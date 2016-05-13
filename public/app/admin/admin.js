@@ -3,9 +3,9 @@
 define([
 	'angular',
 	'angularRoute',
-	'components/version/version'
+	'css'
 ], function(angular) {
-	angular.module('myApp.admin', ['ngRoute', 'myApp.version'])
+	return angular.module('myApp.admin', ['ngRoute'])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/admin', {
 			templateUrl: 'admin/admin.html',

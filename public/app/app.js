@@ -3,18 +3,54 @@
 define([
 	'angular',
 	'angularRoute',
-	'login/app',
-	'admin/app'
-], function(angular, angularRoute, login, admin) {
+	'common/bootstrap'
+], function(angular, angularRoute, bootstrap) {
 	// Declare app level module which depends on views, and components
-	return angular.module('myApp', [
+	var app = angular.module('myApp', [
 		'ngRoute',
-		'angularCSS',
-		'myApp.login',
-		'myApp.admin'
+		'angularCSS'
 	]).
-	config(['$routeProvider', function($routeProvider) {
-		$routeProvider.otherwise({redirectTo: '/login'});
+	config([
+		'$routeProvider',
+		'$controllerProvider',
+		'$compileProvider',
+		'$filterProvider',
+		'$provide',
+		'$injector',
+		function ($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $injector) {
+			app.controller = $controllerProvider.register;
+			app.directive = $compileProvider.directive;
+			app.filter = $filterProvider.register;
+			app.factory = $provide.factory;
+			app.service = $provide.service;
+
+			$routeProvider.otherwise({redirectTo: '/login'});
+
+			//Lazy loading config
+			var providers = {
+				'$controllerProvider': $controllerProvider,
+				'$compileProvider': $compileProvider,
+				'$filterProvider': $filterProvider,
+				'$provide': $provide,
+				'$injector': $injector
+			};
+
+			angular.forEach(bootstrap, function (module) {
+				angular.forEach(module._invokeQueue, function (invokeArgs) { 
+					var provider = providers[invokeArgs[0]];
+					provider[invokeArgs[1]].apply(provider, invokeArgs[2]);
+				});
+				angular.forEach(module._configBlocks, function (invokeArgs) {
+					var provider = providers[invokeArgs[0]];
+					provider[invokeArgs[1]].apply(provider, invokeArgs[2]);
+				});
+				angular.forEach(module._runBlocks, function (invokeArgs) {
+					var provider = providers[invokeArgs[0]];
+					provider[invokeArgs[1]].apply(provider, invokeArgs[2]);
+				});
+			});
 	}]);
+
+	return app;
 });
 
