@@ -1,5 +1,5 @@
 package com.cyb.tms.entity;
-// Generated May 12, 2016 11:55:51 AM by Hibernate Tools 4.3.1.Final
+// Generated May 17, 2016 12:38:28 PM by Hibernate Tools 4.3.1.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,9 +28,9 @@ public class TmsUsers extends BaseEntity {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4913746991009008650L;
+	private static final long serialVersionUID = -9198550957284072520L;
 	private Long id;
-	private TmsProject tmsProject;
+	private TmsModule tmsModule;
 	private String email;
 	private String isActive;
 	private String password;
@@ -55,11 +55,11 @@ public class TmsUsers extends BaseEntity {
 		this.userRole = userRole;
 	}
 
-	public TmsUsers(TmsProject tmsProject, String email, String isActive, String password, String userName,
+	public TmsUsers(TmsModule tmsModule, String email, String isActive, String password, String userName,
 			String userRole, Set<TmsLeaveMst> tmsLeaveMsts, Set<TmsCodeReview> tmsCodeReviewsForDeveloper,
 			Set<TmsSubtask> tmsSubtasks, Set<TmsCodeReview> tmsCodeReviewsForFixedBy, Set<TmsStoryMst> tmsStoryMsts,
 			Set<TmsSprintUser> tmsSprintUsers, Set<UserStoryStaus> userStoryStauses) {
-		this.tmsProject = tmsProject;
+		this.tmsModule = tmsModule;
 		this.email = email;
 		this.isActive = isActive;
 		this.password = password;
@@ -87,13 +87,13 @@ public class TmsUsers extends BaseEntity {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PROJECT")
-	public TmsProject getTmsProject() {
-		return this.tmsProject;
+	@JoinColumn(name = "MODULE_ID")
+	public TmsModule getTmsModule() {
+		return this.tmsModule;
 	}
 
-	public void setTmsProject(TmsProject tmsProject) {
-		this.tmsProject = tmsProject;
+	public void setTmsModule(TmsModule tmsModule) {
+		this.tmsModule = tmsModule;
 	}
 
 	@Column(name = "EMAIL", unique = true, nullable = false, length = 45)
