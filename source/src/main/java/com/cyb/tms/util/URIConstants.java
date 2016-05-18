@@ -2,11 +2,17 @@ package com.cyb.tms.util;
 
 public class URIConstants {
 	
-	public static final String GET_EMP = "api/emp/{id}";
-	public static final String GET_ALL_EMP = "api/emp/list";
-	public static final String CREATE_EMP = "api/emp/create";
-	public static final String DELETE_EMP = "api/emp/delete/{id}";
-	public static final String EDIT_EMP = "api/emp/edit/{id}";
+	/* common uri's */
+	
+	public static final String GET_ALL = "/list";
+	public static final String CREATE = "/create";
+	public static final String DELETE = "/delete/{id}";
+	public static final String EDIT = "/edit/{id}";
+	
+	// OrgLeaves
+	public static final String ORG_LEAVE = "api/org/leave";
+	public static final String GET_ORG_LEAVE = "/{id}";
+	
 
 	public static final String TOKEN_HEADER = "X-Auth-Token";
 	public static final String TOKEN_SECRET = "eHTRcUpaSWfGgTIJsC4rM6lPMm8es87pYPrELJUwoNqMXN7zWIzGQGq1hgdPCM5u";
