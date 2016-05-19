@@ -1,6 +1,7 @@
 package com.cyb.tms.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +19,7 @@ public class UserServiceImpl implements UserDetailsService {
 	@Autowired
 	private TmsUsersDAO userDAO;
 
+	@Cacheable(value = "users", key="#username")
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		TmsUsers user = this.userDAO.findByUsername(username);

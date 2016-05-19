@@ -1,5 +1,5 @@
 package com.cyb.tms.entity;
-// Generated May 17, 2016 12:38:28 PM by Hibernate Tools 4.3.1.Final
+// Generated May 19, 2016 12:17:39 PM by Hibernate Tools 4.3.1.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,22 +26,22 @@ public class TmsModule extends BaseEntity {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 9168237304509343860L;
-	
+	private static final long serialVersionUID = -4790750859389643809L;
 	private Long id;
 	private TmsProject tmsProject;
 	private String moduleName;
 	private String moduleDescription;
-	private Set<TmsUsers> tmsUserses = new HashSet<TmsUsers>(0);
+	private Set<TmsUserModuleSprint> tmsUserModuleSprints = new HashSet<TmsUserModuleSprint>(0);
 
 	public TmsModule() {
 	}
 
-	public TmsModule(TmsProject tmsProject, String moduleName, String moduleDescription, Set<TmsUsers> tmsUserses) {
+	public TmsModule(TmsProject tmsProject, String moduleName, String moduleDescription,
+			Set<TmsUserModuleSprint> tmsUserModuleSprints) {
 		this.tmsProject = tmsProject;
 		this.moduleName = moduleName;
 		this.moduleDescription = moduleDescription;
-		this.tmsUserses = tmsUserses;
+		this.tmsUserModuleSprints = tmsUserModuleSprints;
 	}
 
 	@Id
@@ -85,12 +85,12 @@ public class TmsModule extends BaseEntity {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsModule")
-	public Set<TmsUsers> getTmsUserses() {
-		return this.tmsUserses;
+	public Set<TmsUserModuleSprint> getTmsUserModuleSprints() {
+		return this.tmsUserModuleSprints;
 	}
 
-	public void setTmsUserses(Set<TmsUsers> tmsUserses) {
-		this.tmsUserses = tmsUserses;
+	public void setTmsUserModuleSprints(Set<TmsUserModuleSprint> tmsUserModuleSprints) {
+		this.tmsUserModuleSprints = tmsUserModuleSprints;
 	}
 
 }

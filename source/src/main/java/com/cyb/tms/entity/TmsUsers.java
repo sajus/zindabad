@@ -1,5 +1,5 @@
 package com.cyb.tms.entity;
-// Generated May 17, 2016 12:38:28 PM by Hibernate Tools 4.3.1.Final
+// Generated May 19, 2016 12:17:39 PM by Hibernate Tools 4.3.1.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +30,7 @@ public class TmsUsers extends BaseEntity {
 	 */
 	private static final long serialVersionUID = -9198550957284072520L;
 	private Long id;
-	private TmsModule tmsModule;
+	private TmsProject tmsProject;
 	private String email;
 	private String isActive;
 	private String password;
@@ -40,6 +40,7 @@ public class TmsUsers extends BaseEntity {
 	private Set<TmsCodeReview> tmsCodeReviewsForDeveloper = new HashSet<TmsCodeReview>(0);
 	private Set<TmsSubtask> tmsSubtasks = new HashSet<TmsSubtask>(0);
 	private Set<TmsCodeReview> tmsCodeReviewsForFixedBy = new HashSet<TmsCodeReview>(0);
+	private Set<TmsUserModuleSprint> tmsUserModuleSprints = new HashSet<TmsUserModuleSprint>(0);
 	private Set<TmsStoryMst> tmsStoryMsts = new HashSet<TmsStoryMst>(0);
 	private Set<TmsSprintUser> tmsSprintUsers = new HashSet<TmsSprintUser>(0);
 	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(0);
@@ -55,11 +56,12 @@ public class TmsUsers extends BaseEntity {
 		this.userRole = userRole;
 	}
 
-	public TmsUsers(TmsModule tmsModule, String email, String isActive, String password, String userName,
+	public TmsUsers(TmsProject tmsProject, String email, String isActive, String password, String userName,
 			String userRole, Set<TmsLeaveMst> tmsLeaveMsts, Set<TmsCodeReview> tmsCodeReviewsForDeveloper,
-			Set<TmsSubtask> tmsSubtasks, Set<TmsCodeReview> tmsCodeReviewsForFixedBy, Set<TmsStoryMst> tmsStoryMsts,
+			Set<TmsSubtask> tmsSubtasks, Set<TmsCodeReview> tmsCodeReviewsForFixedBy,
+			Set<TmsUserModuleSprint> tmsUserModuleSprints, Set<TmsStoryMst> tmsStoryMsts,
 			Set<TmsSprintUser> tmsSprintUsers, Set<UserStoryStaus> userStoryStauses) {
-		this.tmsModule = tmsModule;
+		this.tmsProject = tmsProject;
 		this.email = email;
 		this.isActive = isActive;
 		this.password = password;
@@ -69,6 +71,7 @@ public class TmsUsers extends BaseEntity {
 		this.tmsCodeReviewsForDeveloper = tmsCodeReviewsForDeveloper;
 		this.tmsSubtasks = tmsSubtasks;
 		this.tmsCodeReviewsForFixedBy = tmsCodeReviewsForFixedBy;
+		this.tmsUserModuleSprints = tmsUserModuleSprints;
 		this.tmsStoryMsts = tmsStoryMsts;
 		this.tmsSprintUsers = tmsSprintUsers;
 		this.userStoryStauses = userStoryStauses;
@@ -87,13 +90,13 @@ public class TmsUsers extends BaseEntity {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "MODULE_ID")
-	public TmsModule getTmsModule() {
-		return this.tmsModule;
+	@JoinColumn(name = "PROJECT_ID")
+	public TmsProject getTmsProject() {
+		return this.tmsProject;
 	}
 
-	public void setTmsModule(TmsModule tmsModule) {
-		this.tmsModule = tmsModule;
+	public void setTmsProject(TmsProject tmsProject) {
+		this.tmsProject = tmsProject;
 	}
 
 	@Column(name = "EMAIL", unique = true, nullable = false, length = 45)
@@ -175,6 +178,15 @@ public class TmsUsers extends BaseEntity {
 
 	public void setTmsCodeReviewsForFixedBy(Set<TmsCodeReview> tmsCodeReviewsForFixedBy) {
 		this.tmsCodeReviewsForFixedBy = tmsCodeReviewsForFixedBy;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsers")
+	public Set<TmsUserModuleSprint> getTmsUserModuleSprints() {
+		return this.tmsUserModuleSprints;
+	}
+
+	public void setTmsUserModuleSprints(Set<TmsUserModuleSprint> tmsUserModuleSprints) {
+		this.tmsUserModuleSprints = tmsUserModuleSprints;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsers")
