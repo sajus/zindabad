@@ -93,5 +93,4 @@ public class TmsLeaveMst extends BaseEntity {
 	public void setLeavetype(String leavetype) {
 		this.leavetype = leavetype;
 	}
-
 }

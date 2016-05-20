@@ -31,6 +31,7 @@ public class TmsStoryMst extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 9020461102911849768L;
 	private Long storyId;
+	private TmsModule tmsModule;
 	private TmsStatusMst tmsStatusMst;
 	private TmsUsers tmsUsers;
 	private Date assignedDate;
@@ -52,8 +53,9 @@ public class TmsStoryMst extends BaseEntity {
 		this.storyPoint = storyPoint;
 	}
 
-	public TmsStoryMst(TmsStatusMst tmsStatusMst, TmsUsers tmsUsers, Date assignedDate, Date createdDate, String jiraId,
-			int storyPoint, Set<TmsSubtask> tmsSubtasks) {
+	public TmsStoryMst(TmsModule tmsModule, TmsStatusMst tmsStatusMst, TmsUsers tmsUsers, Date assignedDate,
+			Date createdDate, String jiraId, int storyPoint, Set<TmsSubtask> tmsSubtasks) {
+		this.tmsModule = tmsModule;
 		this.tmsStatusMst = tmsStatusMst;
 		this.tmsUsers = tmsUsers;
 		this.assignedDate = assignedDate;
@@ -73,6 +75,16 @@ public class TmsStoryMst extends BaseEntity {
 
 	public void setStoryId(Long storyId) {
 		this.storyId = storyId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MODULE_ID")
+	public TmsModule getTmsModule() {
+		return this.tmsModule;
+	}
+
+	public void setTmsModule(TmsModule tmsModule) {
+		this.tmsModule = tmsModule;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

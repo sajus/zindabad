@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.Table;
 
 import com.cyb.tms.entity.base.BaseEntity;
@@ -36,17 +34,17 @@ public class TmsModule extends BaseEntity {
 	private TmsProject tmsProject;
 	private String moduleName;
 	private String moduleDescription;
-	private Set<TmsUserModuleSprint> tmsUserModuleSprints = new HashSet<TmsUserModuleSprint>(0);
+	private Set<TmsStoryMst> tmsStoryMsts = new HashSet<TmsStoryMst>(0);
 
 	public TmsModule() {
 	}
 
 	public TmsModule(TmsProject tmsProject, String moduleName, String moduleDescription,
-			Set<TmsUserModuleSprint> tmsUserModuleSprints) {
+			Set<TmsStoryMst> tmsStoryMsts) {
 		this.tmsProject = tmsProject;
 		this.moduleName = moduleName;
 		this.moduleDescription = moduleDescription;
-		this.tmsUserModuleSprints = tmsUserModuleSprints;
+		this.tmsStoryMsts = tmsStoryMsts;
 	}
 
 	@Id
@@ -92,12 +90,13 @@ public class TmsModule extends BaseEntity {
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsModule")
-	public Set<TmsUserModuleSprint> getTmsUserModuleSprints() {
-		return this.tmsUserModuleSprints;
+	public Set<TmsStoryMst> getTmsStoryMsts() {
+		return this.tmsStoryMsts;
 	}
 
-	public void setTmsUserModuleSprints(Set<TmsUserModuleSprint> tmsUserModuleSprints) {
-		this.tmsUserModuleSprints = tmsUserModuleSprints;
+	public void setTmsStoryMsts(Set<TmsStoryMst> tmsStoryMsts) {
+		this.tmsStoryMsts = tmsStoryMsts;
 	}
+
 
 }

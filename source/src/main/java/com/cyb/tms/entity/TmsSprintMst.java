@@ -39,7 +39,6 @@ public class TmsSprintMst extends BaseEntity {
 	private String sprintStatus;
 	private int sprintVelocity;
 	private Set<TmsLeaveMst> tmsLeaveMsts = new HashSet<TmsLeaveMst>(0);
-	private Set<TmsSprintUser> tmsSprintUsers = new HashSet<TmsSprintUser>(0);
 	private Set<TmsEfforts> tmsEffortses = new HashSet<TmsEfforts>(0);
 	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(0);
 
@@ -57,8 +56,8 @@ public class TmsSprintMst extends BaseEntity {
 	}
 
 	public TmsSprintMst(Date sprintEndDate, int sprintHours, String sprintName, Date sprintStartDate,
-			String sprintStatus, int sprintVelocity, Set<TmsLeaveMst> tmsLeaveMsts, Set<TmsSprintUser> tmsSprintUsers,
-			Set<TmsEfforts> tmsEffortses, Set<UserStoryStaus> userStoryStauses) {
+			String sprintStatus, int sprintVelocity, Set<TmsLeaveMst> tmsLeaveMsts, Set<TmsEfforts> tmsEffortses,
+			Set<UserStoryStaus> userStoryStauses) {
 		this.sprintEndDate = sprintEndDate;
 		this.sprintHours = sprintHours;
 		this.sprintName = sprintName;
@@ -66,7 +65,6 @@ public class TmsSprintMst extends BaseEntity {
 		this.sprintStatus = sprintStatus;
 		this.sprintVelocity = sprintVelocity;
 		this.tmsLeaveMsts = tmsLeaveMsts;
-		this.tmsSprintUsers = tmsSprintUsers;
 		this.tmsEffortses = tmsEffortses;
 		this.userStoryStauses = userStoryStauses;
 	}
@@ -151,16 +149,6 @@ public class TmsSprintMst extends BaseEntity {
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSprintMst")
-	public Set<TmsSprintUser> getTmsSprintUsers() {
-		return this.tmsSprintUsers;
-	}
-
-	public void setTmsSprintUsers(Set<TmsSprintUser> tmsSprintUsers) {
-		this.tmsSprintUsers = tmsSprintUsers;
-	}
-
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSprintMst")
 	public Set<TmsEfforts> getTmsEffortses() {
 		return this.tmsEffortses;
 	}
@@ -178,5 +166,4 @@ public class TmsSprintMst extends BaseEntity {
 	public void setUserStoryStauses(Set<UserStoryStaus> userStoryStauses) {
 		this.userStoryStauses = userStoryStauses;
 	}
-
 }
