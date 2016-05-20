@@ -91,6 +91,7 @@ public class TmsUsers extends BaseEntity {
 		this.id = id;
 	}
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROJECT_ID")
 	public TmsProject getTmsProject() {
@@ -147,6 +148,7 @@ public class TmsUsers extends BaseEntity {
 		this.userRole = userRole;
 	}
 
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsers")
 	public Set<TmsLeaveMst> getTmsLeaveMsts() {
 		return this.tmsLeaveMsts;
