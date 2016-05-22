@@ -32,8 +32,8 @@ public class TmsSprintServiceImpl implements TmsSprintService{
 	}
 
 	@Override
-	public List<TmsSprintMst> getAllSprint() {
-		return sprintDAO.getAllSprint();
+	public List<TmsSprintMst> getAllSprints() {
+		return sprintDAO.getAllSprints();
 	}
 
 	@Override

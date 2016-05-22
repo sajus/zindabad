@@ -26,7 +26,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	}
 
 	@Override
-	public List<TmsSprintMst> getAllSprint() {
+	public List<TmsSprintMst> getAllSprints() {
 		return hibernateUtil.fetchAll(TmsSprintMst.class);
 	}
 

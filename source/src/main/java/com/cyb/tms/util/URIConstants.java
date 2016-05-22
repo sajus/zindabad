@@ -28,6 +28,16 @@ public class URIConstants {
 	// Project
 	public static final String PROJECT = "api/project";
 	
+	// Story
+	public static final String STORY = "api/story";
+	public static final String STORIES_BY_SPRINT = "/sprint";
+	
+	// Subtask
+	public static final String SUBTASK = "api/subtask";
+	
+	// Efforts
+	public static final String EFFORTS = "api/efforts";
+
 
 	public static final String TOKEN_HEADER = "X-Auth-Token";
 	public static final String TOKEN_SECRET = "eHTRcUpaSWfGgTIJsC4rM6lPMm8es87pYPrELJUwoNqMXN7zWIzGQGq1hgdPCM5u";

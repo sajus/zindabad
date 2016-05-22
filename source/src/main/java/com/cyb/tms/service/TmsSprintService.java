@@ -8,7 +8,7 @@ public interface TmsSprintService {
 	
 	public long createSprint(TmsSprintMst sprint);
 	public TmsSprintMst updateSprint(TmsSprintMst sprint);
-	public List<TmsSprintMst> getAllSprint();
+	public List<TmsSprintMst> getAllSprints();
 	public TmsSprintMst getSprint(long id);
 
 }

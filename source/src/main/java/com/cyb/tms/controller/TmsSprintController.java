@@ -38,9 +38,9 @@ public class TmsSprintController {
 	// ------------------Retrieve All Sprints --------------
 
 	@RequestMapping(value = URIConstants.GET_ALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<TmsSprintMst>> listAllSprint() {
-		List<TmsSprintMst> sprint = tmsSprintService.getAllSprint();
-		return new ResponseEntity<List<TmsSprintMst>>(sprint, HttpStatus.OK);
+	public ResponseEntity<List<TmsSprintMst>> listAllSprints() {
+		List<TmsSprintMst> sprints = tmsSprintService.getAllSprints();
+		return new ResponseEntity<List<TmsSprintMst>>(sprints, HttpStatus.OK);
 	}
 
 }
