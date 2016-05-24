@@ -1,7 +1,8 @@
 'use strict';
 define([
 	'login/login',
-	'admin/admin'
-	], function(loginView, adminView) {
-	return [adminView, loginView];
+	'admin/admin',
+	'common/loginService'
+	], function(loginView, adminView, loginService) {
+	return [adminView, loginView, loginService];
 });

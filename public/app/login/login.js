@@ -4,8 +4,9 @@ define([
 	'angularRoute',
 	'css'
 ], function(angular) {
-	return angular.module('myApp.login', ['ngRoute'])
-	.config(['$routeProvider', function($routeProvider) {
+	return angular.module('myApp.login', ['ngRoute', 'LocalStorageModule'])
+	.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+		//$locationProvider.html5Mode(true);
 		$routeProvider.when('/login', {
 			templateUrl: 'login/login.html',
 			css: 'login/login.css',
@@ -21,5 +22,12 @@ define([
 			$injector.invoke(controller, this, {'$scope': $scope});
 		});
 	}]);
+	// .service('loginService', ['$scope', '$injector', function($scope, $injector) {
+	// 	require(['login/loginService'], function(service) {
+	// 		$injector.invoke(service, this, {'$scope': $scope});
+	// 	});
+	// 	// body...
+	// }]);
+	
 });
 
