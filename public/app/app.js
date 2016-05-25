@@ -5,6 +5,8 @@ define([
 	'angularRoute',
 	'common/bootstrap',
 	'angularLocalStorage',
+	'bootstrap',
+	'jQuery'
 ], function(angular, angularRoute, bootstrap) {
 	// Declare app level module which depends on views, and components
 	var app = angular.module('myApp', [
@@ -30,7 +32,7 @@ define([
 			app.service = $provide.service;
 			//localStorageServiceProvider.setPrefix('myApp');
 
-			$routeProvider.otherwise({redirectTo: '/admin'});
+			$routeProvider.otherwise({redirectTo: '/home'});
 			$locationProvider.html5Mode({
 			  enabled: true,
 			  reqireBase: false

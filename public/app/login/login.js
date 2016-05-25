@@ -4,7 +4,7 @@ define([
 	'angularRoute',
 	'css'
 ], function(angular) {
-	return angular.module('myApp.login', ['ngRoute', 'LocalStorageModule'])
+	return angular.module('myApp', ['ngRoute', 'LocalStorageModule'])
 	.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 		//$locationProvider.html5Mode(true);
 		$routeProvider.when('/login', {

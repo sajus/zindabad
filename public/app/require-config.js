@@ -22,6 +22,8 @@ require.config({
 		angularRoute: 'bower_components/angular-route/angular-route',
 		angularMocks: 'bower_components/angular-mocks/angular-mocks',
 		angularLocalStorage: 'bower_components/angular-local-storage/dist/angular-local-storage.min',
+		bootstrap: 'bower_components/bootstrap/dist/js/bootstrap.min',
+		jQuery: 'bower_components/jQuery/dist/jQuery.min',
 		text: 'bower_components/requirejs-text/text',
 		css: 'bower_components/angular-css/angular-css'
 	},
@@ -33,6 +35,15 @@ require.config({
 			'exports':'angular.mock'
 		},
 		'angularLocalStorage': {
+			deps: ['angular']
+		},
+		'bootstrapCss': {
+			deps: ['angular']
+		},
+		'bootstrapTheme': {
+			deps: ['angular']
+		},
+		'bootstrapScript': {
 			deps: ['angular']
 		},
 		'css': ['angular']
