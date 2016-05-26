@@ -4,11 +4,10 @@ define([
 	'angular',
 	'angularRoute',
 	'common/bootstrap',
-	'angularLocalStorage',
-	'bootstrap',
-	'jQuery'
+	'angularLocalStorage'
 ], function(angular, angularRoute, bootstrap) {
 	// Declare app level module which depends on views, and components
+
 	var app = angular.module('myApp', [
 		'ngRoute',
 		'angularCSS',
@@ -30,13 +29,11 @@ define([
 			app.filter = $filterProvider.register;
 			app.factory = $provide.factory;
 			app.service = $provide.service;
-			//localStorageServiceProvider.setPrefix('myApp');
 
 			$routeProvider.otherwise({redirectTo: '/home'});
-			$locationProvider.html5Mode({
-			  enabled: true,
-			  reqireBase: false
-			});
+
+			$locationProvider.hashPrefix('!');
+			$locationProvider.html5Mode(true);
 
 			//Lazy loading config
 			var providers = {
@@ -63,16 +60,19 @@ define([
 			});
 	}])
 
-	.constant('appConstants', {
-		url : 'http://localhost:8080/TaskManagement/',
-		config :{
-			headers: {
-				'Context-Type' : 'application/json'
-			}
-		}
-	})
+	// .constant('appConstants', {
+	// 	url : 'http://localhost:8080/TaskManagement/',
+	// 	config :{
+	// 		headers: {
+	// 			'Context-Type' : 'application/json'
+	// 		}
+	// 	}
+	// })
 
-	.run(function ($rootScope, $http, $location, localStorageService) {
+	.run(function ($rootScope, $http, $location, localStorageService, appConstants) {
+		console.log(appConstants.getLocalStorage());
+		console.log(appConstants.endPointBase);
+		//appConstants.getLocalStorage();
 
 		if (localStorageService.get('currentUser')) {
             $http.defaults.headers.common['X-Auth-Token'] = localStorageService.get('token');

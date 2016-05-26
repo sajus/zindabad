@@ -22,12 +22,6 @@ define([
 			$injector.invoke(controller, this, {'$scope': $scope});
 		});
 	}]);
-	// .service('loginService', ['$scope', '$injector', function($scope, $injector) {
-	// 	require(['login/loginService'], function(service) {
-	// 		$injector.invoke(service, this, {'$scope': $scope});
-	// 	});
-	// 	// body...
-	// }]);
 	
 });
 

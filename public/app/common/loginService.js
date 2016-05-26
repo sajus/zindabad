@@ -7,7 +7,7 @@ define([
 		var self = this;
 
 		self.authenticate = function(user) {
-			return $http.post(appConstants.url+"api/auth", user);
+			return $http.post(appConstants.endPointBase+"api/auth", user);
 		};
 
 	});
