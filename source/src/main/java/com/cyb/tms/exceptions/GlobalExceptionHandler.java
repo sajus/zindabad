@@ -1,27 +1,20 @@
 package com.cyb.tms.exceptions;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
@@ -75,8 +68,8 @@ public class GlobalExceptionHandler {
     }
     
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({AccessDeniedException.class })
-    protected ResponseEntity<Object> handleUserNameNotFound(AccessDeniedException ufe, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    @ExceptionHandler({UsernameNotFoundException.class })
+    protected ResponseEntity<Object> handleUserNameNotFound(HttpServletRequest req, UsernameNotFoundException ufe) {
     	Throwable mostSpecificCause = ufe.fillInStackTrace();
         ErrorMessage errorMessage;
         if (mostSpecificCause != null) {
@@ -86,7 +79,7 @@ public class GlobalExceptionHandler {
         } else {
             errorMessage = new ErrorMessage(ufe.getMessage());
         }
-        return new ResponseEntity<Object>(errorMessage, headers, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<Object>(errorMessage, HttpStatus.UNAUTHORIZED);
     	
     	
     }

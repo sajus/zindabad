@@ -64,7 +64,7 @@ public class AuthenticationController {
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 			String token = this.tokenUtils.generateToken(userDetails);
 			// Return the token
-			return ResponseEntity.ok(new AuthenticationResponse(token));
+			return ResponseEntity.ok(new AuthenticationResponse(token, (CybUsers)userDetails));
 			
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
@@ -79,7 +79,7 @@ public class AuthenticationController {
 	    CybUsers user = (CybUsers) this.userDetailsService.loadUserByUsername(username);
 	    //if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordReset())) {
 	      String refreshedToken = this.tokenUtils.refreshToken(token);
-	      return ResponseEntity.ok(new AuthenticationResponse(refreshedToken));
+	      return ResponseEntity.ok(new AuthenticationResponse(refreshedToken, user));
 	   // } else {
 	   //   return ResponseEntity.badRequest().body(null);
 	   // }
