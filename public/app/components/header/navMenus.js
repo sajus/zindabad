@@ -18,9 +18,9 @@ define([
                     {label: 'Leaves', key: 'LEAVES', accessTo: ['LEAD', 'DEVELOPER']},
                 ]
 
-            }; // IF multiple functions user ','
+            } // IF multiple functions user ','
 
         }
 
-    };    
+    });    
 });

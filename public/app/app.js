@@ -60,29 +60,18 @@ define([
 			});
 	}])
 
-	// .constant('appConstants', {
-	// 	url : 'http://localhost:8080/TaskManagement/',
-	// 	config :{
-	// 		headers: {
-	// 			'Context-Type' : 'application/json'
-	// 		}
-	// 	}
-	// })
 
-	.run(function ($rootScope, $http, $location, localStorageService, appConstants) {
-		console.log(appConstants.getLocalStorage());
-		console.log(appConstants.endPointBase);
-		//appConstants.getLocalStorage();
-
-		if (localStorageService.get('currentUser')) {
-            $http.defaults.headers.common['X-Auth-Token'] = localStorageService.get('token');
+	.run(function ($rootScope, $http, $location, appConstants) {
+		
+		if (appConstants.isAuthenticated()) {
+            $http.defaults.headers.common['X-Auth-Token'] = appConstants.getItem('token');
         }
 
         // redirect to login page if not logged in and trying to access a restricted page
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
             var publicPages = ['/login'];
             var restrictedPage = publicPages.indexOf($location.path()) === -1;
-            if (restrictedPage && !localStorageService.get('currentUser')) {
+            if (restrictedPage && !appConstants.isAuthenticated()) {
                 $location.path('/login');
              } 
         });

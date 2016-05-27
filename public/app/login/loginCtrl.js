@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-	return ['$scope', 'loginService', 'localStorageService', '$location', function($scope, loginService, localStorageService, $location) {
+	return ['$scope', '$rootScope', 'loginService', 'appConstants', '$location', function($scope, $rootScope, loginService, appConstants, $location) {
 	
 	$scope.authenticate = function() {
 		$scope.user = {
@@ -16,17 +16,25 @@ define([], function() {
 				$location.path('/admin');
 			},
 			function(status) {
-
+				clearLocalInfo();
+				$location.path('/login');
 			});
-		//console.log("status::", $scope.status);
+	};
+
+	function storeUserInfo(data) {
+	    //if(!localStorageService.isSupported) { return false; }
+	    appConstants.setItem('token', data.token);
+	    appConstants.setItem('currentUser', data.userDto);
+	    $rootScope.$broadcast('loginStatusChanged', true);
 	}
-		function storeUserInfo(data) {
-		    if(!localStorageService.isSupported) { return false; }
-		    localStorageService.set('token', data.token);
-		    localStorageService.set('currentUser', data.user);''
-		}
+
+	function clearLocalInfo() {
+		appConstants.clearAll();
+		$rootScope.$broadcast('loginStatusChanged', false);
+	}	
 			
 
-		$scope.$apply();
+	$scope.$apply();
+		
 	}];
 });

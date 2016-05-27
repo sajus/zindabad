@@ -7,15 +7,33 @@ define([
 		return {
 
 			endPointBase: 'http://localhost:8080/TaskManagement/',
-			
+
 			config :{
 				headers: {
 					'Context-Type' : 'application/json'
 				}
 			},
 
-			getLocalStorage : function() {
-				return "sime";
+			user : localStorageService.get('currentUser'),
+
+			isAuthenticated: function(){
+				return (localStorageService.get('currentUser') !== null) ? true : false;
+			},	
+
+			getStorageType : function() {
+				return localStorageService.getStorageType();
+			},
+
+			getItem: function(key) {
+			   return localStorageService.get(key);
+			},
+
+			setItem: function(key, val) {
+				return localStorageService.set(key, val);
+			},
+
+			clearAll: function() {
+				return localStorageService.clearAll();
 			}
 
 		}
