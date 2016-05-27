@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.dto.TmsUsersDTO;
+import com.cyb.tms.entity.TmsProject;
 import com.cyb.tms.security.TokenUtils;
 import com.cyb.tms.security.json.AuthenticationRequest;
 import com.cyb.tms.security.json.AuthenticationResponse;
 import com.cyb.tms.security.model.CybUsers;
+import com.cyb.tms.service.TmsProjectService;
+import com.cyb.tms.service.TmsUserService;
 import com.cyb.tms.util.URIConstants;
 
 
@@ -46,6 +51,12 @@ public class AuthenticationController {
 
 	  @Autowired
 	  private UserDetailsService userDetailsService;
+	  
+	  @Autowired
+	  private TmsUserService tmsUserService;
+	  
+	  @Autowired
+	  private TmsProjectService tmsProjectService;
 
 	  @RequestMapping(method = RequestMethod.POST)
 	  public ResponseEntity<?> authenticationRequest(@RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
@@ -64,7 +75,8 @@ public class AuthenticationController {
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 			String token = this.tokenUtils.generateToken(userDetails);
 			// Return the token
-			return ResponseEntity.ok(new AuthenticationResponse(token, (CybUsers)userDetails));
+			TmsUsersDTO currentUser = tmsUserService.findByName(userDetails.getUsername());
+			return ResponseEntity.ok(new AuthenticationResponse(token, currentUser));
 			
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
@@ -79,7 +91,9 @@ public class AuthenticationController {
 	    CybUsers user = (CybUsers) this.userDetailsService.loadUserByUsername(username);
 	    //if (this.tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordReset())) {
 	      String refreshedToken = this.tokenUtils.refreshToken(token);
-	      return ResponseEntity.ok(new AuthenticationResponse(refreshedToken, user));
+	      
+	      TmsUsersDTO currentUser = tmsUserService.findByName(username);
+			return ResponseEntity.ok(new AuthenticationResponse(refreshedToken, currentUser));
 	   // } else {
 	   //   return ResponseEntity.badRequest().body(null);
 	   // }

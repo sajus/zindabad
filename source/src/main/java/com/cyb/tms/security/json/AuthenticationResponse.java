@@ -1,6 +1,6 @@
 package com.cyb.tms.security.json;
 
-import com.cyb.tms.security.model.CybUsers;
+import com.cyb.tms.dto.TmsUsersDTO;
 import com.cyb.tms.security.model.ModelBase;
 
 public class AuthenticationResponse extends ModelBase {
@@ -9,26 +9,28 @@ public class AuthenticationResponse extends ModelBase {
 	private static final long serialVersionUID = -8899688124401146318L;
 	
 	private String token;
-	private CybUsers user;
+	private TmsUsersDTO currentUser;
 	
 	public AuthenticationResponse() {
 		super();
 	}
 
 	
-	public AuthenticationResponse(String token, CybUsers user) {
+	public AuthenticationResponse(String token, TmsUsersDTO currentUser) {
+		super();
 		this.token = token;
-		this.user = user;
+		this.currentUser = currentUser;
+	}
+
+	
+
+	public TmsUsersDTO getUserDto() {
+		return currentUser;
 	}
 
 
-	public CybUsers getUser() {
-		return user;
-	}
-
-
-	public void setUser(CybUsers user) {
-		this.user = user;
+	public void setUserDto(TmsUsersDTO userDto) {
+		this.currentUser = userDto;
 	}
 
 
@@ -38,7 +40,6 @@ public class AuthenticationResponse extends ModelBase {
 
 	public void setToken(String token) {
 		this.token = token;
-	}
-	
-	
+	}	
+
 }

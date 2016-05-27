@@ -2,6 +2,7 @@ package com.cyb.tms.service;
 
 import java.util.List;
 
+import com.cyb.tms.dto.TmsUsersDTO;
 import com.cyb.tms.entity.TmsUsers;
 
 public interface TmsUserService {
@@ -12,5 +13,6 @@ public interface TmsUserService {
     public List<TmsUsers> getAllUsers();
     public TmsUsers getUser(long id);
 	public boolean isUserExist(TmsUsers tmsUser);
+	public TmsUsersDTO findByName(String userName);
 
 }

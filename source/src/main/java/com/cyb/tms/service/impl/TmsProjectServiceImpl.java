@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cyb.tms.dao.TmsProjectDAO;
+import com.cyb.tms.dto.TmsProjectDTO;
 import com.cyb.tms.entity.TmsProject;
 import com.cyb.tms.service.TmsProjectService;
 
@@ -30,6 +31,12 @@ public class TmsProjectServiceImpl implements TmsProjectService {
 	@Override
 	public List<TmsProject> getAllProjects() {
 		return tmsProjectDAO.getAllProjects();
+	}
+
+	@Override
+	public TmsProjectDTO getProjectByUserId(Long userId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

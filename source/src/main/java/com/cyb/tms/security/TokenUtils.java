@@ -160,7 +160,7 @@ public class TokenUtils {
 	    final String username = this.getUsernameFromToken(token);
 	    final Date created = this.getCreatedDateFromToken(token);
 	    final Date expiration = this.getExpirationDateFromToken(token);
-	    return (username.equals(user.getUsername()) && !(this.isTokenExpired(token)));
+	    return (username.equals(user.getUsername()) && !(this.isTokenExpired(token)) && (created.compareTo(expiration) > 0));
 	  }
 
 }

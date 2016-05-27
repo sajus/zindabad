@@ -91,8 +91,7 @@ public class TmsUsers extends BaseEntity {
 		this.id = id;
 	}
 
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PROJECT_ID")
 	public TmsProject getTmsProject() {
 		return this.tmsProject;
@@ -110,7 +109,8 @@ public class TmsUsers extends BaseEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	
+	@JsonIgnore
 	@Column(name = "IS_ACTIVE", nullable = false, length = 9)
 	public String getIsActive() {
 		return this.isActive;
