@@ -18,9 +18,12 @@ if(window.__karma__) {
 
 require.config({
 	paths: {
+		jQuery: 'bower_components/jquery/dist/jquery.min',
 		angular: 'bower_components/angular/angular',
 		angularRoute: 'bower_components/angular-route/angular-route',
 		angularMocks: 'bower_components/angular-mocks/angular-mocks',
+		angularLocalStorage: 'bower_components/angular-local-storage/dist/angular-local-storage.min',
+		ngBootstrap: 'bower_components/bootstrap/dist/js/bootstrap.min',
 		text: 'bower_components/requirejs-text/text',
 		css: 'bower_components/angular-css/angular-css'
 	},
@@ -30,6 +33,16 @@ require.config({
 		'angularMocks': {
 			deps:['angular'],
 			'exports':'angular.mock'
+		},
+		'angularLocalStorage': {
+			deps: ['angular']
+		},
+		'jQuery': {
+			exports: 'jQuery'
+		},
+		'ngBootstrap': {
+			exports: 'ngBootstrap',
+			deps: ['jQuery']
 		},
 		'css': ['angular']
 	},
@@ -43,7 +56,9 @@ require.config({
 
 require([
 	'angular',
-	'app'
+	'app',
+	'jQuery',
+	'ngBootstrap'
 	], function(angular, app) {
 		var $html = angular.element(document.getElementsByTagName('html')[0]);
 		angular.element().ready(function() {

@@ -13,6 +13,7 @@
     "html5-boilerplate": "~4.3.0",
     "requirejs-text": "2.0.x",
     "requirejs": "2.1.x",
-    "angular-css": "1.0.8"
+    "angular-css": "1.0.8",
+    "angular-local-storage": "^0.2.7"
   }
 }

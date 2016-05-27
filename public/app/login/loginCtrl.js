@@ -1,12 +1,32 @@
 'use strict';
 
 define([], function() {
-	return ['$scope', function($scope) {
-		// You can access the scope of the controller from here
-		$scope.welcomeMessage = 'Hey this is login Controller';
-		// because this has happened asynchroneusly we've missed
-		// Angular's initial call to $apply after the controller has been loaded
-		// hence we need to explicityly call it at the end of our Controller constructor
+	return ['$scope', 'loginService', 'localStorageService', '$location', function($scope, loginService, localStorageService, $location) {
+	
+	$scope.authenticate = function() {
+		$scope.user = {
+			username: $scope.username,
+			password: $scope.password
+		};
+
+		var promise = loginService.authenticate($scope.user);
+		promise.then(
+			function(response) {
+				storeUserInfo(response.data);
+				$location.path('/admin');
+			},
+			function(status) {
+
+			});
+		//console.log("status::", $scope.status);
+	}
+		function storeUserInfo(data) {
+		    if(!localStorageService.isSupported) { return false; }
+		    localStorageService.set('token', data.token);
+		    localStorageService.set('currentUser', data.user);''
+		}
+			
+
 		$scope.$apply();
 	}];
 });
