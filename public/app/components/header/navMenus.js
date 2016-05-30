@@ -9,13 +9,13 @@ define([
 
             getMenus: function() {
                 return [
-                    {label: 'Home', key: 'HOME', accessTo: ['MANAGER', 'LEAD']},
-                    {label: 'DashBoard', key: 'DASHBOARD', accessTo: ['LEAD', 'DEVELOPER']},
-                    {label: 'Sprint', key: 'SPRINT', accessTo: ['MANAGER, LEAD']},
-                    {label: 'Story', key: 'STORY', accessTo: ['LEAD', 'DEVELOPER']},
-                    {label: 'Subtask', key: 'SUBTASK', accessTo: ['LEAD', 'DEVELOPER']},
-                    {label: 'Efforts', key: 'EFFORTS', accessTo: ['LEAD', 'DEVELOPER']},
-                    {label: 'Leaves', key: 'LEAVES', accessTo: ['LEAD', 'DEVELOPER']},
+                    {label: 'DashBoard', key: 'dashboard', accessTo: ['LEAD', 'DEVELOPER']},
+                    {label: 'Users', key: 'users', accessTo: ['MANAGER']},
+                    {label: 'Sprint', key: 'sprint', accessTo: ['MANAGER', 'LEAD']},
+                    {label: 'Story', key: 'story', accessTo: ['MANAGER','LEAD', 'DEVELOPER']},
+                    {label: 'Subtask', key: 'subtask', accessTo: ['LEAD', 'DEVELOPER']},
+                    {label: 'Efforts', key: 'efforts', accessTo: ['LEAD', 'DEVELOPER']},
+                    {label: 'Leaves', key: 'leave', accessTo: ['LEAD', 'DEVELOPER']},
                 ]
 
             } // IF multiple functions user ','

@@ -30,11 +30,15 @@ define([
 			app.factory = $provide.factory;
 			app.service = $provide.service;
 
-			$routeProvider.otherwise({redirectTo: '/home'});
+			$routeProvider.otherwise({redirectTo: '/dashboard'});
 
-			$locationProvider.hashPrefix('!');
-			$locationProvider.html5Mode(true);
+			// $locationProvider.hashPrefix('!');
+			//$locationProvider.html5Mode(true);
 
+			// $locationProvider.html5Mode({
+			//     enabled: true,
+			//     requireBase: false
+			// });
 			//Lazy loading config
 			var providers = {
 				'$controllerProvider': $controllerProvider,
@@ -61,19 +65,28 @@ define([
 	}])
 
 
-	.run(function ($rootScope, $http, $location, appConstants) {
+	.run(function ($rootScope, $templateCache, $http, $location, appConstants) {
 		
 		if (appConstants.isAuthenticated()) {
             $http.defaults.headers.common['X-Auth-Token'] = appConstants.getItem('token');
         }
 
+        $rootScope.$on('$viewContentLoaded', function() {
+	       $templateCache.removeAll();
+	   	});
+
         // redirect to login page if not logged in and trying to access a restricted page
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
+        	if (typeof(current) !== 'undefined'){
+	            $templateCache.remove(current.templateUrl);
+	        }
             var publicPages = ['/login'];
             var restrictedPage = publicPages.indexOf($location.path()) === -1;
             if (restrictedPage && !appConstants.isAuthenticated()) {
                 $location.path('/login');
              } 
+
+
         });
 
      });   

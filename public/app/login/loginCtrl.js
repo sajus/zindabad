@@ -13,7 +13,7 @@ define([], function() {
 		promise.then(
 			function(response) {
 				storeUserInfo(response.data);
-				$location.path('/admin');
+				$location.path('/home');
 			},
 			function(status) {
 				clearLocalInfo();
@@ -25,12 +25,12 @@ define([], function() {
 	    //if(!localStorageService.isSupported) { return false; }
 	    appConstants.setItem('token', data.token);
 	    appConstants.setItem('currentUser', data.userDto);
-	    $rootScope.$broadcast('loginStatusChanged', true);
+	    $rootScope.$broadcast('loginStatusChanged');
 	}
 
 	function clearLocalInfo() {
 		appConstants.clearAll();
-		$rootScope.$broadcast('loginStatusChanged', false);
+		$rootScope.$broadcast('loginStatusChanged');
 	}	
 			
 

@@ -3,46 +3,122 @@ define([
 	'angular',
 ], function(angular) {
 
-return angular.module('myApp.directive',['appConstants', 'navMenus', '$location']).directive('appHeader', function (appConstants, navMenus, $location) {
+return angular.module('myApp.directive',['appConstants', 'navMenus', '$location', '$routeProvider']).directive('appHeader', function (appConstants, navMenus, $location) {
 	return {
-		restrict: 'EA',
+		restrict: 'E',
 		templateUrl: 'components/header/header.html',
-		scope: { },
-		replace: true,
-		controller: function($scope, $attrs) {
+		$scope: { },
+		replace: false,
+		controller: function($scope, $attrs, $element) {
 
-			function init() {
-				$scope.isAuthenticated = appConstants.isAuthenticated();
-				$scope.user = appConstants.user;
-				$scope.selectedTab = 0;
-				$scope.menus = navMenus.getMenus();//[];
+			//$scope.selectedTab = 0;
 
-				// angular.forEach(navMenus.getMenus(), function(menu) {
-				// 	if ($scope.user && (menu.accessTo).indexOf($scope.user.userRole) > -1) {
-				// 		$scope.menus.push(menu);
-				// 	} 
-				// });					
-					
-			};
+			$scope.changeTab = function (menu, $index) {
+				$location.path('/'+menu.key);
+				$scope.selectedTab = $index;
+			}
+
+			$scope.$on('$destroy', function(){
+                    $element.remove();
+                    $element = null;
+                    $scope.$destroy();
+                    $scope = null;
+                })
+
+			//var init = function () {
+				
+				
+				$scope.$watch('isAuthenticated', function () {
+					$scope.user = appConstants.getItem('currentUser');
+					$scope.isAuthenticated = appConstants.isAuthenticated();
+					$scope.menus = $scope.isAuthenticated ? navMenus.getMenus(): [];
+				})
+
+				function getFilteredMenus() {
+					return _.filter(navMenus.getMenus(), function(menu){ 
+						return menu.accessTo.indexOf($scope.user.userRole) > -1;
+					});	
+				}
+
+				function getCurrentTab(path) {
+					var filtered = getFilteredMenus();
+					var result =  _.indexOf(_.map(filtered, 'key'));
+					return _.indexOf(_.pluck(filtered, 'key'), path);
+				}		
+
+
+			//Todo
+// 			app.factory('DoNotReloadCurrentTemplate', ['$route', function($route) {
+//   return function(scope) {
+//     var lastRoute = $route.current;
+//     scope.$on('$locationChangeSuccess', function() {
+//       if (lastRoute.$$route.templateUrl === $route.current.$$route.templateUrl) {
+//         console.log('DoNotReloadCurrentTemplate not reloading template: ' + $route.current.$$route.templateUrl);
+//         $route.current = lastRoute;
+//       }
+//     });
+//   };
+// }]);
+//https://github.com/angular/angular.js/issues/1699
 		
 			$scope.logout = function() {
 				$scope.isAuthenticated = false;
 				appConstants.clearAll();
-				//$location.replace();
+				$scope.menus = [];
+				$location.replace();
 				$location.path('/login');
 			}
 			
 
-		    $scope.$on('loginStatusChanged', function (loggedIn) {
-		        $scope.isAuthenticated = loggedIn; 
+		    $scope.$on('loginStatusChanged', function () {
+		        $scope.isAuthenticated = appConstants.isAuthenticated(); 
 		    });
 
-		    init();
+		   $scope.$on('$routeChangeSuccess', function(event, next, current) {
+		   		var path = $location.path();
+		   		var currentPath = path.substring(1, path.length);
+		   		$scope.selectedTab = getCurrentTab(currentPath);
+		  	});
+		  // init();
 
 
 		}
 	};
-});    	
-
-
+})
+.config( function($routeProvider) {
+   $routeProvider
+   		.when('/dashboard', {
+            templateUrl : 'home/home.html',
+            css: 'home/home.css',
+            controller  : 'homeCtrl'
+        })
+		.when('/sprint', {
+            templateUrl : 'sprint/sprint.html',
+            css: 'sprint/sprint.css',
+            controller  : 'sprintCtrl'
+        })
+        .when('/story', {
+			templateUrl: 'story/story.html',
+			css: 'story/story.css',
+			controller: 'storyCtrl'
+		})
+		.when('/subtask', {
+            templateUrl : 'subtask/subtask.html',
+            css: 'subtask/subtask.css',
+            controller  : 'subtaskCtrl'
+        })
+		.when('/efforts', {
+            templateUrl : 'efforts/efforts.html',
+            css: 'efforts/efforts.css',
+            controller  : 'effortsCtrl'
+        })
+        .when('/leave', {
+            templateUrl : 'leave/leave.html',
+            css: 'leave/leave.css',
+            controller  : 'leaveCtrl'
+        })
+        .otherwise({
+	        redirectTo: '/dashboard'
+	    });	
+    });
 });    

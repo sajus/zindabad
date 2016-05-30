@@ -24,6 +24,7 @@ require.config({
 		angularMocks: 'bower_components/angular-mocks/angular-mocks',
 		angularLocalStorage: 'bower_components/angular-local-storage/dist/angular-local-storage.min',
 		ngBootstrap: 'bower_components/bootstrap/dist/js/bootstrap.min',
+		underscore: 'bower_components/underscore/underscore-min',
 		text: 'bower_components/requirejs-text/text',
 		css: 'bower_components/angular-css/angular-css'
 	},
@@ -44,6 +45,9 @@ require.config({
 			exports: 'ngBootstrap',
 			deps: ['jQuery']
 		},
+		'underscore' : {
+			exports: 'underscore'
+		},
 		'css': ['angular']
 	},
 	priority: [
@@ -58,7 +62,8 @@ require([
 	'angular',
 	'app',
 	'jQuery',
-	'ngBootstrap'
+	'ngBootstrap',
+	'underscore'
 	], function(angular, app) {
 		var $html = angular.element(document.getElementsByTagName('html')[0]);
 		angular.element().ready(function() {

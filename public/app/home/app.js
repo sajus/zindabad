@@ -9,6 +9,7 @@ define([
 	.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
 		$routeProvider.when('/home', {
+			cache: false,
 			templateUrl: 'home/home.html',
 			css: 'home/home.css',
 			controller: 'homeCtrl'

@@ -14,6 +14,9 @@
     "requirejs-text": "2.0.x",
     "requirejs": "2.1.x",
     "angular-css": "1.0.8",
-    "angular-local-storage": "^0.2.7"
+    "angular-local-storage": "^0.2.7",
+    "jQuery": "^2.2.4",
+    "fontawesome": "~4.4.0",
+    "underscore": "~1.8.3"
   }
 }
