@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -38,6 +40,7 @@ public class TmsSprintMst extends BaseEntity {
 	private Date sprintStartDate;
 	private String sprintStatus;
 	private int sprintVelocity;
+	private TmsProject tmsProject;
 	private Set<TmsLeaveMst> tmsLeaveMsts = new HashSet<TmsLeaveMst>(0);
 	private Set<TmsEfforts> tmsEffortses = new HashSet<TmsEfforts>(0);
 	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(0);
@@ -46,13 +49,14 @@ public class TmsSprintMst extends BaseEntity {
 	}
 
 	public TmsSprintMst(Date sprintEndDate, int sprintHours, String sprintName, Date sprintStartDate,
-			String sprintStatus, int sprintVelocity) {
+			String sprintStatus, int sprintVelocity, TmsProject tmsProject) {
 		this.sprintEndDate = sprintEndDate;
 		this.sprintHours = sprintHours;
 		this.sprintName = sprintName;
 		this.sprintStartDate = sprintStartDate;
 		this.sprintStatus = sprintStatus;
 		this.sprintVelocity = sprintVelocity;
+		this.tmsProject = tmsProject;
 	}
 
 	public TmsSprintMst(Date sprintEndDate, int sprintHours, String sprintName, Date sprintStartDate,
@@ -136,6 +140,18 @@ public class TmsSprintMst extends BaseEntity {
 	public void setSprintVelocity(int sprintVelocity) {
 		this.sprintVelocity = sprintVelocity;
 	}
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PROJECT_ID")
+	public TmsProject getTmsProject() {
+		return this.tmsProject;
+	}
+
+	public void setTmsProject(TmsProject tmsProject) {
+		this.tmsProject = tmsProject;
+	}
+
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSprintMst")

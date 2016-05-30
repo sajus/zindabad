@@ -38,6 +38,7 @@ public class TmsUsers extends BaseEntity {
 	private Long id;
 	private TmsProject tmsProject;
 	private String email;
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String isActive;
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;

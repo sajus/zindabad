@@ -38,18 +38,20 @@ public class TmsProject extends BaseEntity {
 	private Date endDate;
 	private Set<TmsUsers> tmsUserses = new HashSet<TmsUsers>(0);
 	private Set<TmsModule> tmsModules = new HashSet<TmsModule>(0);
+	private Set<TmsSprintMst> tmsSprintMsts = new HashSet<TmsSprintMst>(0);
 
 	public TmsProject() {
 	}
 
 	public TmsProject(String name, Date startDate, String projectDesc, Date endDate, Set<TmsUsers> tmsUserses,
-			Set<TmsModule> tmsModules) {
+			Set<TmsModule> tmsModules, Set<TmsSprintMst> tmsSprintMsts) {
 		this.name = name;
 		this.startDate = startDate;
 		this.projectDesc = projectDesc;
 		this.endDate = endDate;
 		this.tmsUserses = tmsUserses;
 		this.tmsModules = tmsModules;
+		this.tmsSprintMsts = tmsSprintMsts;
 	}
 
 	@Id
@@ -120,6 +122,16 @@ public class TmsProject extends BaseEntity {
 
 	public void setTmsModules(Set<TmsModule> tmsModules) {
 		this.tmsModules = tmsModules;
+	}
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsProject")
+	public Set<TmsSprintMst> getTmsSprintMsts() {
+		return this.tmsSprintMsts;
+	}
+
+	public void setTmsSprintMsts(Set<TmsSprintMst> tmsSprintMsts) {
+		this.tmsSprintMsts = tmsSprintMsts;
 	}
 
 

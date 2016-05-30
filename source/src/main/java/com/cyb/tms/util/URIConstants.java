@@ -14,6 +14,7 @@ public class URIConstants {
 	
 	// User
 	public static final String USER = "api/user";
+	public static final String DASH_BOARD = "/dashboard";
 	
 	// OrgLeaves
 	public static final String ORG_LEAVE = "api/org/leave";
