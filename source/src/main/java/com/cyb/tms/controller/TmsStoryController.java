@@ -55,9 +55,9 @@ public class TmsStoryController {
 	
 	// ------------------Retrieve Stories by Sprint --------------
 
-	@RequestMapping(value = URIConstants.STORIES_BY_SPRINT, method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<TmsStoryMst>> listStoriesBySprint(@RequestBody String sprintName) throws Exception {
-		List<TmsStoryMst> stories = tmsStoryService.getStoriesBySprint(sprintName);
+	@RequestMapping(value = URIConstants.STORIES_BY_SPRINT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<TmsStoryMst>> listStoriesBySprint(@RequestBody Long userId, Long projectId) throws Exception {
+		List<TmsStoryMst> stories = tmsStoryService.getStoriesBySprint(projectId);
 		return new ResponseEntity<List<TmsStoryMst>>(stories, HttpStatus.OK);
 	}
 }

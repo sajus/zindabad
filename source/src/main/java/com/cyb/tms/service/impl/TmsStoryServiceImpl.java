@@ -40,8 +40,8 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	}
 
 	@Override
-	public List<TmsStoryMst> getStoriesBySprint(String sprintName) throws Exception {
-		return tmsStoryDAO.getStoriesBySprint(sprintName);
+	public List<TmsStoryMst> getStoriesBySprint(Long projectId) throws Exception {
+		return tmsStoryDAO.getStoriesBySprint(projectId);
 	}
 
 	@Override

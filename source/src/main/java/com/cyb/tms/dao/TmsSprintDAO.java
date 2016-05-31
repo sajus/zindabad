@@ -10,5 +10,6 @@ public interface TmsSprintDAO {
 	public TmsSprintMst updateSprint(TmsSprintMst sprint);
 	public List<TmsSprintMst> getAllSprints();
 	public TmsSprintMst getSprint(long id);
+	public TmsSprintMst getActiveSprint(long projectId);
 	
 }

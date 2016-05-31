@@ -8,12 +8,14 @@ import java.util.List;
 
 
 
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.entity.TmsModule;
@@ -28,6 +30,9 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	
 	@Autowired
 	private HibernateUtil hibernateUtil;
+	
+	@Autowired
+	private TmsSprintDAO tmsSprintDAO;
 
 	@Override
 	public long createStory(StoryDTO storyDTO) {
@@ -59,9 +64,9 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TmsStoryMst> getStoriesBySprint(String sprintName) throws Exception {
+	public List<TmsStoryMst> getStoriesBySprint(Long projectId) throws Exception {
 		
-		TmsSprintMst sprint = hibernateUtil.findByPropertyName("sprintName", sprintName, TmsSprintMst.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
 			Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class, "story");
 			criteria.createAlias("userStoryStatus", "uss");

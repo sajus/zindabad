@@ -11,7 +11,7 @@ public interface TmsStoryService {
 	public TmsStoryMst updateStory(TmsStoryMst story);
 	public List<TmsStoryMst> getAllStories();
 	public TmsStoryMst getSprint(long id);
-	public List<TmsStoryMst> getStoriesBySprint(String sprintName) throws Exception;
+	public List<TmsStoryMst> getStoriesBySprint(Long projectId) throws Exception;
 	public void addToCurrentSprint(StoryDTO storyDTO);
 
 }

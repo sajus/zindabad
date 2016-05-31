@@ -2,6 +2,7 @@ package com.cyb.tms.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +34,15 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	@Override
 	public TmsSprintMst getSprint(long id) {
 		return hibernateUtil.fetchById(id, TmsSprintMst.class);
+	}
+
+	@Override
+	public TmsSprintMst getActiveSprint(long projectId) {
+		TmsSprintMst sprint = (TmsSprintMst) hibernateUtil.getCurrentSession().createCriteria(TmsSprintMst.class, "sp")
+                .createAlias("tmsProject", "proj")
+                .add(Restrictions.eq("proj.pid", projectId))
+                .add(Restrictions.eq("sp.sprintStatus", "OPEN")).uniqueResult();
+		return sprint;
 	}
 
 }
