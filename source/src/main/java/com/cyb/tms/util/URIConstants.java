@@ -11,6 +11,7 @@ public class URIConstants {
 	public static final String CREATE = "/create";
 	public static final String DELETE = "/delete/{id}";
 	public static final String EDIT = "/edit/{id}";
+	public static final String GET_ALL_BY_ID = "/list/project";
 	
 	// User
 	public static final String USER = "api/user";
@@ -19,6 +20,8 @@ public class URIConstants {
 	// OrgLeaves
 	public static final String ORG_LEAVE = "api/org/leave";
 	
+	// Leaves
+	public static final String LEAVE = "api/leave";
 	
 	// Sprint
 	public static final String SPRINT = "api/sprint";
