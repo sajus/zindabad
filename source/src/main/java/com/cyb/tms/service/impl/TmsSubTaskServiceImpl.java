@@ -38,4 +38,16 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 		return tmsSubTaskDAO.getSubtask(id);
 	}
 
+	@Override
+	public List<TmsSubtask> getSubTaskBySprint(Long projectId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TmsSubtask> getSubTaskBySprintByUserwise(Long userId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
