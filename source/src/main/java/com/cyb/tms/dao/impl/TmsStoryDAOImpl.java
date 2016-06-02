@@ -70,8 +70,10 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		if(sprint != null) {
 			Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class, "story");
 			criteria.createAlias("userStoryStatus", "uss");
+			criteria.createAlias("tmsSprintMst", "sp");
 			criteria.add(Restrictions.eqProperty("uss.jiraId", "story.jiraId"));
-			criteria.add(Restrictions.eq("uss.tmsSprintMst", sprint.getSprintId()));
+			criteria.add(Restrictions.eqProperty("uss.tmsSprintMst", "sp.sprintId"));
+			criteria.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()));
 			return criteria.list();
 			
 		} else {
