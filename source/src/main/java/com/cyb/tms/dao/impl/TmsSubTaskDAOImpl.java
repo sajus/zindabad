@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsSubTaskDAO;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStoryMst;
@@ -18,6 +19,9 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	
 	@Autowired
 	private HibernateUtil hibernateUtil;
+	
+	@Autowired
+	private TmsSprintDAO tmsSprintDAO;
 
 	@Override
 	public long createSubtask(TmsSubtask subtask) {
@@ -42,7 +46,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TmsSubtask> getSubTaskBySprint(Long projectId) throws Exception; {
+	public List<TmsSubtask> getSubTaskBySprint(Long projectId) throws Exception {
 		
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
