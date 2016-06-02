@@ -50,7 +50,7 @@ public class TmsLeaveController {
 	 
 	// ------------------Retrieve Leave by Sprint --------------
 
-		@RequestMapping(value = URIConstants.GET_ALL_BY_ID, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+		@RequestMapping(value = URIConstants.GET_ALL_PROJECT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<TmsLeaveMst>> listLeaveBySprint(@RequestParam Long projectId) throws Exception {
 			List<TmsLeaveMst> leave = tmsLeaveService.getLeaveBySprint(projectId);
 			return new ResponseEntity<List<TmsLeaveMst>>(leave, HttpStatus.OK);

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cyb.tms.dto.StoryDTO;
@@ -56,7 +57,9 @@ public class TmsStoryController {
 	// ------------------Retrieve Stories by Sprint --------------
 
 	@RequestMapping(value = URIConstants.STORIES_BY_SPRINT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<TmsStoryMst>> listStoriesBySprint(@RequestBody Long userId, Long projectId) throws Exception {
+	public ResponseEntity<List<TmsStoryMst>> listStoriesBySprint(@RequestParam Long userId, Long projectId) throws Exception {
+		//Long projectId = json.get();
+		
 		List<TmsStoryMst> stories = tmsStoryService.getStoriesBySprint(projectId);
 		return new ResponseEntity<List<TmsStoryMst>>(stories, HttpStatus.OK);
 	}
