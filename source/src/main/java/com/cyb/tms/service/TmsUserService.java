@@ -14,5 +14,5 @@ public interface TmsUserService {
     public TmsUsers getUser(long id);
 	public boolean isUserExist(TmsUsers tmsUser);
 	public TmsUsersDTO findByName(String userName);
-
+	public List<TmsUsers> getUsersByStatus(long projectId) throws Exception;
 }
