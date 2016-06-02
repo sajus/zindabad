@@ -12,5 +12,6 @@ public interface TmsUsersDAO {
     public void deleteUser(long id);
     public List<TmsUsers> getAllUsers();
     public TmsUsers getUser(long id);	
+    public List<TmsUsers> getUsersByStatus(long projectId) throws Exception;
 	
 }
