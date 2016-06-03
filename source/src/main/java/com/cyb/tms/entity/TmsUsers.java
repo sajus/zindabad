@@ -38,7 +38,6 @@ public class TmsUsers extends BaseEntity {
 	private Long id;
 	private TmsProject tmsProject;
 	private String email;
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private String isActive;
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
@@ -92,6 +91,7 @@ public class TmsUsers extends BaseEntity {
 		this.id = id;
 	}
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "PROJECT_ID")
 	public TmsProject getTmsProject() {
@@ -111,7 +111,6 @@ public class TmsUsers extends BaseEntity {
 		this.email = email;
 	}
 	
-	@JsonIgnore
 	@Column(name = "IS_ACTIVE", nullable = false, length = 9)
 	public String getIsActive() {
 		return this.isActive;

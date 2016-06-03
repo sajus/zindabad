@@ -70,5 +70,14 @@ public class TmsUserServiceImpl implements TmsUserService {
 //		BeanUtils.copyProperties(users.getTmsProject(), tmsProjectDTO);
 //		userDto.setTmsProjectDTO(tmsProjectDTO);
 	}
+	
+
+	@Override
+	public List<TmsUsers> getUsersByStatus(long projectId) throws Exception {
+		// TODO Auto-generated method stub
+        return tmsUsersDao.getUsersByStatus(projectId);
+	}
+	
+	
 
 }

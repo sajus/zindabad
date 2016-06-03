@@ -29,36 +29,46 @@ public class UserStoryStaus extends BaseEntity {
 	private static final long serialVersionUID = 4615921091199109107L;
 	private Long id;
 	private TmsSprintMst tmsSprintMst;
+	private TmsUsers assignedTo;
+	private TmsUsers modifiedBy;
+	private TmsSubtask tmsSubtask;
+	private TmsStoryMst tmsStoryMst;
 	private TmsStatusMst tmsStatusMst;
-	private TmsUsers tmsUsers;
-	private String jiraId;
 	private Date modifiedDate;
 	private String type;
+	private Date assignedDate;
+	private Date createdDate;
 
 	public UserStoryStaus() {
 	}
 
-	public UserStoryStaus(TmsStatusMst tmsStatusMst, TmsUsers tmsUsers, String jiraId, Date modifiedDate, String type) {
+	public UserStoryStaus(TmsUsers modifiedBy,
+			TmsStatusMst tmsStatusMst, Date modifiedDate, String type) {
+		this.modifiedBy = modifiedBy;
 		this.tmsStatusMst = tmsStatusMst;
-		this.tmsUsers = tmsUsers;
-		this.jiraId = jiraId;
 		this.modifiedDate = modifiedDate;
 		this.type = type;
 	}
 
-	public UserStoryStaus(TmsSprintMst tmsSprintMst, TmsStatusMst tmsStatusMst, TmsUsers tmsUsers, String jiraId,
-			Date modifiedDate, String type) {
+	public UserStoryStaus(TmsSprintMst tmsSprintMst,
+			TmsUsers assignedTo, TmsUsers modifiedBy,
+			TmsSubtask tmsSubtask, TmsStoryMst tmsStoryMst,
+			TmsStatusMst tmsStatusMst, Date modifiedDate, String type,
+			Date assignedDate, Date createdDate) {
 		this.tmsSprintMst = tmsSprintMst;
+		this.assignedTo = assignedTo;
+		this.modifiedBy = modifiedBy;
+		this.tmsSubtask = tmsSubtask;
+		this.tmsStoryMst = tmsStoryMst;
 		this.tmsStatusMst = tmsStatusMst;
-		this.tmsUsers = tmsUsers;
-		this.jiraId = jiraId;
 		this.modifiedDate = modifiedDate;
 		this.type = type;
+		this.assignedDate = assignedDate;
+		this.createdDate = createdDate;
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Long getId() {
 		return this.id;
@@ -79,6 +89,46 @@ public class UserStoryStaus extends BaseEntity {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ASSIGNED_TO")
+	public TmsUsers getAssignedTo() {
+		return this.assignedTo;
+	}
+
+	public void setAssignedTo(TmsUsers assignedTo) {
+		this.assignedTo = assignedTo;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MODIFIED_BY", nullable = false)
+	public TmsUsers getModifiedBy() {
+		return this.modifiedBy;
+	}
+
+	public void setModifiedBy(TmsUsers modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SUBTASK_ID")
+	public TmsSubtask getTmsSubtask() {
+		return this.tmsSubtask;
+	}
+
+	public void setTmsSubtask(TmsSubtask tmsSubtask) {
+		this.tmsSubtask = tmsSubtask;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "STORY_ID")
+	public TmsStoryMst getTmsStoryMst() {
+		return this.tmsStoryMst;
+	}
+
+	public void setTmsStoryMst(TmsStoryMst tmsStoryMst) {
+		this.tmsStoryMst = tmsStoryMst;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "STATUS", nullable = false)
 	public TmsStatusMst getTmsStatusMst() {
 		return this.tmsStatusMst;
@@ -86,25 +136,6 @@ public class UserStoryStaus extends BaseEntity {
 
 	public void setTmsStatusMst(TmsStatusMst tmsStatusMst) {
 		this.tmsStatusMst = tmsStatusMst;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "MODIFIED_BY", nullable = false)
-	public TmsUsers getTmsUsers() {
-		return this.tmsUsers;
-	}
-
-	public void setTmsUsers(TmsUsers tmsUsers) {
-		this.tmsUsers = tmsUsers;
-	}
-
-	@Column(name = "JIRA_ID", nullable = false, length = 20)
-	public String getJiraId() {
-		return this.jiraId;
-	}
-
-	public void setJiraId(String jiraId) {
-		this.jiraId = jiraId;
 	}
 
 	@Temporal(TemporalType.DATE)
@@ -125,5 +156,26 @@ public class UserStoryStaus extends BaseEntity {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "ASSIGNED_DATE", length = 10)
+	public Date getAssignedDate() {
+		return this.assignedDate;
+	}
+
+	public void setAssignedDate(Date assignedDate) {
+		this.assignedDate = assignedDate;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "CREATED_DATE", length = 10)
+	public Date getCreatedDate() {
+		return this.createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
 
 }

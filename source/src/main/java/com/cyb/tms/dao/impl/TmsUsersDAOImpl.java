@@ -2,6 +2,7 @@ package com.cyb.tms.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -52,6 +53,17 @@ private static final String USER_NAME = "userName";
 	@Override
 	public TmsUsers getUser(long id) {
 		return hibernateUtil.fetchById(id, TmsUsers.class);
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TmsUsers> getUsersByStatus(long projectId) throws Exception {
+		List<TmsUsers> users = hibernateUtil.getCurrentSession().createCriteria(TmsUsers.class, "tu")
+				              .createAlias("tmsProject", "proj")
+			                  .add(Restrictions.eq("proj.pid", projectId))
+			                  .add(Restrictions.eq("tu.isActive", "ACTIVE")).list();
+		return users;
 	}
 
 

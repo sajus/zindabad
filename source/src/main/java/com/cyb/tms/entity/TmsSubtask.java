@@ -32,48 +32,42 @@ public class TmsSubtask extends BaseEntity {
 	private static final long serialVersionUID = -9222900952318082035L;
 	private Long subtaskId;
 	private TmsStoryMst tmsStoryMst;
-	private TmsUsers tmsUsers;
-	private Date assignedDate;
-	private Date createdDate;
 	private int efforts;
 	private String jiraId;
 	private String scope;
 	private String type;
 	private Set<TmsCodeReview> tmsCodeReviews = new HashSet<TmsCodeReview>(0);
+	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(
+			0);
 	private Set<TmsEfforts> tmsEffortses = new HashSet<TmsEfforts>(0);
 
 	public TmsSubtask() {
 	}
 
-	public TmsSubtask(TmsStoryMst tmsStoryMst, TmsUsers tmsUsers, Date assignedDate, Date createdDate, int efforts,
-			String jiraId, String scope, String type) {
+	public TmsSubtask(TmsStoryMst tmsStoryMst, int efforts, String jiraId,
+			String scope, String type) {
 		this.tmsStoryMst = tmsStoryMst;
-		this.tmsUsers = tmsUsers;
-		this.assignedDate = assignedDate;
-		this.createdDate = createdDate;
 		this.efforts = efforts;
 		this.jiraId = jiraId;
 		this.scope = scope;
 		this.type = type;
 	}
 
-	public TmsSubtask(TmsStoryMst tmsStoryMst, TmsUsers tmsUsers, Date assignedDate, Date createdDate, int efforts,
-			String jiraId, String scope, String type, Set<TmsCodeReview> tmsCodeReviews, Set<TmsEfforts> tmsEffortses) {
+	public TmsSubtask(TmsStoryMst tmsStoryMst, int efforts, String jiraId,
+			String scope, String type, Set<TmsCodeReview> tmsCodeReviews,
+			Set<UserStoryStaus> userStoryStauses, Set<TmsEfforts> tmsEffortses) {
 		this.tmsStoryMst = tmsStoryMst;
-		this.tmsUsers = tmsUsers;
-		this.assignedDate = assignedDate;
-		this.createdDate = createdDate;
 		this.efforts = efforts;
 		this.jiraId = jiraId;
 		this.scope = scope;
 		this.type = type;
 		this.tmsCodeReviews = tmsCodeReviews;
+		this.userStoryStauses = userStoryStauses;
 		this.tmsEffortses = tmsEffortses;
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "SUBTASK_ID", unique = true, nullable = false)
 	public Long getSubtaskId() {
 		return this.subtaskId;
@@ -91,36 +85,6 @@ public class TmsSubtask extends BaseEntity {
 
 	public void setTmsStoryMst(TmsStoryMst tmsStoryMst) {
 		this.tmsStoryMst = tmsStoryMst;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ASSIGNED_USER", nullable = false)
-	public TmsUsers getTmsUsers() {
-		return this.tmsUsers;
-	}
-
-	public void setTmsUsers(TmsUsers tmsUsers) {
-		this.tmsUsers = tmsUsers;
-	}
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "ASSIGNED_DATE", nullable = false, length = 10)
-	public Date getAssignedDate() {
-		return this.assignedDate;
-	}
-
-	public void setAssignedDate(Date assignedDate) {
-		this.assignedDate = assignedDate;
-	}
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATED_DATE", nullable = false, length = 10)
-	public Date getCreatedDate() {
-		return this.createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
 	}
 
 	@Column(name = "EFFORTS", nullable = false)
@@ -166,6 +130,15 @@ public class TmsSubtask extends BaseEntity {
 
 	public void setTmsCodeReviews(Set<TmsCodeReview> tmsCodeReviews) {
 		this.tmsCodeReviews = tmsCodeReviews;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSubtask")
+	public Set<UserStoryStaus> getUserStoryStauses() {
+		return this.userStoryStauses;
+	}
+
+	public void setUserStoryStauses(Set<UserStoryStaus> userStoryStauses) {
+		this.userStoryStauses = userStoryStauses;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSubtask")
