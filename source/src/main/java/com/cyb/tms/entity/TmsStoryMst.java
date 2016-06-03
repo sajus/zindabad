@@ -36,42 +36,31 @@ public class TmsStoryMst extends BaseEntity {
 	private static final long serialVersionUID = 9020461102911849768L;
 	private Long storyId;
 	private TmsModule tmsModule;
-	private TmsStatusMst tmsStatusMst;
-	private TmsUsers tmsUsers;
-	private Date assignedDate;
-	private Date createdDate;
 	private String jiraId;
 	private int storyPoint;
 	private Set<TmsSubtask> tmsSubtasks = new HashSet<TmsSubtask>(0);
+	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(
+			0);
 
 	public TmsStoryMst() {
 	}
 
-	public TmsStoryMst(TmsStatusMst tmsStatusMst, TmsUsers tmsUsers, Date assignedDate, Date createdDate, String jiraId,
-			int storyPoint) {
-		this.tmsStatusMst = tmsStatusMst;
-		this.tmsUsers = tmsUsers;
-		this.assignedDate = assignedDate;
-		this.createdDate = createdDate;
+	public TmsStoryMst(String jiraId, int storyPoint) {
 		this.jiraId = jiraId;
 		this.storyPoint = storyPoint;
 	}
 
-	public TmsStoryMst(TmsModule tmsModule, TmsStatusMst tmsStatusMst, TmsUsers tmsUsers, Date assignedDate,
-			Date createdDate, String jiraId, int storyPoint, Set<TmsSubtask> tmsSubtasks) {
+	public TmsStoryMst(TmsModule tmsModule, String jiraId, int storyPoint,
+			Set<TmsSubtask> tmsSubtasks, Set<UserStoryStaus> userStoryStauses) {
 		this.tmsModule = tmsModule;
-		this.tmsStatusMst = tmsStatusMst;
-		this.tmsUsers = tmsUsers;
-		this.assignedDate = assignedDate;
-		this.createdDate = createdDate;
 		this.jiraId = jiraId;
 		this.storyPoint = storyPoint;
 		this.tmsSubtasks = tmsSubtasks;
+		this.userStoryStauses = userStoryStauses;
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "STORY_ID", unique = true, nullable = false)
 	public Long getStoryId() {
 		return this.storyId;
@@ -81,7 +70,6 @@ public class TmsStoryMst extends BaseEntity {
 		this.storyId = storyId;
 	}
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODULE_ID")
 	public TmsModule getTmsModule() {
@@ -90,48 +78,6 @@ public class TmsStoryMst extends BaseEntity {
 
 	public void setTmsModule(TmsModule tmsModule) {
 		this.tmsModule = tmsModule;
-	}
-
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "STATUS_ID", nullable = false)
-	public TmsStatusMst getTmsStatusMst() {
-		return this.tmsStatusMst;
-	}
-
-	public void setTmsStatusMst(TmsStatusMst tmsStatusMst) {
-		this.tmsStatusMst = tmsStatusMst;
-	}
-
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ASSIGNED_TO", nullable = false)
-	public TmsUsers getTmsUsers() {
-		return this.tmsUsers;
-	}
-
-	public void setTmsUsers(TmsUsers tmsUsers) {
-		this.tmsUsers = tmsUsers;
-	}
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "ASSIGNED_DATE", nullable = false, length = 10)
-	public Date getAssignedDate() {
-		return this.assignedDate;
-	}
-
-	public void setAssignedDate(Date assignedDate) {
-		this.assignedDate = assignedDate;
-	}
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATED_DATE", nullable = false, length = 10)
-	public Date getCreatedDate() {
-		return this.createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
 	}
 
 	@Column(name = "JIRA_ID", nullable = false, length = 45)
@@ -152,13 +98,22 @@ public class TmsStoryMst extends BaseEntity {
 		this.storyPoint = storyPoint;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tmsStoryMst")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsStoryMst")
 	public Set<TmsSubtask> getTmsSubtasks() {
 		return this.tmsSubtasks;
 	}
 
 	public void setTmsSubtasks(Set<TmsSubtask> tmsSubtasks) {
 		this.tmsSubtasks = tmsSubtasks;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsStoryMst")
+	public Set<UserStoryStaus> getUserStoryStauses() {
+		return this.userStoryStauses;
+	}
+
+	public void setUserStoryStauses(Set<UserStoryStaus> userStoryStauses) {
+		this.userStoryStauses = userStoryStauses;
 	}
 
 }
