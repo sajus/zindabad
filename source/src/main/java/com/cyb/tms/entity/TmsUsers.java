@@ -39,21 +39,24 @@ public class TmsUsers extends BaseEntity {
 	private TmsProject tmsProject;
 	private String email;
 	private String isActive;
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	private String userName;
 	private String userRole;
 	private Set<TmsLeaveMst> tmsLeaveMsts = new HashSet<TmsLeaveMst>(0);
-	private Set<TmsCodeReview> tmsCodeReviewsForDeveloper = new HashSet<TmsCodeReview>(0);
-	private Set<TmsSubtask> tmsSubtasks = new HashSet<TmsSubtask>(0);
-	private Set<TmsCodeReview> tmsCodeReviewsForFixedBy = new HashSet<TmsCodeReview>(0);
-	private Set<TmsStoryMst> tmsStoryMsts = new HashSet<TmsStoryMst>(0);
-	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(0);
+	private Set<UserStoryStaus> userStoryStausesForAssignedTo = new HashSet<UserStoryStaus>(
+			0);
+	private Set<TmsCodeReview> tmsCodeReviewsForFixedBy = new HashSet<TmsCodeReview>(
+			0);
+	private Set<TmsCodeReview> tmsCodeReviewsForDeveloper = new HashSet<TmsCodeReview>(
+			0);
+	private Set<UserStoryStaus> userStoryStausesForModifiedBy = new HashSet<UserStoryStaus>(
+			0);
 
 	public TmsUsers() {
 	}
 
-	public TmsUsers(String email, String isActive, String password, String userName, String userRole) {
+	public TmsUsers(String email, String isActive, String password,
+			String userName, String userRole) {
 		this.email = email;
 		this.isActive = isActive;
 		this.password = password;
@@ -61,10 +64,13 @@ public class TmsUsers extends BaseEntity {
 		this.userRole = userRole;
 	}
 
-	public TmsUsers(TmsProject tmsProject, String email, String isActive, String password, String userName,
-			String userRole, Set<TmsLeaveMst> tmsLeaveMsts, Set<TmsCodeReview> tmsCodeReviewsForDeveloper,
-			Set<TmsSubtask> tmsSubtasks, Set<TmsCodeReview> tmsCodeReviewsForFixedBy, Set<TmsStoryMst> tmsStoryMsts,
-			Set<UserStoryStaus> userStoryStauses) {
+	public TmsUsers(TmsProject tmsProject, String email, String isActive,
+			String password, String userName, String userRole,
+			Set<TmsLeaveMst> tmsLeaveMsts,
+			Set<UserStoryStaus> userStoryStausesForAssignedTo,
+			Set<TmsCodeReview> tmsCodeReviewsForFixedBy,
+			Set<TmsCodeReview> tmsCodeReviewsForDeveloper,
+			Set<UserStoryStaus> userStoryStausesForModifiedBy) {
 		this.tmsProject = tmsProject;
 		this.email = email;
 		this.isActive = isActive;
@@ -72,16 +78,14 @@ public class TmsUsers extends BaseEntity {
 		this.userName = userName;
 		this.userRole = userRole;
 		this.tmsLeaveMsts = tmsLeaveMsts;
-		this.tmsCodeReviewsForDeveloper = tmsCodeReviewsForDeveloper;
-		this.tmsSubtasks = tmsSubtasks;
+		this.userStoryStausesForAssignedTo = userStoryStausesForAssignedTo;
 		this.tmsCodeReviewsForFixedBy = tmsCodeReviewsForFixedBy;
-		this.tmsStoryMsts = tmsStoryMsts;
-		this.userStoryStauses = userStoryStauses;
+		this.tmsCodeReviewsForDeveloper = tmsCodeReviewsForDeveloper;
+		this.userStoryStausesForModifiedBy = userStoryStausesForModifiedBy;
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "ID", unique = true, nullable = false)
 	public Long getId() {
 		return this.id;
@@ -92,7 +96,7 @@ public class TmsUsers extends BaseEntity {
 	}
 
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROJECT_ID")
 	public TmsProject getTmsProject() {
 		return this.tmsProject;
@@ -110,7 +114,7 @@ public class TmsUsers extends BaseEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	@Column(name = "IS_ACTIVE", nullable = false, length = 9)
 	public String getIsActive() {
 		return this.isActive;
@@ -120,7 +124,6 @@ public class TmsUsers extends BaseEntity {
 		this.isActive = isActive;
 	}
 
-	@JsonIgnore
 	@Column(name = "PASSWORD", nullable = false, length = 80)
 	public String getPassword() {
 		return this.password;
@@ -159,23 +162,14 @@ public class TmsUsers extends BaseEntity {
 	}
 
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsersByDeveloper")
-	public Set<TmsCodeReview> getTmsCodeReviewsForDeveloper() {
-		return this.tmsCodeReviewsForDeveloper;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsersByAssignedTo")
+	public Set<UserStoryStaus> getUserStoryStausesForAssignedTo() {
+		return this.userStoryStausesForAssignedTo;
 	}
 
-	public void setTmsCodeReviewsForDeveloper(Set<TmsCodeReview> tmsCodeReviewsForDeveloper) {
-		this.tmsCodeReviewsForDeveloper = tmsCodeReviewsForDeveloper;
-	}
-
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsers")
-	public Set<TmsSubtask> getTmsSubtasks() {
-		return this.tmsSubtasks;
-	}
-
-	public void setTmsSubtasks(Set<TmsSubtask> tmsSubtasks) {
-		this.tmsSubtasks = tmsSubtasks;
+	public void setUserStoryStausesForAssignedTo(
+			Set<UserStoryStaus> userStoryStausesForAssignedTo) {
+		this.userStoryStausesForAssignedTo = userStoryStausesForAssignedTo;
 	}
 
 	@JsonIgnore
@@ -184,28 +178,30 @@ public class TmsUsers extends BaseEntity {
 		return this.tmsCodeReviewsForFixedBy;
 	}
 
-	public void setTmsCodeReviewsForFixedBy(Set<TmsCodeReview> tmsCodeReviewsForFixedBy) {
+	public void setTmsCodeReviewsForFixedBy(
+			Set<TmsCodeReview> tmsCodeReviewsForFixedBy) {
 		this.tmsCodeReviewsForFixedBy = tmsCodeReviewsForFixedBy;
 	}
 
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsers")
-	public Set<TmsStoryMst> getTmsStoryMsts() {
-		return this.tmsStoryMsts;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsersByDeveloper")
+	public Set<TmsCodeReview> getTmsCodeReviewsForDeveloper() {
+		return this.tmsCodeReviewsForDeveloper;
 	}
 
-	public void setTmsStoryMsts(Set<TmsStoryMst> tmsStoryMsts) {
-		this.tmsStoryMsts = tmsStoryMsts;
+	public void setTmsCodeReviewsForDeveloper(
+			Set<TmsCodeReview> tmsCodeReviewsForDeveloper) {
+		this.tmsCodeReviewsForDeveloper = tmsCodeReviewsForDeveloper;
 	}
 
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsers")
-	public Set<UserStoryStaus> getUserStoryStauses() {
-		return this.userStoryStauses;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsersByModifiedBy")
+	public Set<UserStoryStaus> getUserStoryStausesForModifiedBy() {
+		return this.userStoryStausesForModifiedBy;
 	}
 
-	public void setUserStoryStauses(Set<UserStoryStaus> userStoryStauses) {
-		this.userStoryStauses = userStoryStauses;
+	public void setUserStoryStausesForModifiedBy(
+			Set<UserStoryStaus> userStoryStausesForModifiedBy) {
+		this.userStoryStausesForModifiedBy = userStoryStausesForModifiedBy;
 	}
-
 }
