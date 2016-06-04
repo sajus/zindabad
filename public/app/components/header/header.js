@@ -117,6 +117,11 @@ return angular.module('myApp.directive',['appConstants', 'navMenus', '$location'
             css: 'leave/leave.css',
             controller  : 'leaveCtrl'
         })
+        .when('/users', {
+            templateUrl : 'user/user.html',
+            css: 'user/user.css',
+            controller  : 'userCtrl'
+        })
         .otherwise({
 	        redirectTo: '/dashboard'
 	    });	
