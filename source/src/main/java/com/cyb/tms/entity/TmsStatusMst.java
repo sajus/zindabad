@@ -27,7 +27,6 @@ public class TmsStatusMst extends BaseEntity {
 	private static final long serialVersionUID = 1665371766283980783L;
 	private Long statusId;
 	private String status;
-	private Set<TmsStoryMst> tmsStoryMsts = new HashSet<TmsStoryMst>(0);
 	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(0);
 
 	public TmsStatusMst() {
@@ -37,9 +36,8 @@ public class TmsStatusMst extends BaseEntity {
 		this.status = status;
 	}
 
-	public TmsStatusMst(String status, Set<TmsStoryMst> tmsStoryMsts, Set<UserStoryStaus> userStoryStauses) {
+	public TmsStatusMst(String status, Set<UserStoryStaus> userStoryStauses) {
 		this.status = status;
-		this.tmsStoryMsts = tmsStoryMsts;
 		this.userStoryStauses = userStoryStauses;
 	}
 
@@ -62,15 +60,6 @@ public class TmsStatusMst extends BaseEntity {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsStatusMst")
-	public Set<TmsStoryMst> getTmsStoryMsts() {
-		return this.tmsStoryMsts;
-	}
-
-	public void setTmsStoryMsts(Set<TmsStoryMst> tmsStoryMsts) {
-		this.tmsStoryMsts = tmsStoryMsts;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsStatusMst")

@@ -20,8 +20,8 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	@Autowired
 	private HibernateUtil hibernateUtil;
 	
-	@Autowired
-	private TmsSprintDAO tmsSprintDAO;
+	//@Autowired
+	//private TmsSprintDAO tmsSprintDAO;
 
 	@Override
 	public long createSubtask(TmsSubtask subtask) {
@@ -44,30 +44,30 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	}
 
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<TmsSubtask> getSubTaskBySprint(Long projectId) throws Exception {
-		
-		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
-		if(sprint != null) {
-			Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsSubtask.class, "subtask");
-			criteria.createAlias("userStoryStatus", "uss");
-			criteria.createAlias("tmsSprintMst", "sp");
-			criteria.add(Restrictions.eqProperty("uss.jiraId", "story.jiraId"));
-			criteria.add(Restrictions.eqProperty("uss.tmsSprintMst", "sp.sprintId"));
-			criteria.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()));
-			return criteria.list();
-			
-		} else {
-			throw new Exception("Sprint not found");
-		}
-	}
-
-	@Override
-	public List<TmsSubtask> getSubTaskBySprintByUserwise(Long userId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public List<TmsSubtask> getSubTaskBySprint(Long projectId) throws Exception {
+//		
+//		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+//		if(sprint != null) {
+//			Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsSubtask.class, "subtask");
+//			criteria.createAlias("userStoryStatus", "uss");
+//			criteria.createAlias("tmsSprintMst", "sp");
+//			criteria.add(Restrictions.eqProperty("uss.jiraId", "story.jiraId"));
+//			criteria.add(Restrictions.eqProperty("uss.tmsSprintMst", "sp.sprintId"));
+//			criteria.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()));
+//			return criteria.list();
+//			
+//		} else {
+//			throw new Exception("Sprint not found");
+//		}
+//	}
+//
+//	@Override
+//	public List<TmsSubtask> getSubTaskBySprintByUserwise(Long userId) throws Exception {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 
 }

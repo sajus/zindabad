@@ -19,7 +19,7 @@ import com.cyb.tms.service.TmsUserService;
 public class TmsUserServiceImpl implements TmsUserService {
 	
 	@Autowired
-	TmsUsersDAO tmsUsersDao;
+	private TmsUsersDAO tmsUsersDao;
 
 	@Override
 	public long createUser(TmsUsers tmsUser) {

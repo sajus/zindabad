@@ -22,7 +22,7 @@ import com.cyb.tms.util.URIConstants;
 public class TmsUserController {
 	
 	@Autowired
-	TmsUserService tmsUserService;
+	private TmsUserService tmsUserService;
 	
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@RequestBody TmsUsers tmsUser) {

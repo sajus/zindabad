@@ -41,9 +41,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
 		TmsStoryMst storyMst = new TmsStoryMst();
 		BeanUtils.copyProperties(storyDTO, storyMst);
-		storyMst.setTmsUsers(user);
 		storyMst.setTmsModule(module);
-		storyMst.setTmsStatusMst(status);
 		return (Long)hibernateUtil.create(storyMst);
 	}
 
