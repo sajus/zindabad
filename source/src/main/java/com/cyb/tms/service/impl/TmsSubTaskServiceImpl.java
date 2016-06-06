@@ -1,5 +1,6 @@
 package com.cyb.tms.service.impl;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +39,18 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 		return tmsSubTaskDAO.getSubtask(id);
 	}
 
-	@Override
-	public List<TmsSubtask> getSubTaskBySprint(Long projectId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public List<TmsSubtask> getSubTaskBySprintByUserwise(Long userId) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<LinkedHashMap<String, Object>> getSubtasksBySprint(
+			Long projectId) throws Exception {
+		return tmsSubTaskDAO.getSubtasksBySprint(projectId);
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.cyb.tms.dao.impl;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -9,7 +11,10 @@ import java.util.List;
 
 
 
+
+
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +28,7 @@ import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.entity.TmsUsers;
+import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.util.HibernateUtil;
 
 @Repository
@@ -62,21 +68,57 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TmsStoryMst> getStoriesBySprint(Long projectId) throws Exception {
+	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception {
 		
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
-			Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class, "story");
-			criteria.createAlias("userStoryStatus", "uss");
-			criteria.createAlias("tmsSprintMst", "sp");
-			criteria.add(Restrictions.eqProperty("uss.jiraId", "story.jiraId"));
-			criteria.add(Restrictions.eqProperty("uss.tmsSprintMst", "sp.sprintId"));
-			criteria.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()));
-			return criteria.list();
+			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+                    .createAlias("tmsSprintMst", "sprint")
+                    .createAlias("tmsStoryMst", "story")
+                    .setProjection( Projections.distinct(Projections.property("story.storyId")))
+                    .add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
+			if(storyIds.size() > 0) {
+				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
+						  				  .add(Restrictions.in("storyId", storyIds)).list();
+				
+				return parseStories(stories);
+			} else {
+				return null;
+			}
 			
 		} else {
 			throw new Exception("Sprint not found");
 		}
 	}
 
+	
+private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stories) {
+		
+		List<LinkedHashMap<String, Object>> userStories = new ArrayList<LinkedHashMap<String, Object>>();
+		for (TmsStoryMst tmsStoryMst : stories) {
+			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
+			map.put("storyId", tmsStoryMst.getStoryId());
+			map.put("jiraId", tmsStoryMst.getJiraId());
+			map.put("storyPoint", tmsStoryMst.getStoryPoint());
+			map.put("moduleId", tmsStoryMst.getTmsModule().getId());
+			map.put("moduleName", tmsStoryMst.getTmsModule().getModuleName());
+			
+			List<LinkedHashMap<String, Object>> ussList = new ArrayList<LinkedHashMap<String, Object>>();
+			for (UserStoryStaus userStoryStaus : tmsStoryMst.getUserStoryStauses()) {
+				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
+				uss.put("id", userStoryStaus.getId());
+				uss.put("createdDate", userStoryStaus.getCreatedDate());
+				uss.put("assignedDate", userStoryStaus.getAssignedDate());
+				uss.put("type", userStoryStaus.getType());
+				uss.put("modifiedDate", userStoryStaus.getModifiedDate());
+				uss.put("status", userStoryStaus.getTmsStatusMst().getStatus());
+				uss.put("assignedTo", userStoryStaus.getTmsUsersByAssignedTo().getUserName());
+				uss.put("modifiedBy", userStoryStaus.getTmsUsersByModifiedBy().getUserName());
+				ussList.add(uss);
+			}
+			map.put("userStoryStatus", ussList);
+			userStories.add(map);
+		}
+		return userStories;
+	}
 }

@@ -1,5 +1,6 @@
 package com.cyb.tms.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cyb.tms.entity.TmsStoryMst;
@@ -41,6 +43,16 @@ public class TmsSubTaskController {
 		List<TmsSubtask> stories = tmsSubTaskService.getAllSubtasks();
 		return new ResponseEntity<List<TmsSubtask>>(stories, HttpStatus.OK);
 	}
+	
+	
+	// ------------------Retrieve Stories by Sprint --------------
+
+	@RequestMapping(value = URIConstants.SUBTASKS_BY_SPRINT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LinkedHashMap<String, Object>>> listSubtasksBySprint(@RequestParam Long projectId) throws Exception {
+		List<LinkedHashMap<String, Object>> subtasks = tmsSubTaskService.getSubtasksBySprint(projectId);
+		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(subtasks, HttpStatus.OK);
+	}
+
 
 
 }

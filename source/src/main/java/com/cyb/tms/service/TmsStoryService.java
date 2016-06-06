@@ -1,5 +1,6 @@
 package com.cyb.tms.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.cyb.tms.dto.StoryDTO;
@@ -11,7 +12,7 @@ public interface TmsStoryService {
 	public TmsStoryMst updateStory(TmsStoryMst story);
 	public List<TmsStoryMst> getAllStories();
 	public TmsStoryMst getSprint(long id);
-	public List<TmsStoryMst> getStoriesBySprint(Long projectId) throws Exception;
+	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception;
 	public void addToCurrentSprint(StoryDTO storyDTO);
 
 }

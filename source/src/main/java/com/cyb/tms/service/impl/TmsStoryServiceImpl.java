@@ -1,5 +1,6 @@
 package com.cyb.tms.service.impl;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	}
 
 	@Override
-	public List<TmsStoryMst> getStoriesBySprint(Long projectId) throws Exception {
+	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception {
 		return tmsStoryDAO.getStoriesBySprint(projectId);
 	}
 

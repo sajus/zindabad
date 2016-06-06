@@ -38,6 +38,7 @@ public class URIConstants {
 	
 	// Subtask
 	public static final String SUBTASK = "api/subtask";
+	public static final String SUBTASKS_BY_SPRINT = "/sprint";
 	
 	// Efforts
 	public static final String EFFORTS = "api/efforts";
