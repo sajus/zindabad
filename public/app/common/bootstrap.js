@@ -15,7 +15,9 @@ define([
 	'user/user',
 	'common/userService',
 	'components/loader/loader',
-	'common/storyService'
+	'common/storyService',
+	'subtask/subtask',
+	'common/subtaskService'
 		], function(
 				loginView, 
 				homeView, 
@@ -32,7 +34,9 @@ define([
 				leaveService, 
 				userService,
 				loader,
-				storyService
+				storyService,
+				subtaskService,
+				subtaskView
 			) {
 	return [
 		homeView, 
@@ -50,6 +54,8 @@ define([
 		userView,
 		userService,
 		loader,
-		storyService
+		storyService,
+		subtaskService,
+		subtaskView
 	];
 });
