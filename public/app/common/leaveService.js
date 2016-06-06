@@ -6,14 +6,16 @@ define([
 
 		var leaveService = {};
 
-		leaveService.getLeave = function () {
-        return $http.post(appConstants.endPointBase+"api/leave/list/project?projectId="+appConstants.user.projectId);
+		leaveService.getLeaves = function () {
+			return $http({
+			    url: appConstants.endPointBase+"api/leave/list/project", 
+			    method: "POST",
+			    params: {projectId: appConstants.user.projectId}
+			 });
         
-    };
+    	};
 
     return leaveService;
 
 	});
-	
-	
 });

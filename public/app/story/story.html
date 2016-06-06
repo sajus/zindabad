@@ -3,39 +3,45 @@
 		
         
         <div class="col-md-12">
-        <h4>LIST OF STORY</h4>
+        <h4>LIST OF STORIES</h4>
+         <div class="float-right">
+    		<button class="btn btn-success btn-add" type="button">
+                              <i class="glyphicon glyphicon-plus gs"></i>
+                              Add Story
+                            </button>
+ 		 </div>          
         <div class="table table-hover table-bordered table-responsive">
 
                 
               <table id="mytable" class="table table-bordred table-striped">
                    
-                   <!-- <thead>
-                   
-                   <th><input type="checkbox" id="checkall" /></th>
-                   <th>First Name</th>
-                    <th>Last Name</th>
-                     <th>Address</th>
-                     <th>Email</th>
-                     <th>Contact</th>
-                      <th>Edit</th>
-                      
-                       <th>Delete</th>
-                   </thead> -->
-
-
                    <thead>
-                   <tr>
-                   <th><input type="checkbox" id="checkall" /></th>
-                   <th>CREATED DATE</th>
-                    <th>ASSIGNED DATE</th>
-                     <th>JIRA ID</th>
-                     <th>MODULE</th>
-                     <th>STATUS</th>
-                      <th>STORY POINT</th>
-                      <th>Edit</th>
-                       <th>Delete</th>
+                   		<tr>
+                   			<th>S.No</th>
+		                    <th>CREATED DATE</th>
+		                    <th>ASSIGNED DATE</th>
+	                     	<th>JIRA ID</th>
+		                    <th>MODULE</th>
+	                    	<th>STORY POINT</th>
+		                    <th>STATUS</th>
+	                      	<th>Edit</th>
+	                      	<th>Details</th>
                        </tr>
                    </thead>
+                   <tbody>
+                   		<tr ng-repeat="story in stories track by $index">
+                   			<td>{{$index+1}}
+					    	<td>{{story.userStoryStatus[0].createdDate}}</td>
+					    	<td>{{story.userStoryStatus[0].assignedDate}}</td>
+					    	<td>{{story.jiraId}}</td>
+					    	<td>{{story.moduleName}}</td>
+					    	<td>{{story.storyPoint}}</td>
+					    	<td>{{story.userStoryStatus[story.userStoryStatus.length-1].status}}</td>
+					    	<td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+					    	<td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+    					</tr>
+
+                   </tbody>
 
    <!--  <tbody>
     

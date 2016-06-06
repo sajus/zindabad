@@ -13,7 +13,43 @@ define([
 	'leave/leave',
 	'common/leaveService',
 	'user/user',
-	'common/userService'
-		], function(loginView, homeView, loginService, userView, header, appConstants, navMenus, tmsTable, storyView, sprintView, sprintService, leaveView, leaveService, userService) {
-	return [homeView, loginView, loginService, header, appConstants, navMenus, tmsTable, storyView, sprintView, sprintService, leaveView, leaveService, userView, userService];
+	'common/userService',
+	'components/loader/loader',
+	'common/storyService'
+		], function(
+				loginView, 
+				homeView, 
+				loginService,
+				userView, 
+				header, 
+				appConstants, 
+				navMenus, 
+				tmsTable,
+				storyView, 
+				sprintView, 
+				sprintService,
+				leaveView, 
+				leaveService, 
+				userService,
+				loader,
+				storyService
+			) {
+	return [
+		homeView, 
+		loginView, 
+		loginService, 
+		header, 
+		appConstants, 
+		navMenus, 
+		tmsTable, 
+		storyView, 
+		sprintView, 
+		sprintService, 
+		leaveView, 
+		leaveService, 
+		userView,
+		userService,
+		loader,
+		storyService
+	];
 });

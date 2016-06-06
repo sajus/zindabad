@@ -14,6 +14,8 @@
 
 //http://bootsnipp.com/snippets/b4mgg  // loading...
 
+//http://bootsnipp.com/snippets/xaZaG (fancy form)
+
 
 'use strict';
 define([

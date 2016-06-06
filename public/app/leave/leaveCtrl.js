@@ -3,19 +3,17 @@
 define([], function() {
 	return ['$scope','appConstants','$http','leaveService', function($scope, appConstants, $http, leaveService) {
 	
-	function getLeave() {
-        leaveService.getLeave()
+	function getLeaves() {
+        leaveService.getLeaves()
             .success(function (dataLeave) {
-             $scope.leave = dataLeave;
-          
-                
+             $scope.leave = dataLeave; 
             })
             .error(function (error) {
-                $scope.status = 'Unable to load customer data: ' + error.message;
+                $scope.status = 'Unable to process your request: ' + error.message;
             });
     }
     
-    getLeave();
+    getLeaves();
 
 	$scope.$apply();
 		
