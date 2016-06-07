@@ -25,30 +25,15 @@ define([], function() {
 
 
     $scope.editSprint = function(s){
-    
-             $scope.sprintName = s.sprintName; 
-             $scope.sprintStartDate = s.sprintStartDate;
-             $scope.sprintEndDate = s.sprintEndDate;
-             $scope.sprintHours = s.sprintHours;
-             $scope.sprintVelocity = s.sprintVelocity;  
-
-               
-            }
-           
-     $scope.addSprint = function(){
-    
-        sprintService.addSprint()
-             $scope.sprintName = s.sprintName; 
-             $scope.sprintStartDate = s.sprintStartDate;
-             $scope.sprintEndDate = s.sprintEndDate;
-             $scope.sprintHours = s.sprintHours;
-             $scope.sprintVelocity = s.sprintVelocity;  
-
-               
-            }
-    
+        $scope.sprintName = s.sprintName; 
+        $scope.sprintStartDate = s.sprintStartDate;
+        $scope.sprintEndDate = s.sprintEndDate;
+        $scope.sprintHours = s.sprintHours;
+        $scope.sprintVelocity = s.sprintVelocity;  
+    };
 
 	$scope.$apply();
+
 		
 	}];
 });
