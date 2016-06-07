@@ -73,6 +73,8 @@ public class HibernateUtil {
     						.add(Restrictions.eq(propertyName, value)).list();
     	return (T) ((list != null && list.size() > 0) ? list.get(0) : null);
 	}
+
+	
     
     
 	

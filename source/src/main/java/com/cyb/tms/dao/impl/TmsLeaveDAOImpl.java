@@ -1,17 +1,25 @@
 package com.cyb.tms.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsLeaveDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
+import com.cyb.tms.dto.TmsLeaveDTO;
 import com.cyb.tms.entity.TmsLeaveMst;
+import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
+import com.cyb.tms.entity.TmsStatusMst;
+import com.cyb.tms.entity.TmsStoryMst;
+import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.util.HibernateUtil;
+import com.cyb.tms.util.WorkingDaysCalculator;
 
 @Repository
 public class TmsLeaveDAOImpl implements TmsLeaveDAO{
@@ -23,14 +31,34 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 	private TmsSprintDAO tmsSprintDAO;
 	
 	@Override
-	public long createLeave(TmsLeaveMst leave) {
-		return (long) hibernateUtil.create(leave);
+	public long createLeave(TmsLeaveDTO tmsleaveDTO) {
+	
+//	leave.setTmsSprintMst();
+//	leave.setTmsUsers();
+ //  
+		
+		TmsUsers id = hibernateUtil.fetchById( tmsleaveDTO.getId(), TmsUsers.class);
+	//	TmsSprintMst sprintId = hibernateUtil.fetchById(tmsleaveDTO.getSprintId(), TmsSprintMst.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(tmsleaveDTO.getProjectId());
+		TmsLeaveMst leave =new TmsLeaveMst();
+		BeanUtils.copyProperties(tmsleaveDTO, leave);
+		leave.setTmsSprintMst(sprint);
+		leave.setTmsUsers(id);
+		leave.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
+     	return (long) hibernateUtil.create(leave);
+		
+		/*TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
+		TmsStoryMst storyMst = new TmsStoryMst();
+		BeanUtils.copyProperties(storyDTO, storyMst);
+		storyMst.setTmsModule(module);
+		return (Long)hibernateUtil.create(storyMst);*/		
 	}
 
 	@Override
 	public TmsLeaveMst updateLeave(TmsLeaveMst leave) {
 		return hibernateUtil.update(leave);
 	}
+	
 
 	@Override
 	public void deleteLeave(long id) {

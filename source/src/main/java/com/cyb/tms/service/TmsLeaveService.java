@@ -2,11 +2,12 @@ package com.cyb.tms.service;
 
 import java.util.List;
 
+import com.cyb.tms.dto.TmsLeaveDTO;
 import com.cyb.tms.entity.TmsLeaveMst;
 
 public interface TmsLeaveService {
 
-	public long createLeave(TmsLeaveMst leave);
+	public long createLeave(TmsLeaveDTO tmsleaveDTO);
     public TmsLeaveMst updateLeave(TmsLeaveMst leave);
     public void deleteLeave(long id);
     public List<TmsLeaveMst> getAllLeaves();

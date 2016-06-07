@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.dto.StoryDTO;
+import com.cyb.tms.dto.TmsLeaveDTO;
 import com.cyb.tms.entity.TmsLeaveMst;
+import com.cyb.tms.entity.TmsModule;
+import com.cyb.tms.entity.TmsStatusMst;
+import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.service.TmsLeaveService;
 import com.cyb.tms.util.URIConstants;
 
@@ -23,21 +28,29 @@ public class TmsLeaveController {
 
 	@Autowired
 	TmsLeaveService tmsLeaveService;
-	
-	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST)
-    public ResponseEntity<?> createLeave(@RequestBody TmsLeaveMst leave) {
-		
-		System.out.println("Creating User " + leave.getLeavetype());
-		 
-		/*if (leaveService.isUserExist(leaves)) {
-            System.out.println("Leave for the date  " + leaves.getDate() + " already exist");
-            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-        }*/
- 
-		tmsLeaveService.createLeave(leave);
+
+	// -------------------Create a leave---------------
+		@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createLeave(@RequestBody TmsLeaveDTO tmsleaveDTO) {
+				
+			tmsLeaveService.createLeave(tmsleaveDTO);
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        
+        
+        
     }
+		
+		/*-------------------Create a Story---------------
+		@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<Void> createStory(@RequestBody StoryDTO storyDTO) {
+			tmsStoryService.createStory(storyDTO);
+			HttpHeaders headers = new HttpHeaders();
+			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		}*/
+		
+		
+		
 	
 	 @RequestMapping(value = URIConstants.GET_ALL, method = RequestMethod.GET)
 	    public ResponseEntity<List<TmsLeaveMst>> listAllLeaves() {
