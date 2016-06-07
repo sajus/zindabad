@@ -50,6 +50,12 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public List<LinkedHashMap<Object, Object>> getBackLogStories(Long projectId)
+			throws Exception {
+		return null;
+	}
 	
 	
 }

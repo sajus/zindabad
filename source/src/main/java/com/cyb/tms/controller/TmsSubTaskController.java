@@ -45,7 +45,7 @@ public class TmsSubTaskController {
 	}
 	
 	
-	// ------------------Retrieve Stories by Sprint --------------
+	// ------------------Retrieve All Subtasks by Sprint --------------
 
 	@RequestMapping(value = URIConstants.SUBTASKS_BY_SPRINT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<LinkedHashMap<String, Object>>> listSubtasksBySprint(@RequestParam Long projectId) throws Exception {

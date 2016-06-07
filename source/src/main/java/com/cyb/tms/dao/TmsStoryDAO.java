@@ -13,4 +13,5 @@ public interface TmsStoryDAO {
 	public List<TmsStoryMst> getAllStories();
 	public TmsStoryMst getSprint(long id);
 	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception;
+	public List<LinkedHashMap<Object, Object>> getBackLogStories(Long projectId) throws Exception;
 }

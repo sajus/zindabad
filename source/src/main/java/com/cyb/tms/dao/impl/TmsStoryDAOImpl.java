@@ -13,6 +13,8 @@ import java.util.List;
 
 
 
+
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -33,10 +35,10 @@ import com.cyb.tms.util.HibernateUtil;
 
 @Repository
 public class TmsStoryDAOImpl implements TmsStoryDAO {
-	
+
 	@Autowired
 	private HibernateUtil hibernateUtil;
-	
+
 	@Autowired
 	private TmsSprintDAO tmsSprintDAO;
 
@@ -69,31 +71,58 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception {
-		
+
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
 			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
-                    .createAlias("tmsSprintMst", "sprint")
-                    .createAlias("tmsStoryMst", "story")
-                    .setProjection( Projections.distinct(Projections.property("story.storyId")))
-                    .add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
+					.createAlias("tmsSprintMst", "sprint")
+					.createAlias("tmsStoryMst", "story")
+					.setProjection( Projections.distinct(Projections.property("story.storyId")))
+					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
 				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
-						  				  .add(Restrictions.in("storyId", storyIds)).list();
-				
+											.add(Restrictions.in("storyId", storyIds)).list();
+
 				return parseStories(stories);
 			} else {
 				return null;
 			}
-			
+
 		} else {
 			throw new Exception("Sprint not found");
 		}
 	}
 
-	
-private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stories) {
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LinkedHashMap<Object, Object>> getBackLogStories(Long projectId)
+			throws Exception {
+//		List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+//				.createAlias("tmsStatusMst", "tsm")
+//				.setProjection( Projections.max("uss.id"))
+//				.add(Restrictions.eqProperty("tsm.statusId", "uss.tmsStatusMst"))
+//				.add(Restrictions.eq("tsm.status", "BACKLOG")).list();
+//		if(storyIds.size() > 0) {
+//			List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
+//					.add(Restrictions.in("storyId", storyIds)).list();
+
+			return null; //return parseStories(stories);
+	}
 		
+//		DetachedCriteria maxFecha = DetachedCriteria
+//				.forClass(CambiosEstado.class, "cambio")
+//				.setProjection(Projections.max("fecha"))
+//				.add(Property.forName("cambio.practicasEst").eqProperty("cambio2.practicasEst"));  
+//				Criteria criteria = this.getSession().createCriteria(
+//				PracticasEst.class);
+//				Criteria estadosCriteria = criteria.createCriteria(
+//				"cambiosEstados", "cambio2");
+//				estadosCriteria.add(Restrictions.eq("estados", estados));
+//				estadosCriteria.add(Property.forName("fecha").eq(maxFecha));
+//				return criteria.list();
+
+	private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stories) {
+
 		List<LinkedHashMap<String, Object>> userStories = new ArrayList<LinkedHashMap<String, Object>>();
 		for (TmsStoryMst tmsStoryMst : stories) {
 			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
@@ -102,7 +131,7 @@ private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stori
 			map.put("storyPoint", tmsStoryMst.getStoryPoint());
 			map.put("moduleId", tmsStoryMst.getTmsModule().getId());
 			map.put("moduleName", tmsStoryMst.getTmsModule().getModuleName());
-			
+
 			List<LinkedHashMap<String, Object>> ussList = new ArrayList<LinkedHashMap<String, Object>>();
 			for (UserStoryStaus userStoryStaus : tmsStoryMst.getUserStoryStauses()) {
 				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
@@ -121,4 +150,5 @@ private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stori
 		}
 		return userStories;
 	}
+
 }
