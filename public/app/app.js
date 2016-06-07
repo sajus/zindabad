@@ -4,8 +4,9 @@ define([
 	'angular',
 	'angularRoute',
 	'common/bootstrap',
+	'common/ga',
 	'angularLocalStorage'
-], function(angular, angularRoute, bootstrap) {
+], function(angular, angularRoute, bootstrap, ga) {
 	// Declare app level module which depends on views, and components
 
 	var app = angular.module('myApp', [
@@ -74,6 +75,8 @@ define([
         $rootScope.$on('$viewContentLoaded', function() {
 	       $templateCache.removeAll();
 	   	});
+
+		ga.sendPageView('testUser', 'testPage');
 
         // redirect to login page if not logged in and trying to access a restricted page
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
