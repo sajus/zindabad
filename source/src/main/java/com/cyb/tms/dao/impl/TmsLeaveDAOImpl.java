@@ -32,26 +32,14 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 	
 	@Override
 	public long createLeave(TmsLeaveDTO tmsleaveDTO) {
-	
-//	leave.setTmsSprintMst();
-//	leave.setTmsUsers();
- //  
-		
-		TmsUsers id = hibernateUtil.fetchById( tmsleaveDTO.getId(), TmsUsers.class);
-	//	TmsSprintMst sprintId = hibernateUtil.fetchById(tmsleaveDTO.getSprintId(), TmsSprintMst.class);
+		TmsUsers user = hibernateUtil.fetchById( tmsleaveDTO.getId(), TmsUsers.class);
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(tmsleaveDTO.getProjectId());
 		TmsLeaveMst leave =new TmsLeaveMst();
 		BeanUtils.copyProperties(tmsleaveDTO, leave);
 		leave.setTmsSprintMst(sprint);
-		leave.setTmsUsers(id);
+		leave.setTmsUsers(user);
 		leave.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
      	return (long) hibernateUtil.create(leave);
-		
-		/*TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
-		TmsStoryMst storyMst = new TmsStoryMst();
-		BeanUtils.copyProperties(storyDTO, storyMst);
-		storyMst.setTmsModule(module);
-		return (Long)hibernateUtil.create(storyMst);*/		
 	}
 
 	@Override
@@ -93,13 +81,4 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 			throw new Exception("Sprint not found");
 		}
 	}
-
-	/*Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsLeaveMst.class, "leave");
-	criteria.createAlias("tmsSprintMst", "sp");
-	criteria.createAlias("tmsUsers", "user");
-	criteria.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()));
-	criteria.add(Restrictions.eq("user.id", userId));
-	return criteria.list();*/
-	
-	
 }

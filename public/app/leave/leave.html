@@ -14,15 +14,19 @@
         </button>
             <tr>
                 <th>S.No</th>
-                <th>Date</th>
-                <th>Leave Type</th>
+                <th>START DATE</th>
+                <th>END DATE</th>
+                <th>DURATION</th>
+                <th>REASON</th>
                 <th class="text-center">Action</th>
             </tr>
         </thead>
-                <tr ng-repeat="l in leave track by $index">
+                <tr ng-repeat="leave in leaves track by $index">
                     <td class="table-index-medium">{{$index+1}}</td>
-                    <td>{{ l.date}}</td>
-                    <td>{{ l.leavetype}}</td>
+                    <td>{{ leave.startDate}}</td>
+                    <td>{{ leave.endDate}}</td>
+                    <td>{{ leave.duration}}</td>
+                    <td>{{ leave.reason}}</td>
                     <td class="text-center table-actions-medium"><button class='btn btn-info btn-xs' type="button"><span class="glyphicon glyphicon-edit"></span> Edit</button> <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button></td>
                 </tr>
         </table>
