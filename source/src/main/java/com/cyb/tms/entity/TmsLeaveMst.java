@@ -31,69 +31,97 @@ public class TmsLeaveMst extends BaseEntity {
 	private Long leaveId;
 	private TmsSprintMst tmsSprintMst;
 	private TmsUsers tmsUsers;
-	private Date date;
-	private String leavetype;
+	private Date startDate;
+	private Date endDate;
+	private String reason;
+	private int duration;
+	
 
 	public TmsLeaveMst() {
 	}
 
-	public TmsLeaveMst(TmsSprintMst tmsSprintMst, TmsUsers tmsUsers, Date date, String leavetype) {
+	public TmsLeaveMst(TmsSprintMst tmsSprintMst, TmsUsers tmsUsers, Date startDate, Date endDate,
+			String reason, int duration) {
+		super();
+		
 		this.tmsSprintMst = tmsSprintMst;
 		this.tmsUsers = tmsUsers;
-		this.date = date;
-		this.leavetype = leavetype;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.reason = reason;
+		this.duration = duration;
 	}
-
+	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 
 	@Column(name = "LEAVE_ID", unique = true, nullable = false)
 	public Long getLeaveId() {
-		return this.leaveId;
+		return leaveId;
 	}
 
 	public void setLeaveId(Long leaveId) {
 		this.leaveId = leaveId;
 	}
-
+	
+	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SPRINTID", nullable = false)
 	public TmsSprintMst getTmsSprintMst() {
-		return this.tmsSprintMst;
+		return tmsSprintMst;
 	}
 
 	public void setTmsSprintMst(TmsSprintMst tmsSprintMst) {
 		this.tmsSprintMst = tmsSprintMst;
 	}
-
+	
+	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USERID", nullable = false)
 	public TmsUsers getTmsUsers() {
-		return this.tmsUsers;
+		return tmsUsers;
 	}
 
 	public void setTmsUsers(TmsUsers tmsUsers) {
 		this.tmsUsers = tmsUsers;
 	}
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "STARTDATE", nullable = false, length = 10)
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "DATE", nullable = false, length = 10)
-	public Date getDate() {
-		return this.date;
+	@Column(name = "ENDDATE", nullable = false, length = 10)
+	public Date getEndDate() {
+		return endDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	@Column(name = "REASON", nullable = false, length = 9)
+	public String getReason() {
+		return reason;
 	}
 
-	@Column(name = "LEAVETYPE", nullable = false, length = 9)
-	public String getLeavetype() {
-		return this.leavetype;
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	@Column(name = "DURATION", nullable = false, length = 9)
+	public int getDuration() {
+		return duration;
 	}
 
-	public void setLeavetype(String leavetype) {
-		this.leavetype = leavetype;
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
+
 }

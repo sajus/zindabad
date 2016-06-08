@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cyb.tms.dao.TmsLeaveDAO;
+import com.cyb.tms.dto.TmsLeaveDTO;
 import com.cyb.tms.entity.TmsLeaveMst;
 import com.cyb.tms.service.TmsLeaveService;
 
@@ -18,8 +19,8 @@ public class TmsLeaveServiceImpl implements TmsLeaveService{
 	TmsLeaveDAO tmsLeaveDAO;
 
 	@Override
-	public long createLeave(TmsLeaveMst leave) {
-		return tmsLeaveDAO.createLeave(leave);
+	public long createLeave(TmsLeaveDTO tmsleaveDTO) {
+		return tmsLeaveDAO.createLeave(tmsleaveDTO);
 	}
 
 	@Override

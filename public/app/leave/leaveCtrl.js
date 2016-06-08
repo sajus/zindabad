@@ -6,7 +6,7 @@ define([], function() {
 	function getLeaves() {
         leaveService.getLeaves()
             .success(function (dataLeave) {
-             $scope.leave = dataLeave; 
+             $scope.leaves = dataLeave; 
             })
             .error(function (error) {
                 $scope.status = 'Unable to process your request: ' + error.message;
