@@ -24,8 +24,8 @@ public class TmsLeaveServiceImpl implements TmsLeaveService{
 	}
 
 	@Override
-	public TmsLeaveMst updateLeave(TmsLeaveMst leave) {
-		return tmsLeaveDAO.updateLeave(leave);
+	public TmsLeaveMst updateLeave(TmsLeaveDTO tmsleaveDTO) {
+		return tmsLeaveDAO.updateLeave(tmsleaveDTO);
 	}
 
 	@Override

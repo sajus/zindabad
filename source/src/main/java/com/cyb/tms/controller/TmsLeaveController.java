@@ -39,6 +39,19 @@ public class TmsLeaveController {
 
 
 	}
+	
+//	// -------------------update a leave---------------
+	@RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> updateLeave(@RequestBody TmsLeaveDTO tmsleaveDTO) {
+		tmsLeaveService.createLeave(tmsleaveDTO);
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.OK);
+
+
+
+	}	
+		
+	
 
 	@RequestMapping(value = URIConstants.GET_ALL, method = RequestMethod.GET)
 	public ResponseEntity<List<TmsLeaveMst>> listAllLeaves() {
