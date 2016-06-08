@@ -16,7 +16,9 @@ import java.util.List;
 
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,9 +82,10 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					.setProjection( Projections.distinct(Projections.property("story.storyId")))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
+				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
 				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
 											.add(Restrictions.in("storyId", storyIds)).list();
-
+				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
 				return parseStories(stories);
 			} else {
 				return null;
@@ -109,18 +112,6 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			return null; //return parseStories(stories);
 	}
 		
-//		DetachedCriteria maxFecha = DetachedCriteria
-//				.forClass(CambiosEstado.class, "cambio")
-//				.setProjection(Projections.max("fecha"))
-//				.add(Property.forName("cambio.practicasEst").eqProperty("cambio2.practicasEst"));  
-//				Criteria criteria = this.getSession().createCriteria(
-//				PracticasEst.class);
-//				Criteria estadosCriteria = criteria.createCriteria(
-//				"cambiosEstados", "cambio2");
-//				estadosCriteria.add(Restrictions.eq("estados", estados));
-//				estadosCriteria.add(Property.forName("fecha").eq(maxFecha));
-//				return criteria.list();
-
 	private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stories) {
 
 		List<LinkedHashMap<String, Object>> userStories = new ArrayList<LinkedHashMap<String, Object>>();
@@ -131,23 +122,25 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			map.put("storyPoint", tmsStoryMst.getStoryPoint());
 			map.put("moduleId", tmsStoryMst.getTmsModule().getId());
 			map.put("moduleName", tmsStoryMst.getTmsModule().getModuleName());
-
-			List<LinkedHashMap<String, Object>> ussList = new ArrayList<LinkedHashMap<String, Object>>();
-			for (UserStoryStaus userStoryStaus : tmsStoryMst.getUserStoryStauses()) {
+			
+			for (UserStoryStaus userStoryStatus : tmsStoryMst.getUserStoryStauses()) {
 				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
-				uss.put("id", userStoryStaus.getId());
-				uss.put("createdDate", userStoryStaus.getCreatedDate());
-				uss.put("assignedDate", userStoryStaus.getAssignedDate());
-				uss.put("type", userStoryStaus.getType());
-				uss.put("modifiedDate", userStoryStaus.getModifiedDate());
-				uss.put("status", userStoryStaus.getTmsStatusMst().getStatus());
-				uss.put("assignedTo", userStoryStaus.getTmsUsersByAssignedTo().getUserName());
-				uss.put("modifiedBy", userStoryStaus.getTmsUsersByModifiedBy().getUserName());
-				ussList.add(uss);
-			}
-			map.put("userStoryStatus", ussList);
+				uss.put("id", userStoryStatus.getId());
+				uss.put("createdDate", userStoryStatus.getCreatedDate());
+				uss.put("type", userStoryStatus.getType());
+				uss.put("status", userStoryStatus.getTmsStatusMst().getStatus());
+				uss.put("assignedDate", userStoryStatus.getAssignedDate());
+				uss.put("modifiedDate", userStoryStatus.getModifiedDate());
+				if(userStoryStatus.getTmsUsersByAssignedTo() != null) {
+					uss.put("assignedTo", userStoryStatus.getTmsUsersByAssignedTo().getUserName());				
+				}
+				if(userStoryStatus.getTmsUsersByModifiedBy() != null) {
+					uss.put("modifiedBy", userStoryStatus.getTmsUsersByModifiedBy().getUserName());				
+				}
+				map.put("userStoryStatus", uss);
+			}	
 			userStories.add(map);
-		}
+			}
 		return userStories;
 	}
 

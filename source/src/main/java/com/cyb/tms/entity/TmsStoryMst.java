@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,6 +21,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+
 import com.cyb.tms.entity.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,12 +32,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "tms_story_mst", catalog = "TaskManagement")
+@FilterDef(name = TmsStoryMst.LATEST_STATUS_FILTER)
 public class TmsStoryMst extends BaseEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 9020461102911849768L;
+	public static final String LATEST_STATUS_FILTER = "latestStatusFilter";
 	private Long storyId;
 	private TmsModule tmsModule;
 	private String jiraId;
@@ -107,7 +113,8 @@ public class TmsStoryMst extends BaseEntity {
 		this.tmsSubtasks = tmsSubtasks;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsStoryMst")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tmsStoryMst", cascade=CascadeType.ALL)
+	@Filter(name = LATEST_STATUS_FILTER, condition = "ID = (select max(uss.ID) from user_story_staus uss where uss.STORY_ID = STORY_ID)")
 	public Set<UserStoryStaus> getUserStoryStauses() {
 		return this.userStoryStauses;
 	}
