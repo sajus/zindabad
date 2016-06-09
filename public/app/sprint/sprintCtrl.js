@@ -1,41 +1,61 @@
 'use strict';
 
 define([], function() {
-	return ['$scope','appConstants','$http','sprintService', function($scope, appConstants, $http, sprintService) {
+    return ['$scope','appConstants','$http','sprintService', function($scope, appConstants, $http, sprintService) {
   
-
-	function getSprint() {
+    function getSprint() {
 
       $scope.loading = true;
 
         sprintService.getSprint()
             .success(function (dataSprint) {
-             $scope.sprint = _.filter(dataSprint, function(sprint){ return sprint.sprintStatus !== 'CLOSED'});
-             $scope.loading = false;
-          
-                
+             $scope.sprints = dataSprint;//_.filter(dataSprint, function(sprint){ return sprint.sprintStatus !== 'CLOSED'});
+             $scope.loading = false;     
             })
             .error(function (error) {
                 $scope.status = 'Unable to load customer data: ' + error.message;
                 $scope.loading = false;
             });
     }
-	
+    
     getSprint();
 
 
-    $scope.editSprint = function(s){
-        $scope.sprintName = s.sprintName; 
-        $scope.sprintStartDate = s.sprintStartDate;
-        $scope.sprintEndDate = s.sprintEndDate;
-        $scope.sprintHours = s.sprintHours;
-        $scope.sprintVelocity = s.sprintVelocity;  
-    };
+    $scope.editSprint = function(sprint){
+       $scope.sprint = sprint;
 
-	$scope.$apply();
+    }
 
-		
-	}];
+    $scope.updateSprint = function(sprint){
+        sprintService.updateSprint(sprint)
+            .success(function () {
+                getSprint();
+            }).
+            error(function (error) {
+                $scope.status = 'Unable to insert Sprint: ' + error.message;
+            });
+
+        
+    }
+
+    $scope.addSprint = function(newSprint){
+
+        sprintService.addSprint(newSprint)
+            .success(function () {
+                $scope.sprints.push(newSprint);
+            }).
+            error(function (error) {
+                $scope.status = 'Unable to insert Sprint: ' + error.message;
+            });
+
+             $scope.newSprint = '';
+       };
+
+
+    $scope.$apply();
+
+        
+    }];
 });
 
 

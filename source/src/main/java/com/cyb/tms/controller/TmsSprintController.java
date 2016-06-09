@@ -60,7 +60,6 @@ public class TmsSprintController {
 	     
 	    @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
 	    public ResponseEntity<TmsSprintMst> updateSprint(@RequestBody TmsSprintDTO tmsSprintDTO) {
-	        //System.out.println("Updating Sprint " + id);
 	    	tmsSprintService.updateSprint(tmsSprintDTO);
 			HttpHeaders headers = new HttpHeaders();
 			return new ResponseEntity<TmsSprintMst>(headers, HttpStatus.OK);

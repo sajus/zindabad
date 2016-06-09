@@ -23,10 +23,9 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 
 	@Autowired
 	private HibernateUtil hibernateUtil;
-	
+
 	@Override
 	public long createSprint(TmsSprintDTO tmsSprintDTO) {
-		
 		TmsProject projectId = hibernateUtil.fetchById(tmsSprintDTO.getProjectId(), TmsProject.class); 
 		TmsSprintMst tmsSprintMst = new TmsSprintMst();
 		BeanUtils.copyProperties(tmsSprintDTO, tmsSprintMst);
@@ -43,13 +42,13 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 		return hibernateUtil.update(tmsSprintMst);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<TmsSprintMst> getAllSprints(long projectId) {
 		List<TmsSprintMst> sprint = hibernateUtil.getCurrentSession().createCriteria(TmsSprintMst.class, "sp")
-                .createAlias("tmsProject", "proj")
-                .add(Restrictions.eq("proj.pid", projectId)).list();
+				.createAlias("tmsProject", "proj")
+				.add(Restrictions.eq("proj.pid", projectId)).list();
 		return sprint;
-		//return hibernateUtil.fetchAll(TmsSprintMst.class);
 	}
 
 	@Override
@@ -60,9 +59,9 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	@Override
 	public TmsSprintMst getActiveSprint(long projectId) {
 		TmsSprintMst sprint = (TmsSprintMst) hibernateUtil.getCurrentSession().createCriteria(TmsSprintMst.class, "sp")
-                .createAlias("tmsProject", "proj")
-                .add(Restrictions.eq("proj.pid", projectId))
-                .add(Restrictions.eq("sp.sprintStatus", "OPEN")).uniqueResult();
+				.createAlias("tmsProject", "proj")
+				.add(Restrictions.eq("proj.pid", projectId))
+				.add(Restrictions.eq("sp.sprintStatus", "OPEN")).uniqueResult();
 		return sprint;
 	}
 
