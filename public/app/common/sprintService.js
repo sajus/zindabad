@@ -8,16 +8,37 @@ define([
 		var sprintService = {};
 
 		sprintService.getSprint = function () {
-        return $http.get(appConstants.endPointBase+"api/sprint/list");
+        	return $http({
+			    url: appConstants.endPointBase+"api/sprint/list", 
+			    method: "POST",
+			    params: {
+			  		projectId: appConstants.user.projectId
+			  	}
+			 });
         
-    };
-
-    // 	sprintService.updateSprintData= function (id) {
-
-    //     return $http.put(appConstants.endPointBase+"api/sprint/edit/{id}",sprint);
-    // };
+    	};
 
 
+    	sprintService.updateSprint = function (sprint) {
+    		sprint.projectId = appConstants.user.projectId;
+	        return $http({
+				    url: appConstants.endPointBase+"api/sprint/edit", 
+				    method: "POST",
+				    data: sprint
+				 });
+
+ 		};
+    	
+
+    	sprintService.addSprint = function (newSprint) {
+	       newSprint.projectId = appConstants.user.projectId;
+	        return $http({
+				    url: appConstants.endPointBase+"api/sprint/create", 
+				    method: "POST",
+				    data: newSprint
+				 });
+
+ 		};
  return sprintService;
 
   
