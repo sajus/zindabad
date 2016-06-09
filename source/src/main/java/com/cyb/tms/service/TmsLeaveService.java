@@ -8,7 +8,7 @@ import com.cyb.tms.entity.TmsLeaveMst;
 public interface TmsLeaveService {
 
 	public long createLeave(TmsLeaveDTO tmsleaveDTO);
-    public TmsLeaveMst updateLeave(TmsLeaveMst leave);
+    public TmsLeaveMst updateLeave(TmsLeaveDTO tmsleaveDTO);
     public void deleteLeave(long id);
     public List<TmsLeaveMst> getAllLeaves();
     public TmsLeaveMst getLeave(long id);

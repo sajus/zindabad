@@ -43,7 +43,16 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 	}
 
 	@Override
-	public TmsLeaveMst updateLeave(TmsLeaveMst leave) {
+	public TmsLeaveMst updateLeave(TmsLeaveDTO tmsleaveDTO) {
+		TmsUsers user = hibernateUtil.fetchById( tmsleaveDTO.getId(), TmsUsers.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(tmsleaveDTO.getProjectId());
+		TmsLeaveMst leave =new TmsLeaveMst();
+		BeanUtils.copyProperties(tmsleaveDTO, leave);
+		leave.setTmsSprintMst(sprint);
+		leave.setTmsUsers(user);
+		leave.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
+		
+		
 		return hibernateUtil.update(leave);
 	}
 	

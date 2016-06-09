@@ -9,8 +9,10 @@ public class URIConstants {
 	public static final String GET_BY_ID = "/{id}";
 	public static final String GET_ALL = "/list";
 	public static final String CREATE = "/create";
+	
+	
 	public static final String DELETE = "/delete/{id}";
-	public static final String EDIT = "/edit/{id}";
+	public static final String EDIT = "/edit";
 	public static final String GET_ALL_PROJECT = "/list/project";
 	public static final String BACKLOG = "/backlog";
 	
