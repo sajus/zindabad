@@ -7,11 +7,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.dto.TmsSprintDTO;
+import com.cyb.tms.entity.TmsLeaveMst;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.service.TmsSprintService;
 import com.cyb.tms.util.URIConstants;
@@ -29,18 +33,38 @@ public class TmsSprintController {
 
 	// -------------------Create a Sprint---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> createSprint(@RequestBody TmsSprintMst sprint) {
-		tmsSprintService.createSprint(sprint);
+	public ResponseEntity<Void> createSprint(@RequestBody TmsSprintDTO tmsSprintDTO) {
+		tmsSprintService.createSprint(tmsSprintDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
-	// ------------------Retrieve All Sprints --------------
+	
+	// ------------------Retrieve ActiveSprint by projectId --------------
 
-	@RequestMapping(value = URIConstants.GET_ALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<TmsSprintMst>> listAllSprints() {
-		List<TmsSprintMst> sprints = tmsSprintService.getAllSprints();
-		return new ResponseEntity<List<TmsSprintMst>>(sprints, HttpStatus.OK);
-	}
+	//@RequestMapping(value = URIConstants.GET_ALL_PROJECT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	//public ResponseEntity<List<TmsSprintMst>> listSprintByProjectId(@RequestParam Long projectId) throws Exception {
+		//List<TmsSprintMst> sprint = tmsSprintService.getActiveSprint(projectId);
+		//return new ResponseEntity<List<TmsSprintMst>>(sprint, HttpStatus.OK);
+	//}
+	
+	// ------------------Retrieve All Sprints by projectId--------------
+
+		@RequestMapping(value = URIConstants.GET_ALL, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<TmsSprintMst>> listAllSprints(@RequestParam Long projectId) throws Exception{
+			List<TmsSprintMst> sprints = tmsSprintService.getAllSprints(projectId);
+			return new ResponseEntity<List<TmsSprintMst>>(sprints, HttpStatus.OK);
+		}
+		
+		//------------------- Update a Sprint --------------------------------------------------------
+	     
+	    @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+	    public ResponseEntity<TmsSprintMst> updateSprint(@RequestBody TmsSprintDTO tmsSprintDTO) {
+	        //System.out.println("Updating Sprint " + id);
+	    	tmsSprintService.updateSprint(tmsSprintDTO);
+			HttpHeaders headers = new HttpHeaders();
+			return new ResponseEntity<TmsSprintMst>(headers, HttpStatus.OK);
+			
+	    }	
 
 }
