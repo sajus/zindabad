@@ -6,14 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cyb.tms.dao.TmsLeaveDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
+import com.cyb.tms.dto.TmsSprintDTO;
+import com.cyb.tms.entity.TmsLeaveMst;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.service.TmsSprintService;
 
 @Service
 @Transactional
 public class TmsSprintServiceImpl implements TmsSprintService{
-
+	
 	public TmsSprintServiceImpl(){
 		System.out.println("TmsSprintServiceImpl");
 	}
@@ -22,22 +25,27 @@ public class TmsSprintServiceImpl implements TmsSprintService{
 	private TmsSprintDAO sprintDAO;
 	
 	@Override
-	public long createSprint(TmsSprintMst sprint) {
-		return sprintDAO.createSprint(sprint);
+	public long createSprint(TmsSprintDTO tmsSprintDTO) {
+		return sprintDAO.createSprint(tmsSprintDTO);
 	}
 
 	@Override
-	public TmsSprintMst updateSprint(TmsSprintMst sprint) {
-		return sprintDAO.updateSprint(sprint);
+	public TmsSprintMst updateSprint(TmsSprintDTO tmsSprintDTO) {
+		return sprintDAO.updateSprint(tmsSprintDTO);
 	}
 
 	@Override
-	public List<TmsSprintMst> getAllSprints() {
-		return sprintDAO.getAllSprints();
+	public List<TmsSprintMst> getAllSprints(Long projectId) {
+		return sprintDAO.getAllSprints(projectId);
 	}
 
 	@Override
 	public TmsSprintMst getSprint(long id) {
 		return sprintDAO.getSprint(id);
 	}
+	
+	//@Override
+	//public List<TmsSprintMst> getActiveSprint(Long projectId) throws Exception {
+		//return (List<TmsSprintMst>) sprintDAO.getActiveSprint(projectId);
+	//}
 }
