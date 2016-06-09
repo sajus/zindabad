@@ -60,8 +60,10 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
                     .setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
                     .add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(subtaskIds.size() > 0) {
+				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
 				List<TmsSubtask> subtasks = hibernateUtil.getCurrentSession().createCriteria(TmsSubtask.class)
 						  				  .add(Restrictions.in("subtaskId", subtaskIds)).list();
+				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
 				
 				return parseStories(subtasks);
 			} else {
@@ -91,7 +93,6 @@ private List<LinkedHashMap<String, Object>> parseStories(List<TmsSubtask> subtas
 			map.put("type", tmsSubtask.getType());
 			map.put("estEfforts", tmsSubtask.getEfforts());
 			
-			List<LinkedHashMap<String, Object>> ussList = new ArrayList<LinkedHashMap<String, Object>>();
 			for (UserStoryStaus userStoryStaus : tmsSubtask.getUserStoryStauses()) {
 				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
 				uss.put("id", userStoryStaus.getId());
@@ -100,11 +101,15 @@ private List<LinkedHashMap<String, Object>> parseStories(List<TmsSubtask> subtas
 				uss.put("type", userStoryStaus.getType());
 				uss.put("modifiedDate", userStoryStaus.getModifiedDate());
 				uss.put("status", userStoryStaus.getTmsStatusMst().getStatus());
-				uss.put("assignedTo", userStoryStaus.getTmsUsersByAssignedTo().getUserName());
-				uss.put("modifiedBy", userStoryStaus.getTmsUsersByModifiedBy().getUserName());
-				ussList.add(uss);
+				if(userStoryStaus.getTmsUsersByAssignedTo() != null) {
+					uss.put("assignedTo", userStoryStaus.getTmsUsersByAssignedTo().getUserName());				
+				}
+				if(userStoryStaus.getTmsUsersByModifiedBy() != null) {
+					uss.put("modifiedBy", userStoryStaus.getTmsUsersByModifiedBy().getUserName());				
+				}
+				map.put("userStoryStatus", uss);
 			}
-			map.put("userStoryStatus", ussList);
+			
 			userSubtasks.add(map);
 		}
 		return userSubtasks;

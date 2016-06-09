@@ -4,11 +4,15 @@ package com.cyb.tms.entity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +21,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+
 import com.cyb.tms.entity.base.BaseEntity;
 
 /**
@@ -24,12 +31,14 @@ import com.cyb.tms.entity.base.BaseEntity;
  */
 @Entity
 @Table(name = "tms_subtask", catalog = "TaskManagement")
+@FilterDef(name = TmsSubtask.LATEST_STATUS_FILTER)
 public class TmsSubtask extends BaseEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -9222900952318082035L;
+	public static final String LATEST_STATUS_FILTER = "latestStatusFilter";
 	private Long subtaskId;
 	private TmsStoryMst tmsStoryMst;
 	private int efforts;
@@ -132,7 +141,8 @@ public class TmsSubtask extends BaseEntity {
 		this.tmsCodeReviews = tmsCodeReviews;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSubtask")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tmsSubtask", cascade=CascadeType.ALL)
+	@Filter(name = LATEST_STATUS_FILTER, condition = "ID = (select max(uss.ID) from user_story_staus uss where uss.SUBTASK_ID = SUBTASK_ID)")
 	public Set<UserStoryStaus> getUserStoryStauses() {
 		return this.userStoryStauses;
 	}
