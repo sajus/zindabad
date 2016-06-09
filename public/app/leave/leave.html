@@ -9,59 +9,26 @@
      <!-- <div class="row col-md-6 col-md-offset-2 custyle"> -->
         <table class="table table-hover table-bordered table-striped">
         <thead>
-       <button class="btn btn-success btn-add add-leave" type="button">
-          <i class="glyphicon glyphicon-plus gs"></i> ADD LEAVE
-        </button>
-            <tr>
-                <th>S.No</th>
-                <th>START DATE</th>
-                <th>END DATE</th>
-                <th>DURATION</th>
-                <th>REASON</th>
-                <th class="text-center">Action</th>
-            </tr>
-        </thead>
-                <tr ng-repeat="leave in leaves track by $index">
-                    <td class="table-index-medium">{{$index+1}}</td>
-                    <td>{{ leave.startDate}}</td>
-                    <td>{{ leave.endDate}}</td>
-                    <td>{{ leave.duration}}</td>
-                    <td>{{ leave.reason}}</td>
-                    <td class="text-center table-actions-medium"><button class='btn btn-info btn-xs' type="button"><span class="glyphicon glyphicon-edit"></span> Edit</button> <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button></td>
-                </tr>
-        </table>
-        <!-- </div> -->
-   <!--  <table class="table table-hover table-bordered table-striped table-responsive">
-    		<thead>
+          <button class="btn btn-success btn-add add-leave" type="button">
+            <i class="glyphicon glyphicon-plus gs"></i> ADD LEAVE
+          </button>
           <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th>S.No</th>
+            <th>START DATE</th>
+            <th>END DATE</th>
+            <th>DURATION</th>
+            <th>REASON</th>
+            <th class="text-center">Action</th>
           </tr>
-       	</thead>
-
-       	<tbody>
-          <tr ng-repeat="l in leave">
-          	<td>{{ l.date}}</td>
-          	<td>{{ l.leavetype}}</td>
-            <td style="width:auto">
-              <p data-placement="top" data-toggle="tooltip" title="Edit">
-                <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
-                    <span class="glyphicon glyphicon-pencil"></span>
-                </button>
-              </p>
-            </td>
-            <td style="width:auto">
-              <p data-placement="top" data-toggle="tooltip" title="Delete">
-                <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" >
-                  <span class="glyphicon glyphicon-trash"></span>
-                </button>
-              </p>
-            </td>
+        </thead>
+          <tr ng-repeat="leave in leaves track by $index">
+            <td class="table-index-medium">{{$index+1}}</td>
+            <td>{{ leave.startDate}}</td>
+            <td>{{ leave.endDate}}</td>
+            <td>{{ leave.duration}}</td>
+            <td>{{ leave.reason}}</td>
+            <td class="text-center table-actions-medium"><button class='btn btn-info btn-xs' type="button"><span class="glyphicon glyphicon-edit"></span> Edit</button> <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button></td>
           </tr>
-        </tbody>
-                    
-    </table> -->
+        </table>
   </div>
 </div>

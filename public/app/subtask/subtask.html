@@ -1,185 +1,68 @@
 <div class="container">
 	<div class="row">
-		<section>
-        <div class="wizard">
-            <div class="wizard-inner">
-                <div class="connecting-line"></div>
-                <ul class="nav nav-tabs" role="tablist">
-
-                    <li role="presentation" class="active">
-                        <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="Step 1">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-folder-open"></i>
-                            </span>
-                        </a>
+        <div class="tabbable-panel">
+            <div class="tabbable-line">
+                <ul class="nav nav-tabs ">
+                    <li class="active">
+                        <a href="#tab_default_1" data-toggle="tab">
+                        UNASSIGNED </a>
                     </li>
-
-                    <li role="presentation" class="disabled">
-                        <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Step 2">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-pencil"></i>
-                            </span>
-                        </a>
-                    </li>
-                    <li role="presentation" class="disabled">
-                        <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="Step 3">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-picture"></i>
-                            </span>
-                        </a>
-                    </li>
-
-                    <li role="presentation" class="disabled">
-                        <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Complete">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-ok"></i>
-                            </span>
-                        </a>
+                    <li>
+                        <a href="#tab_default_2" data-toggle="tab">
+                        ASSIGNED </a>
                     </li>
                 </ul>
-            </div>
 
-            <form role="form">
                 <div class="tab-content">
-                    <!-- <div class="tab-pane active" role="tabpanel" id="step1">
-                        <h3>Step 1</h3>
-                        <p>This is step 1</p>
-                        <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-primary next-step">Save and continue</button></li>
-                        </ul>
-                    </div> -->
-                    <div class="tab-pane" role="tabpanel" id="step2">
-                        <h3>Step 2</h3>
-                        <p>This is step 2</p>
-                        <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
-                            <li><button type="button" class="btn btn-primary next-step">Save and continue</button></li>
-                        </ul>
+                    <div class="tab-pane active" id="tab_default_1">
+                        <h4>LIST OF SUBTASKS</h4>
+                        <div class="float-right">
+                          <button class="btn btn-success btn-add" type="button">
+                          <i class="glyphicon glyphicon-plus gs"></i>
+                          Add SubTask
+                          </button>
+                        </div>
+                        <div class="table table-hover table-bordered table-responsive">
+                          <table id="mytable" class="table table-bordred table-striped">
+                            <thead>
+                              <tr>
+                                <th>S.No</th>
+                                <th>CREATED DATE</th>
+                                <th>ASSIGNED DATE</th>
+                                <th>JIRA ID</th>
+                                <th>TYPE</th>
+                                <th>EFFORTS</th>
+                                <th>SCOPE</th>
+                                <th>STATUS</th>
+                                <th>Edit</th>
+                                <th>Details</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr ng-repeat="subtask in subtasks track by $index">
+                                <td>{{$index+1}}
+                                <td>{{subtask.userStoryStatus.createdDate}}</td>
+                                <td>{{subtask.userStoryStatus.assignedDate}}</td>
+                                <td>{{subtask.jiraId}}</td>
+                                <td>{{subtask.type}}</td>
+                                <td>{{subtask.estEfforts}}</td>
+                                <td>{{subtask.scope}}</td>
+                                <td>{{subtask.userStoryStatus.status}}</td>
+                                <td>
+                                  <p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p>
+                                </td>
+                                <td>
+                                  <p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                     </div>
-                    <div class="tab-pane" role="tabpanel" id="step3">
-                        <h3>Step 3</h3>
-                        <p>This is step 3</p>
-                        <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
-                            <li><button type="button" class="btn btn-default next-step">Skip</button></li>
-                            <li><button type="button" class="btn btn-primary btn-info-full next-step">Save and continue</button></li>
-                        </ul>
+                    <div class="tab-pane" id="tab_default_2">
                     </div>
-                    <div class="tab-pane" role="tabpanel" id="complete">
-                        <h3>Complete</h3>
-                        <p>You have successfully completed all steps.</p>
-                    </div>
-                    <div class="clearfix"></div>
                 </div>
-            </form>
+            </div>
         </div>
-    </section>
-   </div>
-
-
-
-<div class="row">
-        
-        
-        <div class="col-md-12">
-        <h4>LIST OF SUBTASKS</h4>
-         <div class="float-right">
-            <button class="btn btn-success btn-add" type="button">
-                              <i class="glyphicon glyphicon-plus gs"></i>
-                              Add SubTask
-                            </button>
-         </div>          
-         <div class="table table-hover table-bordered table-responsive"> 
-
-                
-              <table id="mytable" class="table table-bordred table-striped">
-                   
-                   <thead>
-                        <tr>
-<th>S.No</th>
-                            <th>CREATED DATE</th>
-                            <th>ASSIGNED DATE</th>
-                            <th>JIRA ID</th>
-                            <th>TYPE</th>
-                            <th>EFFORTS</th>
-                            <th>SCOPE</th>
-                            <th>STATUS</th>
-                            <th>Edit</th>
-                            <th>Details</th>
-                       </tr>
-                   </thead>
-                   <tbody>
-                        <tr ng-repeat="subtask in subtasks track by $index">
-                            <td>{{$index+1}}
-                            <td>{{subtask.userStoryStatus[0].createdDate}}</td>
-                            <td>{{subtask.userStoryStatus[0].assignedDate}}</td>
-                            <td>{{subtask.jiraId}}</td>
-                            <td>{{subtask.type}}</td>
-                            <td>{{subtask.estEfforts}}</td>
-                            <td>{{subtask.scope}}</td>
-                            <td>{{subtask.userStoryStatus[subtask.userStoryStatus.length-1].status}}</td>
-                 
-                 
-                            <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-                            <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-                        </tr>
-
-                   </tbody>
-</table>
-
-</div>
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 </div>
