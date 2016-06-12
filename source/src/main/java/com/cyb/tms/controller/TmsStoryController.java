@@ -75,6 +75,11 @@ public class TmsStoryController {
 		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = URIConstants.USER_STORIES_BY_SPRINT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LinkedHashMap<String, Object>>> listCurrentUserStoriesBySprint(@RequestParam Long userId, Long projectId) throws Exception {
+		List<LinkedHashMap<String, Object>> stories = tmsStoryService.getCurrentUserStoriesBySprint(userId, projectId);
+		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
+	}
 	
 	@RequestMapping(value = URIConstants.BACKLOG, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<LinkedHashMap<String, Object>>> listBackLogStories(@RequestParam Long projectId) throws Exception {
