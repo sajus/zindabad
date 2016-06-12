@@ -17,7 +17,9 @@ define([
 	'components/loader/loader',
 	'common/storyService',
 	'subtask/subtask',
-	'common/subtaskService'
+	'common/subtaskService',
+	'components/alerts/tmsalert',
+	'common/appErrors'
 		], function(
 				loginView, 
 				homeView, 
@@ -36,7 +38,9 @@ define([
 				loader,
 				storyService,
 				subtaskService,
-				subtaskView
+				subtaskView,
+				tmsalert,
+				appErrors
 			) {
 	return [
 		homeView, 
@@ -56,6 +60,8 @@ define([
 		loader,
 		storyService,
 		subtaskService,
-		subtaskView
+		subtaskView,
+		tmsalert,
+		appErrors
 	];
 });

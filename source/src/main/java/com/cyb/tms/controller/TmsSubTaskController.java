@@ -52,7 +52,18 @@ public class TmsSubTaskController {
 		List<LinkedHashMap<String, Object>> subtasks = tmsSubTaskService.getSubtasksBySprint(projectId);
 		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(subtasks, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = URIConstants.BACKLOG, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LinkedHashMap<String, Object>>> listBackLogStories(@RequestParam Long projectId) throws Exception {
+		List<LinkedHashMap<String, Object>> stories = tmsSubTaskService.getBackLogSubtasks(projectId);
+		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
+	}
 
 
+	@RequestMapping(value = URIConstants.USER_SUBTASKS_BY_SPRINT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LinkedHashMap<String, Object>>> getCurrentUserSubTasksBySprintBy(@RequestParam Long userId, Long projectId) throws Exception {
+		List<LinkedHashMap<String, Object>> stories = tmsSubTaskService.getCurrentUserSubTasksBySprintBy(userId, projectId);
+		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
+	}
 
 }

@@ -1,15 +1,15 @@
-<div ng-show="loading" class="loading-spiner-holder" data-loading >
+<!-- <div ng-show="loading" class="loading-spiner-holder" data-loading >
 	<div class="loading-spiner">
 		<img src="img/loader.gif" /><label>Loading...</label>
 	</div>
-</div>
-
+</div> -->
+<app-loader></app-loader>
 <div class="container" ng-show="!loading">
   <div class="tabbable-panel">
         <div class="tab-content">
         	<div class="tab-pane active" id="tab_default_1">
         		<div class="float-right">
-        			<button class="btn btn-success btn-add" type="button" data-title="Add" data-toggle="modal" data-target="#add">
+        			<button class="btn btn-success btn-add" type="button" data-title="Add" data-toggle="modal" ng-click="showModal('#add')">
         		    <i class="glyphicon glyphicon-plus gs"></i>
         		      Add Sprint
         	    </button>
@@ -39,7 +39,7 @@
           			<td>{{ sprint.sprintVelocity}}</td>
           			<td>
                   <p data-placement="top" data-toggle="tooltip" title="Edit">
-        					  <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit"  ng-disabled="sprint.sprintStatus == 'CLOSED'" ng-click="editSprint(sprint)">
+        					  <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" ng-disabled="sprint.sprintStatus == 'CLOSED'" ng-click="showModal('#edit', sprint)">
         					    <span class="glyphicon glyphicon-pencil"></span>
         					 </button>
         					</p>
@@ -62,29 +62,34 @@
       </div>
 
       <div class="modal-body">
-
+        <div class="sprint-errors" ng-show="error">
+          <div class="alert alert-warning">
+            <strong>{{error}}. </strong> {{errorMessage}}
+            <div>{{errorDetails}}</div>
+          </div>
+        </div>
         <div class="form-group">
-          <label>Name:</label>
-            <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintName" disabled>
+          <label class="label-title">Name:</label>
+          <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintName" disabled>
         </div>
 
         <div class="form-group">
-          <label>Start Date:</label>
-            <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintStartDate" disabled>
+          <label class="label-title">Start Date:</label>
+          <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintStartDate" disabled>
         </div>
 
         <div class="form-group">
-          <label>End Date:</label>
-            <input class="form-control" type="text" ng-model="sprint.sprintEndDate">
+          <label class="label-title">End Date:</label>
+          <input class="form-control" type="text" ng-model="sprint.sprintEndDate">
         </div>
 
         <div class="form-group">
-          <label>Hours:</label>
-            <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintHours" disabled>
+          <label class="label-title">Hours:</label>
+          <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintHours" disabled>
         </div>
 
         <div class="form-group">
-          <label>Status:</label>
+          <label class="label-title">Status:</label>
             <select id="selectbasic" name="selectbasic" class="form-control" ng-model=sprint.sprintStatus>
               <option value="OPEN" >Open</option>
               <option value="CLOSED" >Closed</option>
@@ -92,15 +97,13 @@
         </div>
                       
         <div class="form-group">
-          <label>Velocity:</label>
+          <label class="label-title">Velocity:</label>
             <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintVelocity" disabled>
         </div>
-          
-          
-        <div class="modal-footer" ng-click="updateSprint(sprint)">
-          <button type="button" class="btn btn-warning" style="width: 30%; float:left" data-dismiss="modal"><span class="glyphicon glyphicon-ok-sign" ></span> Update</button>
 
-          <button type="button" class="btn btn-danger" style="width: 30%;" data-dismiss="modal"><span class="glyphicon glyphicon-remove" ></span> Cancel</button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal('#edit')">Cancel</button>
+          <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="updateSprint(sprint)">Update</button>
         </div>
         
       </div>
@@ -119,32 +122,27 @@
       </div>
 
       <div class="modal-body">
-
         <div class="form-group">
-          <input class="form-control " type="text" placeholder="Name" ng-model="newSprint.sprintName">
+          <tms-alert error-message=""></tms-alert>
         </div>
 
         <div class="form-group">
-          <input class="form-control " type="text" placeholder="Start Date" ng-model="newSprint.sprintStartDate">
+          <label class="label-title">Sprint Name: </label>
+          <input class="form-control " type="text" placeholder="Name" ng-model="sprint.sprintName">
+        </div>
+        <div class="form-group">
+          <label class="label-title">Start Date: </label>
+          <input class="form-control" type="text" placeholder="Select Start Date(YYYY-MM-DD)" ng-model="sprint.sprintStartDate">
         </div>
 
         <div class="form-group">
-          <input class="form-control " type="text" placeholder="End Date" ng-model="newSprint.sprintEndDate">
+          <label class="label-title">End Date: </label>
+          <input class="form-control" type="text" placeholder="Select End Date(YYYY-MM-DD)" ng-model="sprint.sprintEndDate">
         </div>
 
-        <div class="form-group">
-          <input class="form-control " type="text" placeholder="Status" ng-model="newSprint.sprintStatus">
-        </div>
-
-        <div class="form-group">
-          <input class="form-control " type="text" placeholder="Velocity" ng-model="newSprint.sprintVelocity">
-        </div>
-      
-          
         <div class="modal-footer ">
-          <button type="button" class="btn btn-success" style="width: 30%; float:left" data-dismiss="modal"><span class="glyphicon glyphicon-ok-sign" ng-click="addSprint(newSprint)"></span> Add Sprint</button>
-
-          <button type="button" class="btn btn-danger" style="width: 30%;" data-dismiss="modal"><span class="glyphicon glyphicon-remove" ></span> Cancel</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal('#add')">Cancel</button>
+          <button type="button" class="btn btn-primary" ng-click="addSprint(sprint)">Save</button>
         </div>
         
       </div>

@@ -13,8 +13,9 @@ public class URIConstants {
 	
 	public static final String DELETE = "/delete/{id}";
 	public static final String EDIT = "/edit";
-	public static final String GET_ALL_PROJECT = "/list/project";
+	public static final String GET_ALL_BY_PROJECT = "/list/project";
 	public static final String BACKLOG = "/backlog";
+	public static final String GET_ALL_BY_USER = "/list/user";
 	
 	// User
 	public static final String USER = "api/user";
@@ -42,6 +43,7 @@ public class URIConstants {
 	// Subtask
 	public static final String SUBTASK = "api/subtask";
 	public static final String SUBTASKS_BY_SPRINT = "/sprint";
+	public static final String USER_SUBTASKS_BY_SPRINT = "/user/sprint";
 	
 	// Efforts
 	public static final String EFFORTS = "api/efforts";

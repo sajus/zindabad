@@ -2,26 +2,16 @@
 	margin-left: 75%;
 }
 
-
-.loading-spiner{
-    position: fixed;
-    z-index: 999;
-    height: 2em;
-    width: 1.5em;
-    overflow: show;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+.modal-body .form-group{
     white-space: nowrap;
 }
-
-.loading-spiner img{
-  height: 40px;
-  width: 40px;
+.label-title{
+    display:inline-block;
+    min-width: 30%;
+    text-align: right;
+    margin-right: 10px;
 }
-
-.loading-spiner img, .loading-spinner label{
-  display: inline-block;
+.form-control{
+    display:inline-block;
+    width:50%;
 }

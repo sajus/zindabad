@@ -58,10 +58,11 @@ private static final String USER_NAME = "userName";
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TmsUsers> getUsersByStatus(long projectId) throws Exception {
+	public List<TmsUsers> getUsersByStatus(long projectId) {
 		List<TmsUsers> users = hibernateUtil.getCurrentSession().createCriteria(TmsUsers.class, "tu")
 				              .createAlias("tmsProject", "proj")
 			                  .add(Restrictions.eq("proj.pid", projectId))
+			                  .add(Restrictions.ne("userRole", "MANAGER"))
 			                  .add(Restrictions.eq("tu.isActive", "ACTIVE")).list();
 		return users;
 	}

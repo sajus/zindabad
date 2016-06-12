@@ -30,7 +30,7 @@ public class TmsSprintServiceImpl implements TmsSprintService{
 	}
 
 	@Override
-	public TmsSprintMst updateSprint(TmsSprintDTO tmsSprintDTO) {
+	public List<String> updateSprint(TmsSprintDTO tmsSprintDTO) {
 		return sprintDAO.updateSprint(tmsSprintDTO);
 	}
 

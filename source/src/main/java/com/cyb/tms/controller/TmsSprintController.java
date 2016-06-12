@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cyb.tms.dto.TmsSprintDTO;
 import com.cyb.tms.entity.TmsLeaveMst;
 import com.cyb.tms.entity.TmsSprintMst;
+import com.cyb.tms.exceptions.ErrorCodes;
+import com.cyb.tms.exceptions.SprintException;
 import com.cyb.tms.service.TmsSprintService;
 import com.cyb.tms.util.URIConstants;
 
@@ -33,7 +35,7 @@ public class TmsSprintController {
 
 	// -------------------Create a Sprint---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> createSprint(@RequestBody TmsSprintDTO tmsSprintDTO) {
+	public ResponseEntity<Void> createSprint(@RequestBody TmsSprintDTO tmsSprintDTO) throws Exception {
 		tmsSprintService.createSprint(tmsSprintDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -59,10 +61,13 @@ public class TmsSprintController {
 		//------------------- Update a Sprint --------------------------------------------------------
 	     
 	    @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
-	    public ResponseEntity<TmsSprintMst> updateSprint(@RequestBody TmsSprintDTO tmsSprintDTO) {
-	    	tmsSprintService.updateSprint(tmsSprintDTO);
+	    public ResponseEntity<Void> updateSprint(@RequestBody TmsSprintDTO tmsSprintDTO) {
+	    	List<String> incompleteStories = tmsSprintService.updateSprint(tmsSprintDTO);
+	    	if(incompleteStories != null & incompleteStories.size() > 0) {
+	    		throw new SprintException(ErrorCodes.CLOSE, incompleteStories);
+	    	}
 			HttpHeaders headers = new HttpHeaders();
-			return new ResponseEntity<TmsSprintMst>(headers, HttpStatus.OK);
+			return new ResponseEntity<Void>(headers, HttpStatus.OK);
 			
 	    }	
 

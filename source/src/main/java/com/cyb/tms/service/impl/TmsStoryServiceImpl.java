@@ -52,9 +52,8 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	}
 
 	@Override
-	public List<LinkedHashMap<Object, Object>> getBackLogStories(Long projectId)
-			throws Exception {
-		return null;
+	public List<LinkedHashMap<String, Object>> getBackLogStories(Long projectId)throws Exception {
+		return tmsStoryDAO.getBackLogStories(projectId);
 	}
 	
 	

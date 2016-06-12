@@ -13,5 +13,6 @@ public interface TmsSubTaskDAO {
 	public List<TmsSubtask> getAllSubtasks();
 	public TmsSubtask getSubtask(long id);
 	public List<LinkedHashMap<String, Object>> getSubtasksBySprint(Long projectId) throws Exception;
-	//public List<TmsSubtask> getSubTaskBySprintByUserwise(Long userId) throws Exception;
+	public List<LinkedHashMap<String, Object>> getCurrentUserSubTasksBySprintBy(Long userId, Long projectId) throws Exception;
+	public List<LinkedHashMap<String, Object>> getBackLogSubtasks(Long projectId);
 }

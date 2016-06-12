@@ -1,9 +1,9 @@
 package com.cyb.tms.dao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,7 @@ import com.cyb.tms.dao.TmsLeaveDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dto.TmsLeaveDTO;
 import com.cyb.tms.entity.TmsLeaveMst;
-import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
-import com.cyb.tms.entity.TmsStatusMst;
-import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.util.HibernateUtil;
 import com.cyb.tms.util.WorkingDaysCalculator;
@@ -32,28 +29,12 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 	
 	@Override
 	public long createLeave(TmsLeaveDTO tmsleaveDTO) {
-		TmsUsers user = hibernateUtil.fetchById( tmsleaveDTO.getId(), TmsUsers.class);
-		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(tmsleaveDTO.getProjectId());
-		TmsLeaveMst leave =new TmsLeaveMst();
-		BeanUtils.copyProperties(tmsleaveDTO, leave);
-		leave.setTmsSprintMst(sprint);
-		leave.setTmsUsers(user);
-		leave.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
-     	return (long) hibernateUtil.create(leave);
+     	return (long) hibernateUtil.create(setDtoToDo(tmsleaveDTO));
 	}
 
 	@Override
 	public TmsLeaveMst updateLeave(TmsLeaveDTO tmsleaveDTO) {
-		TmsUsers user = hibernateUtil.fetchById( tmsleaveDTO.getId(), TmsUsers.class);
-		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(tmsleaveDTO.getProjectId());
-		TmsLeaveMst leave =new TmsLeaveMst();
-		BeanUtils.copyProperties(tmsleaveDTO, leave);
-		leave.setTmsSprintMst(sprint);
-		leave.setTmsUsers(user);
-		leave.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
-		
-		
-		return hibernateUtil.update(leave);
+		return hibernateUtil.update(setDtoToDo(tmsleaveDTO));
 	}
 	
 
@@ -62,23 +43,11 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 		TmsLeaveMst leave = new TmsLeaveMst();
 		leave.setLeaveId(id);
 		hibernateUtil.delete(leave);
-		
-	}
-
-	@Override
-	public List<TmsLeaveMst> getAllLeaves() {
-		return hibernateUtil.fetchAll(TmsLeaveMst.class);
-	}
-
-	@Override
-	public TmsLeaveMst getLeave(long id) {
-		return hibernateUtil.fetchById(id, TmsLeaveMst.class);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TmsLeaveMst> getLeaveBySprint(Long projectId) throws Exception {
-		
+	public List<TmsLeaveMst> getAllLeavesBySprint(Long projectId) throws Exception {
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
 			Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsLeaveMst.class, "leave");
@@ -89,5 +58,58 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 		} else {
 			throw new Exception("Sprint not found");
 		}
+	}
+
+	@Override
+	public int getTotalLeavesBySprint(Long projectId) {
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		if(sprint != null) {
+			Long totalLeaves = (Long) hibernateUtil.getCurrentSession()
+							.createCriteria(TmsLeaveMst.class, "leave")
+							.createAlias("tmsSprintMst", "sp")
+							.setProjection(Projections.sum("leave.duration"))
+							.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()))
+							.uniqueResult();
+			return totalLeaves.intValue();
+		}
+		return 0;
+	}
+	
+	@Override
+	public TmsLeaveMst getLeave(long id) {
+		return hibernateUtil.fetchById(id, TmsLeaveMst.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TmsLeaveMst> getCurrentUserLeavesBySprint(Long userId, Long projectId) throws Exception {
+		
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		if(sprint != null) {
+			Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsLeaveMst.class, "leave");
+			criteria.createAlias("tmsUsers", "user");
+			criteria.createAlias("tmsSprintMst", "sp");
+			criteria.add(Restrictions.eq("user.id", userId));
+			criteria.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()));
+			return criteria.list();
+			
+		} else {
+			throw new Exception("Sprint not found");
+		}
+	}
+	
+	/**
+	 * @param tmsleaveDTO
+	 * @return
+	 */
+	private TmsLeaveMst setDtoToDo(TmsLeaveDTO tmsleaveDTO) {
+		TmsUsers user = hibernateUtil.fetchById( tmsleaveDTO.getUserId(), TmsUsers.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(tmsleaveDTO.getProjectId());
+		TmsLeaveMst leave =new TmsLeaveMst();
+		BeanUtils.copyProperties(tmsleaveDTO, leave);
+		leave.setTmsSprintMst(sprint);
+		leave.setTmsUsers(user);
+		leave.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
+		return leave;
 	}
 }

@@ -78,8 +78,7 @@ public class TmsStoryController {
 	
 	@RequestMapping(value = URIConstants.BACKLOG, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<LinkedHashMap<String, Object>>> listBackLogStories(@RequestParam Long projectId) throws Exception {
-		//List<LinkedHashMap<String, Object>> stories = tmsStoryService.getBackLogStories(projectId);
-		List<LinkedHashMap<String, Object>> stories = tmsStoryService.getStoriesBySprint(projectId);
+		List<LinkedHashMap<String, Object>> stories = tmsStoryService.getBackLogStories(projectId);
 		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
 	}
 	
