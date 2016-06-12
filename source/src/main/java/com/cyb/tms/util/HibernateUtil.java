@@ -25,6 +25,10 @@ public class HibernateUtil {
         return sessionFactory.getCurrentSession().save(entity);        
     }
     
+    public <T> void createOrUpdate(final T entity) {
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);        
+    }
+    
     public <T> T update(final T entity) {
         sessionFactory.getCurrentSession().update(entity);   
         return entity;

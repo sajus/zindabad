@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-	return ['$scope', '$rootScope', 'loginService', 'appConstants', '$location', function($scope, $rootScope, loginService, appConstants, $location) {
+	return ['$scope', '$rootScope', 'loginService', 'appConstants', '$location', '$timeout', function($scope, $rootScope, loginService, appConstants, $location, $timeout) {
 	
 	$scope.authenticate = function() {
 		$scope.user = {
@@ -13,7 +13,10 @@ define([], function() {
 		promise.then(
 			function(response) {
 				storeUserInfo(response.data);
-				$location.path('/home');
+				$timeout(function() {
+				  $location.path('/dashboard');
+				});
+				
 			},
 			function(status) {
 				clearLocalInfo();

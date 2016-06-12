@@ -2,11 +2,11 @@
 define([
 	'angular',
 ], function(angular) {
-	return angular.module('myApp.factory', ['$http', 'appConstants']).factory("storyService", function($http, appConstants) {
+	return angular.module('myApp.service', ['$http', 'appConstants']).service("storyService", function($http, appConstants) {
 
-		var storyService = {};
+		var self = this;
 
-		storyService.getStories = function () {
+		self.getStories = function () {
 
 			var req = {
 				 method: 'GET',
@@ -18,32 +18,25 @@ define([
 			}
 
 			return $http(req);
-			// var url = appConstants.endPointBase+"api/story/sprint", 
-			 // var parameters = {
-    //             	projectId: appConstants.user.projectId, 
-				// 	userId: appConstants.user.userId
-    //         };
-    //         var config = {
-    //             params: parameters
-    //         };
-			 // var config : {
-			 // 	params: {
-			 // 		projectId: appConstants.user.projectId, 
-				// 	userId: appConstants.user.userId
-			 // 	}
-			 // }
-			// return $http.get(url, {
-			//  		projectId: appConstants.user.projectId, 
-			// 	 	userId: appConstants.user.userId
-			//   	});
-							
    	    };
 
-   		 storyService.update = function () {
+   	    self.getBackLogStories = function () {
+
+   	    	var req = {
+				 method: 'GET',
+				 url: appConstants.endPointBase+"api/story/backlog", 
+				 params: {
+			  		projectId: appConstants.user.projectId
+			  	}
+			}
+
+			return $http(req);
+   	    };
+
+
+   		 self.update = function () {
         	return $http.get(appConstants.endPointBase+"api/story/list");
     	};
-
-	 return storyService;
 
 	});
 	

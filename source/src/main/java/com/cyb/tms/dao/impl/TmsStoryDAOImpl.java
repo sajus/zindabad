@@ -4,27 +4,18 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-
-
-
-
-
-
-
-
-
-
-
-import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsSprintDAO;
+import com.cyb.tms.dao.TmsStatusDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.entity.TmsModule;
@@ -37,12 +28,24 @@ import com.cyb.tms.util.HibernateUtil;
 
 @Repository
 public class TmsStoryDAOImpl implements TmsStoryDAO {
+	
+	@Value("${tms.status.backlog}")
+	private String backlog;
+	
+	@Value("${tms.status.closed}")
+	private String closed;
+	
+	@Value("${tms.status.code_merged}")
+	private String code_merged;
 
 	@Autowired
 	private HibernateUtil hibernateUtil;
 
 	@Autowired
 	private TmsSprintDAO tmsSprintDAO;
+	
+	@Autowired
+	private TmsStatusDAO tmsStatusDAO;
 
 	@Override
 	public long createStory(StoryDTO storyDTO) {
@@ -80,6 +83,11 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					.createAlias("tmsSprintMst", "sprint")
 					.createAlias("tmsStoryMst", "story")
 					.setProjection( Projections.distinct(Projections.property("story.storyId")))
+					.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
+							.createAlias("tmsStatusMst", "tsm")
+							.createAlias("tmsStoryMst", "story")
+							.add(Restrictions.eq("tsm.status", backlog))
+					        .setProjection(Property.forName("story.storyId"))))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
 				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
@@ -95,21 +103,53 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			throw new Exception("Sprint not found");
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getIncompleteStoriesInSprint(Long projectId) {
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		Object[] status = {backlog, closed, code_merged};
+		if(sprint != null) {
+			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+					.createAlias("tmsSprintMst", "sprint")
+					.createAlias("tmsStoryMst", "story")
+					.setProjection( Projections.distinct(Projections.property("story.storyId")))
+					.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
+							.createAlias("tmsStatusMst", "tsm")
+							.createAlias("tmsStoryMst", "story")
+							.add(Restrictions.in("tsm.status", status))
+					        .setProjection(Property.forName("story.storyId"))))
+					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
+			if(storyIds.size() > 0) {
+				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
+											.add(Restrictions.in("storyId", storyIds)).list();
+				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+				return getIncompleteStoryIds(stories);
+			} 
+		}
+		return null; 
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<LinkedHashMap<Object, Object>> getBackLogStories(Long projectId)
+	public List<LinkedHashMap<String, Object>> getBackLogStories(Long projectId)
 			throws Exception {
-//		List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
-//				.createAlias("tmsStatusMst", "tsm")
-//				.setProjection( Projections.max("uss.id"))
-//				.add(Restrictions.eqProperty("tsm.statusId", "uss.tmsStatusMst"))
-//				.add(Restrictions.eq("tsm.status", "BACKLOG")).list();
-//		if(storyIds.size() > 0) {
-//			List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
-//					.add(Restrictions.in("storyId", storyIds)).list();
-
-			return null; //return parseStories(stories);
+		List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+				.createAlias("tmsStatusMst", "tsm")
+				.createAlias("tmsStoryMst", "story")
+				.setProjection( Projections.distinct(Projections.property("story.storyId")))
+				.add(Restrictions.eq("tsm.status", backlog)).list();
+		if(storyIds.size() > 0) {
+			hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+			List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
+										.add(Restrictions.in("storyId", storyIds)).list();
+			hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+		
+			return parseStories(stories);
+		} else {
+			return null;
+		}
 	}
 		
 	private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stories) {
@@ -129,8 +169,12 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 				uss.put("createdDate", userStoryStatus.getCreatedDate());
 				uss.put("type", userStoryStatus.getType());
 				uss.put("status", userStoryStatus.getTmsStatusMst().getStatus());
-				uss.put("assignedDate", userStoryStatus.getAssignedDate());
-				uss.put("modifiedDate", userStoryStatus.getModifiedDate());
+				if(userStoryStatus.getAssignedDate() != null) {
+					uss.put("assignedDate", userStoryStatus.getAssignedDate());
+				}
+				if(userStoryStatus.getModifiedDate() != null) {
+					uss.put("modifiedDate", userStoryStatus.getModifiedDate());
+				}
 				if(userStoryStatus.getTmsUsersByAssignedTo() != null) {
 					uss.put("assignedTo", userStoryStatus.getTmsUsersByAssignedTo().getUserName());				
 				}
@@ -142,6 +186,14 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			userStories.add(map);
 			}
 		return userStories;
+	}
+	
+	private List<String> getIncompleteStoryIds(List<TmsStoryMst> stories) {
+		List<String> jiraIds = new ArrayList<String>();
+		for (TmsStoryMst tmsStoryMst : stories) {
+			jiraIds.add(tmsStoryMst.getJiraId());
+		}
+		return jiraIds;
 	}
 
 }

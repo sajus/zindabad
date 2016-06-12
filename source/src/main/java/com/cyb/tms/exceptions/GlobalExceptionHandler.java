@@ -1,5 +1,7 @@
 package com.cyb.tms.exceptions;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -80,10 +82,7 @@ public class GlobalExceptionHandler {
             errorMessage = new ErrorMessage(ufe.getMessage());
         }
         return new ResponseEntity<Object>(errorMessage, HttpStatus.UNAUTHORIZED);
-    	
-    	
     }
-	
     
     @ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<ErrorResponse> sqlExceptionHandler(ConstraintViolationException ex) {
@@ -100,5 +99,15 @@ public class GlobalExceptionHandler {
 		error.setMessage(ex.getMessage());
 		return new ResponseEntity<ErrorResponse>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+    
+    @ExceptionHandler(SprintException.class)
+    public ResponseEntity<ErrorResponse> sprintExceptionHandler(RuntimeException  re) {
+    	SprintException se = (SprintException) re;
+    	ErrorResponse error = new ErrorResponse();
+		error.setErrorCode(HttpStatus.FAILED_DEPENDENCY.value());
+		error.setMessage(se.getMessage());
+		error.setFieldErrors(se.getErrors());
+		return new ResponseEntity<ErrorResponse>(error, HttpStatus.FAILED_DEPENDENCY);
+    }
 
 }

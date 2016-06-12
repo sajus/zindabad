@@ -53,4 +53,15 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 		return tmsSubTaskDAO.getSubtasksBySprint(projectId);
 	}
 
+	@Override
+	public List<LinkedHashMap<String, Object>> getBackLogSubtasks(Long projectId) {
+		return tmsSubTaskDAO.getBackLogSubtasks(projectId);
+	}
+
+	@Override
+	public List<LinkedHashMap<String, Object>> getCurrentUserSubTasksBySprintBy(
+			Long userId, Long projectId) throws Exception {
+		return tmsSubTaskDAO.getCurrentUserSubTasksBySprintBy(userId, projectId);
+	}
+
 }

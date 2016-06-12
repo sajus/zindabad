@@ -6,7 +6,7 @@ define([
 	return angular.module('myApp.factory', ['localStorageService']).factory('appConstants', function(localStorageService) {
 		return {
 
-			endPointBase: 'http://localhost:8080/TaskManagement/',
+			endPointBase: 'http://localhost:9090/TaskManagement/',
 
 			config :{
 				headers: {

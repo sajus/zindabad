@@ -10,7 +10,7 @@ public class TmsLeaveDTO extends BaseDTO {
 	
 	private Long leaveId;
 	private Long projectId;
-	private Long id;
+	private Long userId;
 	private Date startDate;
 	private Date endDate;
 	private String reason;
@@ -22,12 +22,12 @@ public class TmsLeaveDTO extends BaseDTO {
 	}
 
 
-	public TmsLeaveDTO(Long leaveId, Long projectId, Long id, Date startDate, Date endDate, String reason,
+	public TmsLeaveDTO(Long leaveId, Long projectId, Long userId, Date startDate, Date endDate, String reason,
 			int duration) {
 		super();
 		this.leaveId = leaveId;
 		this.projectId = projectId;
-		this.id = id;
+		this.userId = userId;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.reason = reason;
@@ -55,13 +55,13 @@ public class TmsLeaveDTO extends BaseDTO {
 	}
 
 
-	public Long getId() {
-		return id;
+	public Long getUserId() {
+		return userId;
 	}
 
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 

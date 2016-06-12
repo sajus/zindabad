@@ -3,7 +3,7 @@ define([
 	'angular',
 ], function(angular) {
 
-return angular.module('myApp.directive',['appConstants', 'navMenus', '$location', '$routeProvider']).directive('appHeader', function (appConstants, navMenus, $location) {
+return angular.module('myApp.directive',['appConstants', 'navMenus', '$location', '$routeProvider', '$compile']).directive('appHeader', function (appConstants, navMenus, $location, $compile) {
 	return {
 		restrict: 'E',
 		templateUrl: 'components/header/header.html',

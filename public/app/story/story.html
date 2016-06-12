@@ -2,19 +2,19 @@
 	<div class="tabbable-panel">
 		<div class="tabbable-line">
 			<ul class="nav nav-tabs ">
-				<li class="active">
+				<li ng-click="changeTab('BACKLOG');"  ng-class="{'active': selectedTab == 'BACKLOG' }">
 					<a href="#tab_default_1" data-toggle="tab">
 					BACKLOG </a>
 				</li>
-				<li>
+				<li ng-click="changeTab('CURRENT');" ng-class="{'active': selectedTab == 'CURRENT' }">
 					<a href="#tab_default_2" data-toggle="tab">
 					CURRENT SPRINT </a>
 				</li>
 			</ul>
 
 			<div class="tab-content">
-				<div class="tab-pane active" id="tab_default_1">
-					<h4>LIST OF STORIES</h4>
+				<div class="tab-pane" id="tab_default_1" ng-class="{'active': selectedTab == 'BACKLOG' }">
+					<h5>BACKLOG STORIES</h5>
 					<div class="float-right">
 					    <button class="btn btn-success btn-add" type="button">
 					    <i class="glyphicon glyphicon-plus gs"></i>
@@ -33,9 +33,9 @@
 					        </tr>
 					      </thead>
 					      <tbody>
-					        <tr ng-repeat="story in stories track by $index">
+					        <tr ng-repeat="story in backlogtories track by $index">
 					          <td>{{$index+1}}
-					          <td>{{story.userStoryStatus.createdDate}}</t
+					          <td>{{story.userStoryStatus.createdDate}}</td>
 					          <td>{{story.jiraId}}</td>
 					          <td>{{story.moduleName}}</td>
 					          <td>{{story.storyPoint}}</td>  
@@ -44,7 +44,8 @@
 					      </tbody>
 					    </table>
 				</div>
-				<div class="tab-pane" id="tab_default_2">
+				<div class="tab-pane" id="tab_default_2" ng-class="{'active': selectedTab == 'CURRENT' }">
+						<h5>CURRENT SPRINT STORIES</h5>
 					    <table id="mytable" class="table table-hover table-bordered table-striped">
 					      <thead>
 					        <tr>

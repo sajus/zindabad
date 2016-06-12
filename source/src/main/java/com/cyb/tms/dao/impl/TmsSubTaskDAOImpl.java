@@ -5,9 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsSprintDAO;
@@ -20,10 +24,13 @@ import com.cyb.tms.util.HibernateUtil;
 
 @Repository
 public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
-	
+
+	@Value("${tms.status.backlog}")
+	private String backlog;
+
 	@Autowired
 	private HibernateUtil hibernateUtil;
-	
+
 	@Autowired
 	private TmsSprintDAO tmsSprintDAO;
 
@@ -47,43 +54,92 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		return hibernateUtil.fetchById(id, TmsSubtask.class);
 	}
 
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<LinkedHashMap<String, Object>> getSubtasksBySprint(Long projectId) throws Exception {
-		
+
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
 			List<Long> subtaskIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
-                    .createAlias("tmsSprintMst", "sprint")
-                    .createAlias("tmsSubtask", "sub")
-                    .setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
-                    .add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
+					.createAlias("tmsSprintMst", "sprint")
+					.createAlias("tmsSubtask", "sub")
+					.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
+					.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
+							.createAlias("tmsStatusMst", "tsm")
+							.createAlias("tmsSubtask", "sub")
+							.add(Restrictions.eq("tsm.status", backlog))
+							.setProjection(Property.forName("sub.subtaskId"))))
+							.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(subtaskIds.size() > 0) {
-				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-				List<TmsSubtask> subtasks = hibernateUtil.getCurrentSession().createCriteria(TmsSubtask.class)
-						  				  .add(Restrictions.in("subtaskId", subtaskIds)).list();
-				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-				
-				return parseStories(subtasks);
+				return parseStories(getFilteredSubtasks(subtaskIds));
 			} else {
 				return null;
 			}
-			
+
 		} else {
 			throw new Exception("Sprint not found");
 		}
 	}
 
-//	@Override
-//	public List<TmsSubtask> getSubTaskBySprintByUserwise(Long userId) throws Exception {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LinkedHashMap<String, Object>> getBackLogSubtasks(Long projectId) {
+		List<Long> subtaskIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+				.createAlias("tmsStatusMst", "tsm")
+				.createAlias("tmsSubtask", "sub")
+				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
+				.add(Restrictions.eq("tsm.status", backlog)).list();
+		if(subtaskIds.size() > 0) {
+			return parseStories(getFilteredSubtasks(subtaskIds));
+		} else {
+			return null;
+		}
+	}
 
-	
-private List<LinkedHashMap<String, Object>> parseStories(List<TmsSubtask> subtasks) {
-		
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LinkedHashMap<String, Object>> getCurrentUserSubTasksBySprintBy(Long userId, Long projectId) throws Exception {
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		if(sprint != null) {
+			List<Long> subtaskIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+					.createAlias("tmsSprintMst", "sprint")
+					.createAlias("tmsSubtask", "sub")
+					.createAlias("tmsUsersByAssignedTo", "users")
+					.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
+					.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
+							.createAlias("tmsStatusMst", "tsm")
+							.createAlias("tmsSubtask", "sub")
+							.add(Restrictions.eq("tsm.status", backlog))
+							.setProjection(Property.forName("sub.subtaskId"))))
+					.add(Restrictions.eq("users.id", userId))
+					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
+			if(subtaskIds.size() > 0) {
+				return parseStories(getFilteredSubtasks(subtaskIds));
+			} else {
+				return null;
+			}
+
+		} else {
+			throw new Exception("Sprint not found");
+		}
+	}
+
+	/**
+	 * @param subtaskIds
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private List<TmsSubtask> getFilteredSubtasks(List<Long> subtaskIds) {
+		hibernateUtil.getCurrentSession().enableFilter(TmsSubtask.LATEST_STATUS_FILTER);
+		List<TmsSubtask> subtasks = hibernateUtil.getCurrentSession().createCriteria(TmsSubtask.class)
+				.add(Restrictions.in("subtaskId", subtaskIds)).list();
+		hibernateUtil.getCurrentSession().disableFilter(TmsSubtask.LATEST_STATUS_FILTER);
+		return subtasks;
+	}
+
+	private List<LinkedHashMap<String, Object>> parseStories(List<TmsSubtask> subtasks) {
+
 		List<LinkedHashMap<String, Object>> userSubtasks = new ArrayList<LinkedHashMap<String, Object>>();
 		for (TmsSubtask tmsSubtask : subtasks) {
 			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
@@ -92,7 +148,7 @@ private List<LinkedHashMap<String, Object>> parseStories(List<TmsSubtask> subtas
 			map.put("scope", tmsSubtask.getScope());
 			map.put("type", tmsSubtask.getType());
 			map.put("estEfforts", tmsSubtask.getEfforts());
-			
+
 			for (UserStoryStaus userStoryStaus : tmsSubtask.getUserStoryStauses()) {
 				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
 				uss.put("id", userStoryStaus.getId());
@@ -109,10 +165,9 @@ private List<LinkedHashMap<String, Object>> parseStories(List<TmsSubtask> subtas
 				}
 				map.put("userStoryStatus", uss);
 			}
-			
+
 			userSubtasks.add(map);
 		}
 		return userSubtasks;
 	}
-
 }

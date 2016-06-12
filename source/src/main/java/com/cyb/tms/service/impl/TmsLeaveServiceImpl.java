@@ -34,8 +34,8 @@ public class TmsLeaveServiceImpl implements TmsLeaveService{
 	}
 
 	@Override
-	public List<TmsLeaveMst> getAllLeaves() {
-		return tmsLeaveDAO.getAllLeaves();
+	public List<TmsLeaveMst> getAllLeavesBySprint(Long projectId) throws Exception {
+		return tmsLeaveDAO.getAllLeavesBySprint(projectId);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class TmsLeaveServiceImpl implements TmsLeaveService{
 	}
 	
 	@Override
-	public List<TmsLeaveMst> getLeaveBySprint(Long projectId) throws Exception {
-		return tmsLeaveDAO.getLeaveBySprint(projectId);
+	public List<TmsLeaveMst> getCurrentUserLeavesBySprint(Long userId, Long projectId) throws Exception {
+		return tmsLeaveDAO.getCurrentUserLeavesBySprint(userId, projectId);
 	}
 }
