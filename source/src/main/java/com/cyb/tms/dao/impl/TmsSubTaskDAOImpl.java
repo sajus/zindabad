@@ -10,13 +10,16 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsSubTaskDAO;
+import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsSprintMst;
+import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.entity.TmsSubtask;
 import com.cyb.tms.entity.UserStoryStaus;
@@ -27,6 +30,12 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 
 	@Value("${tms.status.backlog}")
 	private String backlog;
+	
+	@Value("${tms.status.closed}")
+	private String closed;
+	
+	@Value("${tms.status.code_merged}")
+	private String code_merged;
 
 	@Autowired
 	private HibernateUtil hibernateUtil;
@@ -35,7 +44,20 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	private TmsSprintDAO tmsSprintDAO;
 
 	@Override
-	public long createSubtask(TmsSubtask subtask) {
+	public long createSubtask(SubtaskDTO subtaskDTO) {
+		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
+		TmsStoryMst storyId = hibernateUtil.fetchById(subtaskDTO.getStoryId(), TmsStoryMst.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(subtaskDTO.getProjectId());
+		TmsSubtask subtask = new TmsSubtask();
+		BeanUtils.copyProperties(subtaskDTO, subtask);
+		subtask.setTmsStoryMst(storyId);
+		UserStoryStaus userStoryStatus = new UserStoryStaus();
+		userStoryStatus.setCreatedDate(subtaskDTO.getCreatedDate());
+		userStoryStatus.setTmsSprintMst(sprint);
+		userStoryStatus.setTmsStatusMst(status);
+		userStoryStatus.setType(subtaskDTO.getType());
+		userStoryStatus.setTmsSubtask(subtask);
+		subtask.getUserStoryStauses().add(userStoryStatus);
 		return (Long)hibernateUtil.create(subtask);
 	}
 
@@ -153,10 +175,14 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
 				uss.put("id", userStoryStaus.getId());
 				uss.put("createdDate", userStoryStaus.getCreatedDate());
-				uss.put("assignedDate", userStoryStaus.getAssignedDate());
 				uss.put("type", userStoryStaus.getType());
-				uss.put("modifiedDate", userStoryStaus.getModifiedDate());
 				uss.put("status", userStoryStaus.getTmsStatusMst().getStatus());
+				if(userStoryStaus.getAssignedDate() != null) {
+					uss.put("assignedDate", userStoryStaus.getAssignedDate());
+				}
+				if(userStoryStaus.getModifiedDate() != null) {
+					uss.put("modifiedDate", userStoryStaus.getModifiedDate());
+				}
 				if(userStoryStaus.getTmsUsersByAssignedTo() != null) {
 					uss.put("assignedTo", userStoryStaus.getTmsUsersByAssignedTo().getUserName());				
 				}

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.entity.TmsSubtask;
 import com.cyb.tms.service.TmsSubTaskService;
@@ -30,8 +31,8 @@ public class TmsSubTaskController {
 
 	// -------------------Create a Subtask---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> createSubtask(@RequestBody TmsSubtask subtask) {
-		tmsSubTaskService.createSubask(subtask);
+	public ResponseEntity<Void> createSubtask(@RequestBody SubtaskDTO subtaskDTO) {
+		tmsSubTaskService.createSubtask(subtaskDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}

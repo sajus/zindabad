@@ -16,7 +16,7 @@
 				<div class="tab-pane" id="tab_default_1" ng-class="{'active': selectedTab == 'BACKLOG' }">
 					<h5>BACKLOG STORIES</h5>
 					<div class="float-right">
-					    <button class="btn btn-success btn-add" type="button">
+					    <button class="btn btn-success btn-add" type="button" ng-click="showModal('#add')">
 					    <i class="glyphicon glyphicon-plus gs"></i>
 					    Add Story
 					    </button>
@@ -112,7 +112,56 @@
   </div>
   <!-- /.modal-dialog --> 
 </div>
-    
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" ng-click="closeModal('#add')" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+				<h4 class="modal-title custom_align" id="Heading">Edit Your Detail</h4>
+			</div>
+			<div class="modal-body">
+
+				<div class="sprint-errors" ng-show="errorMessage">
+					<div class="alert alert-warning">
+						<strong>Error. </strong> {{errorMessage}}
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="label-title">Jira Id:</label>
+					<input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text"  ng-model="story.jiraId">
+				</div>
+
+				<div class="form-group">
+					<label class="label-title">Created Date:</label>
+					<input class="form-control" id="disabledInput" placeholder="Created Date (yyyy-MM-dd)" type="text"  ng-model="story.createdDate">
+				</div>
+
+				<div class="form-group">
+					<label class="label-title">Story Point:</label>
+					<input class="form-control" type="text" placeholder="Story Point(1,2,3,5,8,13)" ng-model="story.storyPoint">
+				</div>
+
+				<div class="form-group">
+					<label class="label-title">Module:</label>
+					<select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=story.module>
+						<option value="GAMBIT" >Gambit</option>
+						<option value="GOONIS" >Goonis</option>
+						<option value="MATRIX" >Matrix</option>
+					</select>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal('#add')">Cancel</button>
+					<button type="button" class="btn btn-primary" ng-disabled="error" ng-click="addStory(story)">Add</button>
+				</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

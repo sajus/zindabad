@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.cyb.tms.dao.TmsModuleDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsStatusDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
@@ -22,6 +23,7 @@ import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
+import com.cyb.tms.entity.TmsSubtask;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.util.HibernateUtil;
@@ -37,6 +39,9 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	
 	@Value("${tms.status.code_merged}")
 	private String code_merged;
+	
+	@Value("${tms.story}")
+	private String story;
 
 	@Autowired
 	private HibernateUtil hibernateUtil;
@@ -46,16 +51,24 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	
 	@Autowired
 	private TmsStatusDAO tmsStatusDAO;
+	
 
 	@Override
 	public long createStory(StoryDTO storyDTO) {
-		TmsUsers user = hibernateUtil.findByPropertyName("userName", storyDTO.getUser(), TmsUsers.class);
+		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
 		TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
-		TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
-		TmsStoryMst storyMst = new TmsStoryMst();
-		BeanUtils.copyProperties(storyDTO, storyMst);
-		storyMst.setTmsModule(module);
-		return (Long)hibernateUtil.create(storyMst);
+		TmsStoryMst tmsStoryMst = new TmsStoryMst();
+		BeanUtils.copyProperties(storyDTO, tmsStoryMst);
+		tmsStoryMst.setTmsModule(module);
+		UserStoryStaus userStoryStatus = new UserStoryStaus();
+		userStoryStatus.setCreatedDate(storyDTO.getCreatedDate());
+		userStoryStatus.setType(story);
+		userStoryStatus.setTmsSprintMst(sprint);
+		userStoryStatus.setTmsStatusMst(status);
+		userStoryStatus.setTmsStoryMst(tmsStoryMst);
+		tmsStoryMst.getUserStoryStauses().add(userStoryStatus);
+		return (Long)hibernateUtil.create(tmsStoryMst);
 	}
 
 	@Override
@@ -102,6 +115,38 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		} else {
 			throw new Exception("Sprint not found");
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LinkedHashMap<String, Object>> getCurrentUserStoriesBySprint(
+			Long userId, Long projectId) {
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		if(sprint != null) {
+			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+					.createAlias("tmsSprintMst", "sprint")
+					.createAlias("tmsStoryMst", "story")
+					.createAlias("tmsUsersByAssignedTo", "user")
+					.setProjection( Projections.distinct(Projections.property("story.storyId")))
+					.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
+							.createAlias("tmsStatusMst", "tsm")
+							.createAlias("tmsStoryMst", "story")
+							.add(Restrictions.eq("tsm.status", backlog))
+					        .setProjection(Property.forName("story.storyId"))))
+					.add(Restrictions.eq("user.id", userId))
+					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
+			if(storyIds.size() > 0) {
+				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
+											.add(Restrictions.in("storyId", storyIds)).list();
+				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+				return parseStories(stories);
+			} else {
+				return null;
+			}
+
+		}
+		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -195,5 +240,4 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		}
 		return jiraIds;
 	}
-
 }

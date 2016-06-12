@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cyb.tms.dao.TmsSubTaskDAO;
+import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsSubtask;
 import com.cyb.tms.service.TmsSubTaskService;
 
@@ -20,8 +21,8 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 	private TmsSubTaskDAO tmsSubTaskDAO;
 
 	@Override
-	public long createSubask(TmsSubtask subtask) {
-		return tmsSubTaskDAO.createSubtask(subtask);
+	public long createSubtask(SubtaskDTO subtaskDTO)  {
+		return tmsSubTaskDAO.createSubtask(subtaskDTO);
 	}
 
 	@Override

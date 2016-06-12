@@ -6,36 +6,54 @@ define([
 
 var subtaskService = {};
 
-		subtaskService.getSubtask = function () {
+    subtaskService.addSubtask = function (subtask) {
+      subtask.projectId = appConstants.user.projectId;
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/subtask/create",
+        data: subtask
+      }
+      return $http(req);
+    };
 
+    subtaskService.getStories = function () {
+      var req = {
+        method: 'GET',
+        url: appConstants.endPointBase+"api/story/sprint",
+        params: {
+          projectId: appConstants.user.projectId,
+          userId: appConstants.user.id
+        }
+      }
+      return $http(req);
+    };
+
+		subtaskService.getSubtasks = function () {
 			var req = {
-				 method: 'GET',
-				 url: appConstants.endPointBase+"api/subtask/user/sprint", 
-				 params: {
-			  		projectId: appConstants.user.projectId, 
-			    	userId: appConstants.user.id
-			  	}
-			}
-
-			return $http(req);
-   	    };
-
-
-   	    subtaskService.getUnassignedSubtask = function () {
-   	    	var req = {
-				 method: 'GET',
-				 url: appConstants.endPointBase+"api/subtask/backlog", 
-				 params: {
-			  		projectId: appConstants.user.projectId
-			  	}
+        method: 'GET',
+        url: appConstants.endPointBase+"api/subtask/user/sprint",
+        params: {
+          projectId: appConstants.user.projectId,
+          userId: appConstants.user.id
+        }
 			}
 			return $http(req);
+    };
 
-   	    };
+    subtaskService.getUnassignedSubtasks = function () {
+      var req = {
+        method: 'GET',
+        url: appConstants.endPointBase+"api/subtask/backlog",
+        params: {
+          projectId: appConstants.user.projectId
+        }
+      }
+			return $http(req);
+    };
    	    	
-   		 subtaskService.update = function () {
-        	return $http.get(appConstants.endPointBase+"api/subtask/list");
-    	};
+    subtaskService.update = function () {
+      return $http.get(appConstants.endPointBase+"api/subtask/list");
+    };
 
 	 return subtaskService;
 

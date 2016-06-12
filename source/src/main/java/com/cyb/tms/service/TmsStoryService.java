@@ -15,5 +15,7 @@ public interface TmsStoryService {
 	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception;
 	public void addToCurrentSprint(StoryDTO storyDTO); 
 	public List<LinkedHashMap<String, Object>> getBackLogStories(Long projectId) throws Exception;
+	public List<LinkedHashMap<String, Object>> getCurrentUserStoriesBySprint(
+			Long userId, Long projectId);
 
 }
