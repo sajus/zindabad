@@ -94,7 +94,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 							.setProjection(Property.forName("sub.subtaskId"))))
 							.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(subtaskIds.size() > 0) {
-				return parseStories(getFilteredSubtasks(subtaskIds));
+				return parseSubtasks(getFilteredSubtasks(subtaskIds));
 			} else {
 				return null;
 			}
@@ -113,7 +113,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
 				.add(Restrictions.eq("tsm.status", backlog)).list();
 		if(subtaskIds.size() > 0) {
-			return parseStories(getFilteredSubtasks(subtaskIds));
+			return parseSubtasks(getFilteredSubtasks(subtaskIds));
 		} else {
 			return null;
 		}
@@ -137,7 +137,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 					.add(Restrictions.eq("users.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(subtaskIds.size() > 0) {
-				return parseStories(getFilteredSubtasks(subtaskIds));
+				return parseSubtasks(getFilteredSubtasks(subtaskIds));
 			} else {
 				return null;
 			}
@@ -160,7 +160,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		return subtasks;
 	}
 
-	private List<LinkedHashMap<String, Object>> parseStories(List<TmsSubtask> subtasks) {
+	private List<LinkedHashMap<String, Object>> parseSubtasks(List<TmsSubtask> subtasks) {
 
 		List<LinkedHashMap<String, Object>> userSubtasks = new ArrayList<LinkedHashMap<String, Object>>();
 		for (TmsSubtask tmsSubtask : subtasks) {

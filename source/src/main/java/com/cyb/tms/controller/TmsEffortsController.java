@@ -1,5 +1,6 @@
 package com.cyb.tms.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +40,14 @@ public class TmsEffortsController {
 
 	@RequestMapping(value = URIConstants.GET_ALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TmsEfforts>> listAllSubtasks() {
-		List<TmsEfforts> stories = tmsEffortsService.getAllEfforts();
-		return new ResponseEntity<List<TmsEfforts>>(stories, HttpStatus.OK);
+		List<TmsEfforts> subtasks = tmsEffortsService.getAllEfforts();
+		return new ResponseEntity<List<TmsEfforts>>(subtasks, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = URIConstants.USER_EFFORTS_BY_SPRINT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<TmsEfforts>> listCurrentUserEffortsBySprint(@RequestParam Long userId, @RequestParam Long projectId) {
-		List<TmsEfforts> stories = tmsEffortsService.getCurrentUserEffortsBySprint(userId, projectId);
-		return new ResponseEntity<List<TmsEfforts>>(stories, HttpStatus.OK);
+	public ResponseEntity<List<LinkedHashMap<String, Object>>> listCurrentUserEffortsBySprint(@RequestParam Long userId, @RequestParam Long projectId) {
+		List<LinkedHashMap<String, Object>> subtasks = tmsEffortsService.getCurrentUserEffortsBySprint(userId, projectId);
+		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(subtasks, HttpStatus.OK);
 	}
 
 }

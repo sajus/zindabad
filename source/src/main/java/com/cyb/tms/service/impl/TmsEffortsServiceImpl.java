@@ -1,5 +1,6 @@
 package com.cyb.tms.service.impl;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class TmsEffortsServiceImpl implements TmsEffortsService {
 	}
 
 	@Override
-	public List<TmsEfforts> getCurrentUserEffortsBySprint(Long userId, Long projectId) {
+	public List<LinkedHashMap<String, Object>> getCurrentUserEffortsBySprint(Long userId, Long projectId) {
 		return tmsEffortsDAO.getCurrentUserEffortsBySprint(userId, projectId);
 	}
 

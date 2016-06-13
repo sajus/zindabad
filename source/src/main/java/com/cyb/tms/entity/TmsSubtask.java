@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.FilterDefs;
 
 import com.cyb.tms.entity.base.BaseEntity;
 
@@ -31,7 +32,11 @@ import com.cyb.tms.entity.base.BaseEntity;
  */
 @Entity
 @Table(name = "tms_subtask", catalog = "TaskManagement")
-@FilterDef(name = TmsSubtask.LATEST_STATUS_FILTER)
+@FilterDefs({
+	@FilterDef(name = TmsSubtask.LATEST_STATUS_FILTER),
+	@FilterDef(name = TmsSubtask.SUBTASK_EFFORTS_FILTER)
+})
+
 public class TmsSubtask extends BaseEntity {
 
 	/**
@@ -39,6 +44,7 @@ public class TmsSubtask extends BaseEntity {
 	 */
 	private static final long serialVersionUID = -9222900952318082035L;
 	public static final String LATEST_STATUS_FILTER = "latestStatusFilter";
+	public static final String SUBTASK_EFFORTS_FILTER = "subtaskEffortsFilter";
 	private Long subtaskId;
 	private TmsStoryMst tmsStoryMst;
 	private int efforts;
@@ -151,7 +157,8 @@ public class TmsSubtask extends BaseEntity {
 		this.userStoryStauses = userStoryStauses;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSubtask")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tmsSubtask", cascade=CascadeType.ALL)
+	@Filter(name = SUBTASK_EFFORTS_FILTER, condition = "efforts = (select sum(ef.loggedHours) from tms_efforts ef where ef.SUBTASK_ID = SUBTASK_ID)")
 	public Set<TmsEfforts> getTmsEffortses() {
 		return this.tmsEffortses;
 	}
