@@ -10,6 +10,8 @@ public interface TmsEffortsService {
 	public TmsEfforts updateEffort(TmsEfforts effort);
 	public List<TmsEfforts> getAllEfforts();
 	public TmsEfforts getEffort(long id);
+	public List<TmsEfforts> getCurrentUserEffortsBySprint(Long userId,
+			Long projectId);
 
 
 }
