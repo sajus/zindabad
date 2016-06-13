@@ -37,4 +37,9 @@ public class TmsEffortsServiceImpl implements TmsEffortsService {
 		return tmsEffortsDAO.getEffort(id);
 	}
 
+	@Override
+	public List<TmsEfforts> getCurrentUserEffortsBySprint(Long userId, Long projectId) {
+		return tmsEffortsDAO.getCurrentUserEffortsBySprint(userId, projectId);
+	}
+
 }

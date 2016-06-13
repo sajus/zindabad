@@ -36,4 +36,10 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 		return hibernateUtil.fetchById(id, TmsEfforts.class);
 	}
 
+	@Override
+	public List<TmsEfforts> getCurrentUserEffortsBySprint(Long userId,
+			Long projectId) {
+		return null;
+	}
+
 }

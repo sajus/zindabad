@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cyb.tms.entity.TmsEfforts;
@@ -39,6 +40,12 @@ public class TmsEffortsController {
 	@RequestMapping(value = URIConstants.GET_ALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TmsEfforts>> listAllSubtasks() {
 		List<TmsEfforts> stories = tmsEffortsService.getAllEfforts();
+		return new ResponseEntity<List<TmsEfforts>>(stories, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = URIConstants.USER_EFFORTS_BY_SPRINT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<TmsEfforts>> listCurrentUserEffortsBySprint(@RequestParam Long userId, @RequestParam Long projectId) {
+		List<TmsEfforts> stories = tmsEffortsService.getCurrentUserEffortsBySprint(userId, projectId);
 		return new ResponseEntity<List<TmsEfforts>>(stories, HttpStatus.OK);
 	}
 
