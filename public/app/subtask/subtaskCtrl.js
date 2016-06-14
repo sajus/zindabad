@@ -77,6 +77,34 @@ define([], function() {
       $scope.errorMessage = undefined;
     }
 
+    // For Edit subtask
+
+    $scope.oldSubtaskStatus = true;
+    $scope.editStatus = true;
+
+    $scope.editSubtask = function(subtask){
+
+    $scope.availableOptions = ["BACKLOG", "TODO", "DEVELOPMENT","PULLREQUEST", "INTERNAL_REVIEW", "QUALITY","REOPEN", "CODE_MERGED", "CLOSED"];
+    
+    
+    for (var i in $scope.availableOptions) {
+    var option = $scope.availableOptions[i];
+    if (option ===  subtask.userStoryStatus.status) {
+      $scope.selectedOption = option;
+      break;
+      }
+    }
+    
+    
+    $scope.newSubtaskStatus = true;
+    $scope.oldSubtaskStatus = false;
+    $scope.editStatus = false;
+    $scope.saveStatus = true;
+  } 
+
+
+    
+
 	$scope.$apply();
 		
 	}];
