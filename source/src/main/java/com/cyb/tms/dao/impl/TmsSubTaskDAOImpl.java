@@ -1,6 +1,7 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.entity.TmsSubtask;
+import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.util.HibernateUtil;
 
@@ -43,6 +45,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	@Autowired
 	private TmsSprintDAO tmsSprintDAO;
 
+	// -------------------Create a Subtask---------------
 	@Override
 	public long createSubtask(SubtaskDTO subtaskDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
@@ -61,9 +64,20 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		return (Long)hibernateUtil.create(subtask);
 	}
 
+	//------------------- Update a Subtask --------------------------------------------------------
+	@SuppressWarnings("unchecked")
 	@Override
-	public TmsSubtask updateSubtask(TmsSubtask subtask) {
-		return hibernateUtil.update(subtask);
+	public long updateSubtask(SubtaskDTO subtaskDTO) {
+		TmsStatusMst status = hibernateUtil.findByPropertyName("status", subtaskDTO.getStatus(), TmsStatusMst.class);
+		TmsUsers user = hibernateUtil.fetchById( subtaskDTO.getUserId(), TmsUsers.class);
+		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
+		UserStoryStaus userStoryStatus = new UserStoryStaus();
+		userStoryStatus.setTmsSubtask(tmsSubtask);
+		userStoryStatus.setType(tmsSubtask.getType());
+		userStoryStatus.setModifiedDate(new Date());
+		userStoryStatus.setTmsUsersByModifiedBy(user);
+		userStoryStatus.setTmsStatusMst(status);
+		return (Long)hibernateUtil.create(userStoryStatus);
 	}
 
 	@Override

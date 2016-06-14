@@ -5,11 +5,12 @@ import java.util.List;
 
 import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsSubtask;
+import com.cyb.tms.entity.UserStoryStaus;
 
 public interface TmsSubTaskService {
 	
 	public long createSubtask(SubtaskDTO subtaskDTO);
-	public TmsSubtask updateSubtask(TmsSubtask subtask);
+	public long updateSubtask(SubtaskDTO subtaskDTO);
 	public List<TmsSubtask> getAllSubtasks();
 	public TmsSubtask getSubtask(long id);
 	public List<LinkedHashMap<String, Object>> getSubtasksBySprint(Long projectId) throws Exception;
