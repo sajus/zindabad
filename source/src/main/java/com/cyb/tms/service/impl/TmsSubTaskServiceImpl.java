@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cyb.tms.dao.TmsSubTaskDAO;
 import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsSubtask;
+import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.service.TmsSubTaskService;
 
 @Transactional
@@ -26,8 +27,8 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 	}
 
 	@Override
-	public TmsSubtask updateSubtask(TmsSubtask subtask) {
-		return tmsSubTaskDAO.updateSubtask(subtask);
+	public long updateSubtask(SubtaskDTO subtaskDTO) {
+		return tmsSubTaskDAO.updateSubtask(subtaskDTO);
 	}
 
 	@Override
