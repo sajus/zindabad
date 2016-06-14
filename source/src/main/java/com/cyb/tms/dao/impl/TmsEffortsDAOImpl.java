@@ -1,6 +1,7 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -9,17 +10,23 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsEffortsDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
+import com.cyb.tms.dto.TmsEffortsDTO;
+import com.cyb.tms.dto.TmsLeaveDTO;
 import com.cyb.tms.entity.TmsEfforts;
+import com.cyb.tms.entity.TmsLeaveMst;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsSubtask;
+import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.util.HibernateUtil;
+import com.cyb.tms.util.WorkingDaysCalculator;
 
 @Repository
 public class TmsEffortsDAOImpl implements TmsEffortsDAO {
@@ -35,8 +42,8 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 	private TmsSprintDAO tmsSprintDAO;
 
 	@Override
-	public long createEffort(TmsEfforts effort) {
-		return (Long)hibernateUtil.create(effort);
+	public long createEffort(TmsEffortsDTO tmseffortDTO) {
+		return (Long)hibernateUtil.create(setDtoToDo(tmseffortDTO));
 	}
 
 	@Override
@@ -106,10 +113,34 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 			map.put("jiraId", tmsSubtask.getJiraId());
 			map.put("scope", tmsSubtask.getScope());
 			map.put("type", tmsSubtask.getType());
+			
 			Double remainingEfforts = getTotalEffortsBySubtask(projectId, tmsSubtask.getSubtaskId());
 			map.put("remaingEfforts", (tmsSubtask.getEfforts() - remainingEfforts));
 			userSubtasks.add(map);
 		}
 		return userSubtasks;
 	}
+	
+	private TmsEfforts setDtoToDo(TmsEffortsDTO tmseffortDTO) {
+		//TmsUsers user = hibernateUtil.fetchById( tmseffortDTO.getUserId(), TmsUsers.class);
+		TmsSubtask subtask=hibernateUtil.fetchById( tmseffortDTO.getSubtaskId(), TmsSubtask.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(tmseffortDTO.getProjectId());
+		TmsEfforts efforts =new TmsEfforts();
+		efforts.setTmsSprintMst(sprint);
+		efforts.setTmsSubtask(subtask);
+		efforts.setLoggedDate(new Date());
+		efforts.setLoggedHours(tmseffortDTO.getLoggedHours());
+		//leave.setTmsUsers(user);
+//.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
+		return efforts;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

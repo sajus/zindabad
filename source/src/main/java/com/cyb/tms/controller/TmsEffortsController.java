@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.dto.TmsEffortsDTO;
 import com.cyb.tms.entity.TmsEfforts;
 import com.cyb.tms.service.TmsEffortsService;
 import com.cyb.tms.util.URIConstants;
@@ -30,8 +31,8 @@ public class TmsEffortsController {
 
 	// -------------------Create a Effort---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> createSubtask(@RequestBody TmsEfforts effort) {
-		tmsEffortsService.createEffort(effort);
+	public ResponseEntity<Void> createSubtask(@RequestBody TmsEffortsDTO tmseffortDTO) {
+		tmsEffortsService.createEffort(tmseffortDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
