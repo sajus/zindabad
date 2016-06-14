@@ -1,29 +1,24 @@
 package com.cyb.tms.entity;
 // Generated May 17, 2016 12:38:28 PM by Hibernate Tools 4.3.1.Final
 
-import java.util.Date;
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-
-import static javax.persistence.GenerationType.IDENTITY;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.FilterDefs;
 
 import com.cyb.tms.entity.base.BaseEntity;
 
@@ -32,11 +27,7 @@ import com.cyb.tms.entity.base.BaseEntity;
  */
 @Entity
 @Table(name = "tms_subtask", catalog = "TaskManagement")
-@FilterDefs({
-	@FilterDef(name = TmsSubtask.LATEST_STATUS_FILTER),
-	@FilterDef(name = TmsSubtask.SUBTASK_EFFORTS_FILTER)
-})
-
+@FilterDef(name = TmsSubtask.LATEST_STATUS_FILTER)
 public class TmsSubtask extends BaseEntity {
 
 	/**
@@ -44,7 +35,6 @@ public class TmsSubtask extends BaseEntity {
 	 */
 	private static final long serialVersionUID = -9222900952318082035L;
 	public static final String LATEST_STATUS_FILTER = "latestStatusFilter";
-	public static final String SUBTASK_EFFORTS_FILTER = "subtaskEffortsFilter";
 	private Long subtaskId;
 	private TmsStoryMst tmsStoryMst;
 	private int efforts;
@@ -157,8 +147,7 @@ public class TmsSubtask extends BaseEntity {
 		this.userStoryStauses = userStoryStauses;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tmsSubtask", cascade=CascadeType.ALL)
-	@Filter(name = SUBTASK_EFFORTS_FILTER, condition = "efforts = (select sum(ef.loggedHours) from tms_efforts ef where ef.SUBTASK_ID = SUBTASK_ID)")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSubtask")
 	public Set<TmsEfforts> getTmsEffortses() {
 		return this.tmsEffortses;
 	}
