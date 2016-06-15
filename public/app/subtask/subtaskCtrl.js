@@ -9,14 +9,20 @@ define([], function() {
   };
 
   $scope.closeModal = closeModal;
+  $scope.isModalVisible = false;
   $scope.errorMessage = undefined;
   $scope.changeTab('ASSIGNED');
-
-  $scope.showModal = function(id, subtask) {
-    $scope.getStories();
-    $scope.subtask = angular.copy(subtask) || {};
-    var element = angular.element(id);
-    element.modal('show');
+  
+  $scope.showModal = function(subtask) {
+    $scope.$apply(function () {
+      $scope.getStories();
+      $scope.subtask = angular.copy(subtask) || {};
+      $scope.isModalVisible = true;
+    });
+    
+    
+    // var element = angular.element(id);
+    // element.modal('show');
   }
 
   $scope.addSubtask = function(subtask) {
@@ -67,10 +73,11 @@ define([], function() {
 
     }
 
-    function closeModal(id) {
+    function closeModal() {
       clearErrorMessages();
-      var element = angular.element(id);
-      element.modal('hide');
+      $scope.isModalVisible = false;
+      // var element = angular.element(id);
+      // element.modal('hide');
     }
 
     function clearErrorMessages() {

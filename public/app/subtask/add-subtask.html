@@ -1,0 +1,52 @@
+<tms-modal modal-visible="isModalVisible" on-sown="" on-hide="">
+  <modal-header title="Add Subtask"></modal-header>
+  <modal-body>
+    <div class="sprint-errors" ng-show="errorMessage">
+      <div class="alert alert-warning">
+        <strong>Error. </strong> {{errorMessage}}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Story:</label>
+      <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model=subtask.storyId>
+        <option value="{{story.storyId}}" data-ng-repeat="story in stories">{{story.jiraId}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Jira Id:</label>
+      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text"  ng-model="subtask.jiraId">
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Created Date:</label>
+      <input class="form-control" id="disabledInput" placeholder="Created Date (yyyy-MM-dd)" type="text"  ng-model="subtask.createdDate">
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Efforts:</label>
+      <input class="form-control" type="text" placeholder="Efforts" ng-model="subtask.efforts">
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Scope:</label>
+      <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=subtask.scope>
+        <option value="PLANED" >Planed</option>
+        <option value="UNPLANED" >Unplaned</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Scope:</label>
+      <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=subtask.type>
+        <option value="BUG" >Bug</option>
+        <option value="SUBTASK">Subtask</option>
+      </select>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
+    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="addSubtask(subtask)">Add</button>
+  </modal-footer>
+</tms-modal>

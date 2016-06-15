@@ -24,7 +24,8 @@ require.config({
 		angularMocks: 'bower_components/angular-mocks/angular-mocks',
 		angularLocalStorage: 'bower_components/angular-local-storage/dist/angular-local-storage.min',
 		angularResource: 'bower_components/angular-resource/angular-resource.min',
-		angularUiBootstrap: 'bower_components/angular-ui-bootstrap-bower/ui-bootstrap.min',
+		bootstrap: 'bower_components/bootstrap/dist/js/bootstrap.min',
+		angularUiBootstrap: 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
 		bootstrapDatepicker: 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min',
 		underscore: 'bower_components/underscore/underscore-min',
 		text: 'bower_components/requirejs-text/text',
@@ -43,10 +44,6 @@ require.config({
 		'jQuery': {
 			exports: 'jQuery'
 		},
-		'angularBootstrap': {
-		    exports: 'angularBootstrap',
-            deps: ['jQuery', 'angular']
-		},
 		'underscore' : {
 			exports: 'underscore'
 		},
@@ -57,6 +54,10 @@ require.config({
 		'angularUiBootstrap': {
 			deps: ['angular']
 		},
+		'bootstrap': {		
+ 			exports: 'bootstrap',		
+ 			deps: ['jQuery']		
+ 		},
 
 	},
 	priority: [
@@ -72,6 +73,7 @@ require([
 	'app',
 	'jQuery',
 	'underscore',
+	'bootstrap',
 	], function(angular, app) {
 		var $html = angular.element(document.getElementsByTagName('html')[0]);
 		angular.element().ready(function() {
