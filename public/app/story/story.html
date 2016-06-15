@@ -29,7 +29,22 @@
 					          <th>JIRA ID</th>
 					          <th>MODULE</th>
 					          <th>STORY POINT</th>
-					         <th class="text-center">Actions</th>
+					          <th class="text-center">Actions</th>
+					          <th>
+					          <div ng-show="user.userRole === 'LEAD'">
+					          	<input type="checkbox" value="" id="check" ng-model="master" ng-change="isSelectAll()">
+					          	<select id="selectUser" name="selectUser">
+					          		<option value="select">Select</option>
+					          		<option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+					          	 </select>
+					          	 <button class='btn btn-info btn-xs' type="button" id="save"><span class="glyphicon glyphicon-ok"></span>Save</button>
+							  </div>
+					
+					          <div ng-hide="user.userRole === 'LEAD'">
+					          	<input type="checkbox" value="" id="check" ng-model="master" ng-change="isSelectAll()" >
+					          	<button class='btn btn-primary btn-sm' type="button">Assign To Me</button>
+					         </div>
+					         </th>
 					        </tr>
 					      </thead>
 					      <tbody>
@@ -38,8 +53,9 @@
 					          <td>{{story.userStoryStatus.createdDate}}</td>
 					          <td>{{story.jiraId}}</td>
 					          <td>{{story.moduleName}}</td>
-					          <td>{{story.storyPoint}}</td>  
+					          <td>{{story.storyPoint}}</td> 	          
 					          <td class="text-center table-actions-medium"><button class='btn btn-info btn-xs' type="button"><span class="glyphicon glyphicon-edit"></span> Edit</button> <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button></td>
+					          <td><input type="checkbox" value="" id="check" ng-model="story.selected" ng-change="isLabelChecked()"></td>
 					        </tr>
 					      </tbody>
 					    </table>

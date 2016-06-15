@@ -25,7 +25,6 @@ require.config({
 		angularLocalStorage: 'bower_components/angular-local-storage/dist/angular-local-storage.min',
 		ngBootstrap: 'bower_components/bootstrap/dist/js/bootstrap.min',
 		angularBootstrap: 'bower_components/angular-bootstrap/ui-bootstrap.min',
-		ngDatePicker: 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min',
 		underscore: 'bower_components/underscore/underscore-min',
 		text: 'bower_components/requirejs-text/text',
 		css: 'bower_components/angular-css/angular-css'
@@ -54,11 +53,6 @@ require.config({
 		'underscore' : {
 			exports: 'underscore'
 		},
-		'ngDatePicker': {
-		    deps: ["jQuery", "ngBootstrap"],
-            exports: "ngDatePicker"
-
-		},
 		'css': ['angular']
 	},
 	priority: [
@@ -75,7 +69,6 @@ require([
 	'jQuery',
 	'ngBootstrap',
 	'underscore',
-	'ngDatePicker',
 	'angularBootstrap'
 	], function(angular, app) {
 		var $html = angular.element(document.getElementsByTagName('html')[0]);
