@@ -32,12 +32,12 @@ public class TmsEfforts extends BaseEntity {
 	private TmsSprintMst tmsSprintMst;
 	private TmsSubtask tmsSubtask;
 	private Date loggedDate;
-	private int loggedHours;
+	private Double loggedHours;
 
 	public TmsEfforts() {
 	}
 
-	public TmsEfforts(TmsSprintMst tmsSprintMst, TmsSubtask tmsSubtask, Date loggedDate, int loggedHours) {
+	public TmsEfforts(TmsSprintMst tmsSprintMst, TmsSubtask tmsSubtask, Date loggedDate, Double loggedHours) {
 		this.tmsSprintMst = tmsSprintMst;
 		this.tmsSubtask = tmsSubtask;
 		this.loggedDate = loggedDate;
@@ -87,11 +87,11 @@ public class TmsEfforts extends BaseEntity {
 	}
 
 	@Column(name = "LOGGED_HOURS", nullable = false)
-	public int getLoggedHours() {
+	public Double getLoggedHours() {
 		return this.loggedHours;
 	}
 
-	public void setLoggedHours(int loggedHours) {
+	public void setLoggedHours(Double loggedHours) {
 		this.loggedHours = loggedHours;
 	}
 

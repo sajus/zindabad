@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cyb.tms.dto.SubtaskDTO;
+import com.cyb.tms.dto.TmsSprintDTO;
 import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.entity.TmsSubtask;
 import com.cyb.tms.service.TmsSubTaskService;
@@ -65,6 +66,14 @@ public class TmsSubTaskController {
 	public ResponseEntity<List<LinkedHashMap<String, Object>>> getCurrentUserSubTasksBySprintBy(@RequestParam Long userId, Long projectId) throws Exception {
 		List<LinkedHashMap<String, Object>> stories = tmsSubTaskService.getCurrentUserSubTasksBySprintBy(userId, projectId);
 		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
+	}
+	
+	// -------------------Update a Subtask---------------
+	@RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> updateSprint(@RequestBody SubtaskDTO subtaskDTO) {
+		tmsSubTaskService.updateSubtask(subtaskDTO);
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	}
 
 }

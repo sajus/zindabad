@@ -48,6 +48,7 @@ public class URIConstants {
 	
 	// Efforts
 	public static final String EFFORTS = "api/efforts";
+	public static final String USER_EFFORTS_BY_SPRINT = "/user/sprint";
 
 
 	public static final String TOKEN_HEADER = "X-Auth-Token";

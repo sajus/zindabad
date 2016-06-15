@@ -3,14 +3,18 @@
 define([
 	'angular',
 	'angularRoute',
+	'angularUiBootstrap',
+	'angularResource',
 	'common/bootstrap',
 	'common/ga',
 	'angularLocalStorage'
-], function(angular, angularRoute, bootstrap, ga) {
+], function(angular, angularRoute, angularUiBootstrap, angularResource, bootstrap, ga) {
 	// Declare app level module which depends on views, and components
 
 	var app = angular.module('myApp', [
 		'ngRoute',
+		'ui.bootstrap',
+		'ngResource',
 		'angularCSS',
 		'LocalStorageModule'
 	]).
@@ -24,7 +28,9 @@ define([
 		'$provide',
 		'$injector',
 		'localStorageServiceProvider',
-		function ($routeProvider, $locationProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $injector, localStorageServiceProvider) {
+		'$resourceProvider',
+		function ($routeProvider, $locationProvider, $httpProvider, $controllerProvider, $compileProvider, $filterProvider, 
+			$provide, $injector, localStorageServiceProvider, $resourceProvider) {
 			app.controller = $controllerProvider.register;
 			app.directive = $compileProvider.directive;
 			app.filter = $filterProvider.register;

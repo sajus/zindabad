@@ -21,13 +21,14 @@ public class SubtaskDTO extends BaseDTO {
 	private String status;
 	private Date assignedDate;
 	private Date createdDate;
+	private Long userId;
 	
 
 	public SubtaskDTO() {
 		super();
 	}
 
-	public SubtaskDTO(Long subtaskId, Long storyId, Long projectId, int efforts, String jiraId, String scope,
+	public SubtaskDTO(Long userId, Long subtaskId, Long storyId, Long projectId, int efforts, String jiraId, String scope,
 			String type, String status, Date assignedDate, Date createdDate) {
 		super();
 		this.subtaskId = subtaskId;
@@ -40,6 +41,7 @@ public class SubtaskDTO extends BaseDTO {
 		this.status = status;
 		this.assignedDate = assignedDate;
 		this.createdDate = createdDate;
+		this.userId = userId;
 	}
 
 	public Long getSubtaskId() {
@@ -120,5 +122,14 @@ public class SubtaskDTO extends BaseDTO {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+	
+	public Long getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
