@@ -1,6 +1,7 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsEffortsDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
+import com.cyb.tms.dto.TmsEffortsDTO;
 import com.cyb.tms.entity.TmsEfforts;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsSubtask;
@@ -35,8 +37,8 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 	private TmsSprintDAO tmsSprintDAO;
 
 	@Override
-	public long createEffort(TmsEfforts effort) {
-		return (Long)hibernateUtil.create(effort);
+	public long createEffort(TmsEffortsDTO tmseffortDTO) {
+		return (Long)hibernateUtil.create(setDtoToDo(tmseffortDTO));
 	}
 
 	@Override
@@ -111,5 +113,16 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 			userSubtasks.add(map);
 		}
 		return userSubtasks;
+	}
+	
+	private TmsEfforts setDtoToDo(TmsEffortsDTO tmseffortDTO) {
+		TmsSubtask subtask=hibernateUtil.fetchById( tmseffortDTO.getSubtaskId(), TmsSubtask.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(tmseffortDTO.getProjectId());
+		TmsEfforts efforts =new TmsEfforts();
+		efforts.setTmsSprintMst(sprint);
+		efforts.setTmsSubtask(subtask);
+		efforts.setLoggedDate(new Date());
+		efforts.setLoggedHours(tmseffortDTO.getLoggedHours());
+		return efforts;
 	}
 }
