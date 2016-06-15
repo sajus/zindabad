@@ -40,6 +40,7 @@ public class URIConstants {
 	public static final String STORY = "api/story";
 	public static final String STORIES_BY_SPRINT = "/sprint";
 	public static final String USER_STORIES_BY_SPRINT = "/user/sprint";
+	public static final String ASSIGN_TO_SPRINT = "/assign/sprint";
 	
 	// Subtask
 	public static final String SUBTASK = "api/subtask";

@@ -1,6 +1,7 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	
 	@Value("${tms.status.backlog}")
 	private String backlog;
+	
+	@Value("${tms.status.todo}")
+	private String todo;
 	
 	@Value("${tms.status.closed}")
 	private String closed;
@@ -69,6 +73,27 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		userStoryStatus.setTmsStoryMst(tmsStoryMst);
 		tmsStoryMst.getUserStoryStauses().add(userStoryStatus);
 		return (Long)hibernateUtil.create(tmsStoryMst);
+	}
+	
+	@Override
+	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
+		TmsStatusMst status = hibernateUtil.findByPropertyName("status", todo, TmsStatusMst.class);
+		TmsUsers assignedTo = hibernateUtil.fetchById(assignToId, TmsUsers.class);
+		TmsUsers modifiedBy = hibernateUtil.fetchById(modifiedById, TmsUsers.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		for (StoryDTO storyDTO : storyDTOs) {
+			UserStoryStaus userStoryStatus = new UserStoryStaus();
+			TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
+			userStoryStatus.setTmsSprintMst(sprint);
+			userStoryStatus.setTmsStoryMst(tmsStoryMst);
+			userStoryStatus.setModifiedDate(new Date());
+			userStoryStatus.setAssignedDate(new Date());
+			userStoryStatus.setTmsUsersByAssignedTo(assignedTo);
+			userStoryStatus.setTmsUsersByModifiedBy(modifiedBy);
+			userStoryStatus.setTmsStatusMst(status);
+			userStoryStatus.setType(story);
+			hibernateUtil.create(tmsStoryMst);
+		}
 	}
 
 	@Override
@@ -240,4 +265,6 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		}
 		return jiraIds;
 	}
+
+	
 }
