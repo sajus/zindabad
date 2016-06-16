@@ -1,6 +1,7 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsStatusDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
+import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
@@ -71,10 +73,24 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		return (Long)hibernateUtil.create(tmsStoryMst);
 	}
 
-	@Override
-	public TmsStoryMst updateStory(TmsStoryMst story) {
-		return hibernateUtil.update(story);
-	}
+	//------------------- Update a Story --------------------------------------------------------
+		@SuppressWarnings("unchecked")
+		@Override
+		public long updateStory(StoryDTO storyDTO) {
+			TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
+			TmsUsers user = hibernateUtil.fetchById( storyDTO.getUserId(), TmsUsers.class);
+			//TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
+			TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
+			TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
+			UserStoryStaus userStoryStatus = new UserStoryStaus();
+			userStoryStatus.setTmsSprintMst(sprint);
+			userStoryStatus.setTmsStatusMst(status);
+			userStoryStatus.setType(story);
+			userStoryStatus.setTmsStoryMst(tmsStoryMst);
+			userStoryStatus.setModifiedDate(new Date());
+			userStoryStatus.setTmsUsersByModifiedBy(user);
+			return (Long)hibernateUtil.create(userStoryStatus);
+		}
 
 	@Override
 	public List<TmsStoryMst> getAllStories() {

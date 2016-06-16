@@ -15,7 +15,7 @@ public class StoryDTO extends BaseDTO {
 	private static final long serialVersionUID = -2599696294099365925L;
 	
 	private Long storyId;
-	private String userId;
+	private Long userId;
 	private String module;
 	private String status;
 	private Date assignedDate;
@@ -28,7 +28,7 @@ public class StoryDTO extends BaseDTO {
 		super();
 	}
 
-	public StoryDTO(Long storyId, String userId, String module, String status,
+	public StoryDTO(Long storyId, Long userId, String module, String status,
 			Date assignedDate, Date createdDate, String jiraId, int storyPoint,
 			Long projectId) {
 		super();
@@ -51,11 +51,11 @@ public class StoryDTO extends BaseDTO {
 		this.storyId = storyId;
 	}
 
-	public String getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
