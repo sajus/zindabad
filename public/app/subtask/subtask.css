@@ -68,6 +68,13 @@ span.round-tab:hover {
     width: 25%;
 }
 
+#check{
+    float: left;
+}
+#save{
+    float: right;
+}
+
 .wizard li:after {
     content: " ";
     position: absolute;

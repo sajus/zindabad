@@ -4,7 +4,7 @@
             <div class="tabbable-line">
                 <ul class="nav nav-tabs ">
                     <li ng-click="changeTab('UNASSIGNED');"  ng-class="{'active': selectedTab == 'UNASSIGNED' }">
-                        <a href="#tab_default_1" data-toggle="tab">
+                        <a data-toggle="tab">
                         UNASSIGNED </a>
                     </li>
                     <li ng-click="changeTab('ASSIGNED');"  ng-class="{'active': selectedTab == 'ASSIGNED' }">
@@ -35,6 +35,21 @@
                                 <th>SCOPE</th>
                                 <!--<th>STATUS</th>-->
                                 <th class="text-center">Actions</th>
+                                <th class="text-center">
+                                  <div ng-show="user.userRole === 'LEAD'">
+                                    <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()">
+                                    <select id="selectUser" name="selectUser" ng-model="assignToId">
+                                      <option value="select" ng-selected={{!assignToId}}>Select</option>
+                                      <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+                                    </select>
+                                    <button class='btn btn-info btn-xs' type="button" id="save"ng-click="assignToSprint()"><span class="glyphicon glyphicon-ok"></span>Save</button>
+                                  </div>
+          
+                                 <div ng-hide="user.userRole === 'LEAD'">
+                                    <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()" >
+                                    <button class='btn btn-primary btn-sm' type="button">Assign To Me</button>
+                                  </div>
+                                 </th>
                               </tr>
                             </thead>
                             <tbody>
@@ -50,6 +65,7 @@
                                 <td class="text-center table-actions-medium">
                                   <button class='btn btn-info btn-xs' type="button" ng-click=""><span class="glyphicon glyphicon-edit"></span> Edit</button>
                                   <button class="btn btn-danger btn-xs" ng-click=""><span class="glyphicon glyphicon-trash"></span> Del</button></td>
+                                <td><input type="checkbox" id="check" ng-model="subtaskList[$index]" ng-change="isLabelChecked(subtask, subtaskList[$index], $index)"></td>
                               </tr>
                               </tr>
                             </tbody>

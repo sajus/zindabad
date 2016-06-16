@@ -3,11 +3,11 @@
 		<div class="tabbable-line">
 			<ul class="nav nav-tabs ">
 				<li ng-click="changeTab('BACKLOG');"  ng-class="{'active': selectedTab == 'BACKLOG' }">
-					<a href="#tab_default_1" data-toggle="tab">
+					<a data-toggle="tab">
 					BACKLOG </a>
 				</li>
 				<li ng-click="changeTab('CURRENT');" ng-class="{'active': selectedTab == 'CURRENT' }">
-					<a href="#tab_default_2" data-toggle="tab">
+					<a data-toggle="tab">
 					CURRENT SPRINT </a>
 				</li>
 			</ul>
@@ -29,7 +29,22 @@
 					          <th>JIRA ID</th>
 					          <th>MODULE</th>
 					          <th>STORY POINT</th>
-					         <th class="text-center">Actions</th>
+					          <th class="text-center">Actions</th>
+					          <th>
+					          <div ng-show="user.userRole === 'LEAD'">
+					          	<input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()">
+					          	<select id="selectUser" name="selectUser" ng-model="assignToId">
+					          		<option value="select" ng-selected={{!assignToId}}>Select</option>
+					          		<option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+					          	 </select>
+					          	 <button class='btn btn-info btn-xs' type="button" id="save" ng-click="assignToSprint()"><span class="glyphicon glyphicon-ok"></span>Save</button>
+							  </div>
+					
+					          <div ng-hide="user.userRole === 'LEAD'">
+					          	<input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()" >
+					          	<button class='btn btn-primary btn-sm' type="button">Assign To Me</button>
+					         </div>
+					         </th>
 					        </tr>
 					      </thead>
 					      <tbody>
@@ -38,8 +53,9 @@
 					          <td>{{story.userStoryStatus.createdDate}}</td>
 					          <td>{{story.jiraId}}</td>
 					          <td>{{story.moduleName}}</td>
-					          <td>{{story.storyPoint}}</td>  
+					          <td>{{story.storyPoint}}</td> 	          
 					          <td class="text-center table-actions-medium"><button class='btn btn-info btn-xs' type="button"><span class="glyphicon glyphicon-edit"></span> Edit</button> <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button></td>
+					          <td><input type="checkbox" id="check" ng-model="storiesList[$index]" ng-change="isLabelChecked(story, storiesList[$index], $index)"></td>
 					        </tr>
 					      </tbody>
 					    </table>
