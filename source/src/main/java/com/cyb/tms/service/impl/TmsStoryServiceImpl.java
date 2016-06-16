@@ -26,8 +26,8 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	}
 
 	@Override
-	public TmsStoryMst updateStory(TmsStoryMst story) {
-		return tmsStoryDAO.updateStory(story);
+	public long updateStory(StoryDTO storyDTO) {
+		return tmsStoryDAO.updateStory(storyDTO);
 	}
 
 	@Override

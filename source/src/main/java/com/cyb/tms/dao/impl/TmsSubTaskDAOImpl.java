@@ -71,12 +71,14 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", subtaskDTO.getStatus(), TmsStatusMst.class);
 		TmsUsers user = hibernateUtil.fetchById( subtaskDTO.getUserId(), TmsUsers.class);
 		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(subtaskDTO.getProjectId());
 		UserStoryStaus userStoryStatus = new UserStoryStaus();
+		userStoryStatus.setTmsSprintMst(sprint);
+		userStoryStatus.setTmsStatusMst(status);
 		userStoryStatus.setTmsSubtask(tmsSubtask);
 		userStoryStatus.setType(tmsSubtask.getType());
 		userStoryStatus.setModifiedDate(new Date());
 		userStoryStatus.setTmsUsersByModifiedBy(user);
-		userStoryStatus.setTmsStatusMst(status);
 		return (Long)hibernateUtil.create(userStoryStatus);
 	}
 

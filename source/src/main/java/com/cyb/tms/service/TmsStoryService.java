@@ -9,7 +9,7 @@ import com.cyb.tms.entity.TmsStoryMst;
 public interface TmsStoryService {
 	
 	public long createStory(StoryDTO storyDTO);
-	public TmsStoryMst updateStory(TmsStoryMst story);
+	public long updateStory(StoryDTO storyDTO);
 	public List<TmsStoryMst> getAllStories();
 	public TmsStoryMst getSprint(long id);
 	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception;
