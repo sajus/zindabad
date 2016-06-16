@@ -1,9 +1,9 @@
 'use strict';
 
 define([], function() {
-	return ['$scope', '$rootScope', 'subtaskService', 'appConstants', '$location', function($scope, $rootScope, subtaskService, appConstants, $location) {
-	
-	$scope.changeTab = function (currentTab) {
+  return ['$scope', '$rootScope', 'subtaskService', 'appConstants', '$location', function($scope, $rootScope, subtaskService, appConstants, $location) {
+  
+  $scope.changeTab = function (currentTab) {
     currentTab === 'UNASSIGNED' ? getUnassignedSubtasks() : getSubtasks();
     $scope.selectedTab = currentTab;
   };
@@ -84,28 +84,52 @@ define([], function() {
 
     $scope.editSubtask = function(subtask){
 
-    $scope.availableOptions = ["BACKLOG", "TODO", "DEVELOPMENT","PULLREQUEST", "INTERNAL_REVIEW", "QUALITY","REOPEN", "CODE_MERGED", "CLOSED"];
+      $scope.availableOptions = [
+        {value: "BACKLOG", name: "BACKLOG"},
+        {value: "TODO", name: "TODO"},
+        {value: "DEVELOPMENT", name: "DEVELOPMENT"},
+        {value: "PULLREQUEST", name: "PULLREQUEST"},
+        {value: "INTERNAL_REVIEW", name: "INTERNAL_REVIEW"},
+        {value: "QUALITY", name: "QUALITY"},
+        {value: "REOPEN", name: "REOPEN"},
+        {value: "CODE_MERGED", name: "CODE_MERGED"},
+        {value: "CLOSED", name: "CLOSED"}
+      ];
     
-    
-    for (var i in $scope.availableOptions) {
-    var option = $scope.availableOptions[i];
-    if (option ===  subtask.userStoryStatus.status) {
-      $scope.selectedOption = option;
-      break;
+      $scope.newSubtaskStatus = true;
+      $scope.oldSubtaskStatus = false;
+      $scope.editStatus = false;
+      $scope.saveStatus = true;
+    } 
+
+
+    $scope.saveSubtaskStatus = function(subtask) {
+
+      var subtaskValues = {
+        subtaskId : subtask.subtaskId,
+        status : subtask.userStoryStatus.status,
+        projectId : appConstants.user.projectId,
+        userId : appConstants.user.id
       }
+
+      subtaskService.saveSubtaskStatus(subtaskValues)
+        .success(function () {
+         getSubtasks();
+        })
+        .error(function (error) {
+          $scope.errorMessage = 'Unable to process your request';
+        });
     }
-    
-    
-    $scope.newSubtaskStatus = true;
-    $scope.oldSubtaskStatus = false;
-    $scope.editStatus = false;
-    $scope.saveStatus = true;
-  } 
 
+    $scope.cancelEditSubtaskStatus = function() { 
+      $scope.newSubtaskStatus = false;
+      $scope.oldSubtaskStatus = true;
+      $scope.saveStatus = false;
+      $scope.editStatus = true;
 
+    }
+
+  $scope.$apply();
     
-
-	$scope.$apply();
-		
-	}];
+  }];
 });
