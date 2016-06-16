@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
@@ -77,6 +78,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	
 	@Override
 	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
+		Transaction tx = hibernateUtil.getCurrentSession().beginTransaction();
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", todo, TmsStatusMst.class);
 		TmsUsers assignedTo = hibernateUtil.fetchById(assignToId, TmsUsers.class);
 		TmsUsers modifiedBy = hibernateUtil.fetchById(modifiedById, TmsUsers.class);
@@ -92,8 +94,9 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			userStoryStatus.setTmsUsersByModifiedBy(modifiedBy);
 			userStoryStatus.setTmsStatusMst(status);
 			userStoryStatus.setType(story);
-			hibernateUtil.create(tmsStoryMst);
+			long id = (long) hibernateUtil.create(tmsStoryMst);
 		}
+		tx.commit();
 	}
 
 	@Override

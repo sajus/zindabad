@@ -58,8 +58,7 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 
 	@Override
 	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
-		// TODO Auto-generated method stub
-		
+		tmsStoryDAO.addToCurrentSprint(storyDTOs, projectId, assignToId, modifiedById);
 	}
 	
 	
