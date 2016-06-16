@@ -12,6 +12,9 @@ define([], function() {
   $scope.story = {};
   $scope.errorMessage = undefined;
 	$scope.changeTab('CURRENT');
+  $scope.selectedStoryList = [];
+  $scope.storiesList = [];
+  $scope.isAllSelected = false;
 
 	$scope.showModal = function(id, story) {
     $scope.story = angular.copy(story) || {};
@@ -76,44 +79,39 @@ define([], function() {
 
 
   $scope.user =  appConstants.getItem('currentUser');
-
-  $scope.model = {
-   selectedStoryList : []
-  }
+ 
+  
   $scope.isSelectAll = function(){
-     $scope.model.selectedStoryList = [];
 
-     if($scope.master){
-        $scope.master = true;
-        for(var i=0;i<$scope.backlogtories.length;i++){
-          $scope.model.selectedStoryList.push($scope.backlogtories[i].name);  
-        }
+     if($scope.isAllSelected){
+        
+        $scope.selectedStoryList = angular.copy($scope.backlogtories);
       }
       else{
-        $scope.master = false;
+        $scope.selectedStoryList = [];
       }
+    }
 
-      angular.forEach($scope.backlogtories, function (item) {
-        item.selected = $scope.master;
+  $scope.isLabelChecked = function(story, isSelected, index){
+
+    if (isSelected) {
+      $scope.selectedStoryList.push(story);
+    } else {
+      $scope.selectedStoryList.splice(index, 1);
+    }
+  } 
+
+  $scope.assignToSprint = function(){
+
+    storyService.assignToSprint($scope.selectedStoryList, $scope.assignToId)
+      .success(function () {
+       getBackLogStories();
+      })
+      .error(function (error) {
+          $scope.status = 'Unable to process your request: ' + error.message;
       });
-
-    }
-
-  $scope.isLabelChecked = function(){
-    var _name = this.story.name;
-    
-    if(this.story.selected){
-    $scope.model.selectedStoryList.push(_name);
-    if($scope.model.selectedStoryList.length == $scope.backlogtories.length )
-    {
-     $scope.master = true;
-    }
-    }else{
-    $scope.master = false;
-    var index = $scope.model.selectedStoryList.indexOf(_name);
-    $scope.model.selectedStoryList.splice(index, 1);
   }
-}
+
   
 	$scope.$apply();
 		

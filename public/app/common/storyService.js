@@ -45,6 +45,23 @@ define([
       return $http.get(appConstants.endPointBase+"api/story/list");
     };
 
+    
+    self.assignToSprint = function(selectedStoryList, assignToId){
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/story/assign/sprint",
+        data: selectedStoryList,
+        params: {
+          projectId: appConstants.user.projectId,
+          assignToId: assignToId,
+          modifiedById: appConstants.user.id
+        }
+      }
+      return $http(req);
+    };
+
+
+
   });
 
 	
