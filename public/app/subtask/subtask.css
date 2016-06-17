@@ -1,18 +1,33 @@
+/*.modal-body .form-group{
+    white-space: nowrap;
+}
+.label-title{
+    display:inline-block;
+    min-width: 30%;
+    text-align: right;
+    margin-right: 10px;
+}
+.form-control{
+    display:inline-block;
+    width:50%;
+}
+*/
+
 .wizard {
     margin: 20px auto;
     background: #fff;
 }
 
-    .wizard .nav-tabs {
-        position: relative;
-        margin: 40px auto;
-        margin-bottom: 0;
-        border-bottom-color: #e0e0e0;
-    }
+.wizard .nav-tabs {
+    position: relative;
+    margin: 40px auto;
+    margin-bottom: 0;
+    border-bottom-color: #e0e0e0;
+}
 
-    .wizard > div.wizard-inner {
-        position: relative;
-    }
+.wizard > div.wizard-inner {
+    position: relative;
+}
 
 .connecting-line {
     height: 2px;
@@ -137,4 +152,5 @@ span.round-tab:hover {
         position: absolute;
         left: 35%;
     }
+
 }

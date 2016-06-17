@@ -47,6 +47,7 @@ define([
           $(element).on('hidden.bs.modal', function(){
             scope.$apply(function(){
               scope.$parent[attrs.modalVisible] = false;
+
             });
           });
           

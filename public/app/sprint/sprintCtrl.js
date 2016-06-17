@@ -12,7 +12,7 @@ define([], function() {
       sprintService.getSprint()
         .success(function (dataSprint) {
         var array = _.sortBy(dataSprint, function(sprint) {
-            return sprint.sprintName;
+            return sprint.sprintStartDate;
         });
          $scope.sprints = array.reverse();//_.filter(dataSprint, function(sprint){ return sprint.sprintStatus !== 'CLOSED'});
          $scope.loading = false;

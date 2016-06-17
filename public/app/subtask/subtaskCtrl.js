@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-	return ['$scope', '$rootScope', 'subtaskService', 'appConstants', '$location', function($scope, $rootScope, subtaskService, appConstants, $location) {
+	return ['$scope', '$rootScope', 'subtaskService', 'appConstants', '$location', '$timeout', function($scope, $rootScope, subtaskService, appConstants, $location, $timeout) {
 	
 	$scope.changeTab = function (currentTab) {
     currentTab === 'UNASSIGNED' ? getUnassignedSubtasks() : getSubtasks();
@@ -12,28 +12,26 @@ define([], function() {
   $scope.isModalVisible = false;
   $scope.errorMessage = undefined;
   $scope.changeTab('ASSIGNED');
-  
+  $scope.dateOptions = {format: 'dd/mm/yyyy'};
+
   $scope.showModal = function(subtask) {
-    $scope.$apply(function () {
-      $scope.getStories();
-      $scope.subtask = angular.copy(subtask) || {};
-      $scope.isModalVisible = true;
-    });
-    
-    
-    // var element = angular.element(id);
-    // element.modal('show');
+    $scope.getStories();
+    $scope.subtask = angular.copy(subtask) || {};
+    $scope.isModalVisible = true;
   }
 
   $scope.addSubtask = function(subtask) {
-    subtaskService.addSubtask(subtask)
+    $timeout(function() {
+      subtaskService.addSubtask(subtask)
       .success(function () {
         getUnassignedSubtasks();
-        closeModal('#add');
+        closeModal();
       })
       .error(function (error) {
         $scope.errorMessage = 'Unable to process your request';
       });
+    }, 0);
+    
   }
 
   $scope.getStories = function() {
@@ -61,6 +59,7 @@ define([], function() {
 
 
     function getUnassignedSubtasks() {
+      $scope.loading = true;
       subtaskService.getUnassignedSubtasks()
         .success(function (dataSubtask) {
          $scope.unassignedTasks = dataSubtask;
@@ -76,8 +75,6 @@ define([], function() {
     function closeModal() {
       clearErrorMessages();
       $scope.isModalVisible = false;
-      // var element = angular.element(id);
-      // element.modal('hide');
     }
 
     function clearErrorMessages() {

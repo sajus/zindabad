@@ -16,6 +16,8 @@
                 <div class="tab-content">
                     <div class="tab-pane" id="tab_default_1" ng-class="{'active': selectedTab == 'UNASSIGNED' }">
                         <h4>LIST OF SUBTASKS</h4>
+                        <app-loader></app-loader>
+                        <div ng-show="!loading">
                         <div class="float-right">
                           <button class="btn btn-success btn-add" type="button" ng-click="showModal()">
                           <i class="glyphicon glyphicon-plus gs"></i>
@@ -54,6 +56,7 @@
                               </tr>
                             </tbody>
                           </table>
+                          </div>
                        <!--  </div> -->
                     </div>
                     <div class="tab-pane" id="tab_default_2" ng-class="{'active': selectedTab == 'ASSIGNED' }">
@@ -121,12 +124,12 @@
 
     <div class="form-group">
       <label class="label-title">Created Date:</label>
-      <tms-datepicker ng-model="subtask.createdDate"></tms-datepicker>
+      <tms-datepicker class="datepicker" ng-model="subtask.createdDate"></tms-datepicker>
     </div>
 
     <div class="form-group">
       <label class="label-title">Efforts:</label>
-      <input class="form-control" type="text" placeholder="Efforts" ng-model="subtask.efforts">
+      <input class="form-control" type="text" placeholder="Efforts" ng-model="subtask.efforts" ng-required ="true">
     </div>
 
     <div class="form-group">

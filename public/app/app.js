@@ -7,9 +7,8 @@ define([
 	'angularResource',
 	'common/bootstrap',
 	'common/ga',
-	'angularLocalStorage',
-	'bootstrapDatepicker'
-], function(angular, angularRoute, angularUiBootstrap, angularResource, bootstrap, ga, bootstrapDatepicker) {
+	'angularLocalStorage'
+], function(angular, angularRoute, angularUiBootstrap, angularResource, bootstrap, ga) {
 	// Declare app level module which depends on views, and components
 
 	var app = angular.module('myApp', [
