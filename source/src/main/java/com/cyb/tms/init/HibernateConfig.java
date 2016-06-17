@@ -82,6 +82,7 @@ public class HibernateConfig {
 		properties.put("hibernate.show_sql", PROPERTY_NAME_HIBERNATE_SHOW_SQL);
 		properties.put("hibernate.hbm2ddl.auto", PROPERTY_HIBERNATE_HBM2DDL_AUTO);
 		properties.put("hibernate.format_sql", PROPERTY_HIBERNATE_FORMAT_SQL);
+		
 		/*properties.put(PROPERTY_NAME_HIBERNATE_DIALECT, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_DIALECT));
 		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));*/
 		return properties;	

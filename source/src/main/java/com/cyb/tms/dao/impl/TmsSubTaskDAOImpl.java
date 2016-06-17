@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsSubTaskDAO;
+import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
@@ -32,6 +34,9 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 
 	@Value("${tms.status.backlog}")
 	private String backlog;
+	
+	@Value("${tms.status.todo}")
+	private String todo;
 	
 	@Value("${tms.status.closed}")
 	private String closed;
@@ -80,6 +85,31 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		userStoryStatus.setModifiedDate(new Date());
 		userStoryStatus.setTmsUsersByModifiedBy(user);
 		return (Long)hibernateUtil.create(userStoryStatus);
+	}
+	
+	//------------- Add to current Sprint ------------------------------------------------------------
+	
+	@Override
+	public void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById) {
+		Transaction tx = hibernateUtil.getCurrentSession().beginTransaction();
+		TmsStatusMst status = hibernateUtil.findByPropertyName("status", todo, TmsStatusMst.class);
+		TmsUsers assignedTo = hibernateUtil.fetchById(assignToId, TmsUsers.class);
+		TmsUsers modifiedBy = hibernateUtil.fetchById(modifiedById, TmsUsers.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		for (SubtaskDTO subtaskDTO : subtaskDTOs){
+			UserStoryStaus userStoryStatus = new UserStoryStaus();
+			TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
+			userStoryStatus.setTmsSprintMst(sprint);
+			userStoryStatus.setTmsSubtask(tmsSubtask);
+			userStoryStatus.setModifiedDate(new Date());
+			userStoryStatus.setAssignedDate(new Date());
+			userStoryStatus.setTmsUsersByAssignedTo(assignedTo);
+			userStoryStatus.setTmsUsersByModifiedBy(modifiedBy);
+			userStoryStatus.setTmsStatusMst(status);
+			//userStoryStatus.setType(subtask);
+			long id = (long) hibernateUtil.create(tmsSubtask);
+		}
+		tx.commit();
 	}
 
 	@Override
@@ -212,4 +242,5 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		}
 		return userSubtasks;
 	}
+
 }

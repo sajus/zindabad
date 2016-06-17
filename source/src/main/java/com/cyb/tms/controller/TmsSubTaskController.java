@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.dto.TmsSprintDTO;
 import com.cyb.tms.entity.TmsStoryMst;
@@ -37,6 +38,14 @@ public class TmsSubTaskController {
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
+	
+	// -------------------Add Story to current sprint---------------
+		@RequestMapping(value = URIConstants.ASSIGN_TO_SPRINT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<Void> addToCurrentSprint(@RequestBody List<SubtaskDTO> subtaskDTOs, @RequestParam Long projectId, @RequestParam Long assignToId, @RequestParam Long modifiedById) {
+			tmsSubTaskService.addToCurrentSprint(subtaskDTOs, projectId, assignToId, modifiedById);
+			HttpHeaders headers = new HttpHeaders();
+			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		}
 
 	// ------------------Retrieve All Subtasks --------------
 
