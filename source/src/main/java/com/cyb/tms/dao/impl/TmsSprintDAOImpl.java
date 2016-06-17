@@ -50,6 +50,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	@Value("${tms.sprint.open}")
 	private String sprint_open;
 
+	// -------------------Create a Sprint---------------
 	@Override
 	public long createSprint(TmsSprintDTO tmsSprintDTO){
 		TmsProject project = hibernateUtil.fetchById(tmsSprintDTO.getProjectId(), TmsProject.class); 
@@ -62,6 +63,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 		return (Long)hibernateUtil.create(tmsSprintMst);
 	}
 
+	//------------------- Update a Sprint --------------------------------------------------------
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> updateSprint(TmsSprintDTO tmsSprintDTO) {

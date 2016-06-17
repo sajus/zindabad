@@ -19,3 +19,10 @@ h5{
     display:inline-block;
     width:50%;
 }
+
+#check{
+	float: left;
+}
+#save{
+	float: right;
+}

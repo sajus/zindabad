@@ -1,14 +1,15 @@
 <div class="container">
-  <div class="row">
+	<div class="row">
     <div class="tabbable-panel">
       <div class="tabbable-line">
         <ul class="nav nav-tabs ">
           <li ng-click="changeTab('UNASSIGNED');"  ng-class="{'active': selectedTab == 'UNASSIGNED' }">
-            <a data-toggle="tab">UNASSIGNED</a> 
+              <a data-toggle="tab">
+              UNASSIGNED </a>
           </li>
-                    
           <li ng-click="changeTab('ASSIGNED');"  ng-class="{'active': selectedTab == 'ASSIGNED' }">
-            <a data-toggle="tab">ASSIGNED </a>
+              <a href="#tab_default_2" data-toggle="tab">
+              ASSIGNED </a>
           </li>
         </ul>
 
@@ -17,11 +18,12 @@
             <h4>LIST OF SUBTASKS</h4>
               <div class="float-right">
                 <button class="btn btn-success btn-add" type="button" ng-click="showModal('#add')">
-                  <i class="glyphicon glyphicon-plus gs"></i>Add SubTask
+                <i class="glyphicon glyphicon-plus gs"></i>
+                Add SubTask
                 </button>
               </div>
-                <!-- <div class="table table-hover table-bordered table-responsive"> -->
               <table id="mytable" class="table table-hover table-bordered table-striped">
+
                 <thead>
                   <tr>
                     <th>S.No</th>
@@ -30,7 +32,23 @@
                     <th>TYPE</th>
                     <th>EFFORTS</th>
                     <th>SCOPE</th>
-                    <th>Actions</th>
+                    <th class="text-center">Actions</th>
+                    <th class="text-center">
+                      <div ng-show="user.userRole === 'LEAD'">
+                        <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()">
+                          <select id="selectUser" name="selectUser" ng-model="assignToId">
+                            <option value="select" ng-selected={{!assignToId}}>Select</option>
+                            <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+                          </select>
+                          <button class='btn btn-info btn-xs' type="button" id="save"ng-click="assignToSprint()"><span class="glyphicon glyphicon-ok"></span>Save</button>
+                      </div>
+
+                      <div ng-hide="user.userRole === 'LEAD'">
+                        <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()" >
+                          <button class='btn btn-primary btn-sm' type="button">Assign To Me</button>
+                      </div>
+
+                    </th>
                   </tr>
                 </thead>
 
@@ -47,11 +65,14 @@
 
                       <button class="btn btn-danger btn-xs" ng-click=""><span class="glyphicon glyphicon-trash"></span> Del</button>
                     </td>
+                    <td><input type="checkbox" id="check" ng-model="subtaskList[$index]" ng-change="isLabelChecked(subtask, subtaskList[$index], $index)">
+                    </td>
                   </tr>
                 </tbody>
               </table>
+                    
             </div>
-            <!-- table for assigned subtask> -->
+
             <div class="tab-pane" id="tab_default_2" ng-class="{'active': selectedTab == 'ASSIGNED' }">
               <table id="mytable" class="table table-bordred table-striped" width="100%">
                 <thead>
@@ -116,6 +137,7 @@
       </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
   <div class="modal-dialog">

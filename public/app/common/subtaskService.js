@@ -55,7 +55,6 @@ define([
       return $http.get(appConstants.endPointBase+"api/subtask/list");
     };
 
-
     subtaskService.saveSubtaskStatus = function (subtask) {
      
       var req = {
@@ -65,6 +64,21 @@ define([
       }
       return $http(req);
     };
+
+    subtaskService.assignToSprint = function(selectedSubtaskList, assignToId){
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/subtask/assign/sprint",
+        data: selectedSubtaskList,
+        params: {
+          projectId: appConstants.user.projectId,
+          assignToId: assignToId,
+          modifiedById: appConstants.user.id
+        }
+      }
+      return $http(req);
+    };
+
     
   return subtaskService;
 
