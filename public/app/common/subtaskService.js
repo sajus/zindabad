@@ -1,10 +1,10 @@
 'use strict';
 define([
-	'angular',
+  'angular',
 ], function(angular) {
-	return angular.module('myApp.factory', ['$http', 'appConstants']).factory("subtaskService", function($http, appConstants) {
+  return angular.module('myApp.factory', ['$http', 'appConstants']).factory("subtaskService", function($http, appConstants) {
 
-var subtaskService = {};
+    var subtaskService = {};
 
     subtaskService.addSubtask = function (subtask) {
       subtask.projectId = appConstants.user.projectId;
@@ -28,16 +28,16 @@ var subtaskService = {};
       return $http(req);
     };
 
-		subtaskService.getSubtasks = function () {
-			var req = {
+    subtaskService.getSubtasks = function () {
+      var req = {
         method: 'GET',
         url: appConstants.endPointBase+"api/subtask/user/sprint",
         params: {
           projectId: appConstants.user.projectId,
           userId: appConstants.user.id
         }
-			}
-			return $http(req);
+      }
+      return $http(req);
     };
 
     subtaskService.getUnassignedSubtasks = function () {
@@ -48,13 +48,22 @@ var subtaskService = {};
           projectId: appConstants.user.projectId
         }
       }
-			return $http(req);
+      return $http(req);
     };
-   	    	
+          
     subtaskService.update = function () {
       return $http.get(appConstants.endPointBase+"api/subtask/list");
     };
 
+    subtaskService.saveSubtaskStatus = function (subtask) {
+     
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/subtask/edit",
+        data: subtask
+      }
+      return $http(req);
+    };
 
     subtaskService.assignToSprint = function(selectedSubtaskList, assignToId){
       var req = {
@@ -70,10 +79,9 @@ var subtaskService = {};
       return $http(req);
     };
 
-	 return subtaskService;
+    
+  return subtaskService;
 
-	});
-	
-	
-	
+  });
+  
 });
