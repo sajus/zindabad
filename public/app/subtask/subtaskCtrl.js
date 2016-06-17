@@ -131,6 +131,21 @@ define([], function() {
 
     }
 
+    function getUser() {
+      userService.getUser()
+        .success(function (dataUser) {
+          $scope.users = dataUser;
+          
+                
+        })
+        .error(function (error) {
+          $scope.status = 'Unable to load customer data: ' + error.message;
+        });
+    }
+  
+    getUser();
+
+
     $scope.user =  appConstants.getItem('currentUser');
 
     $scope.isSelectAll = function(){
