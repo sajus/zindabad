@@ -62,34 +62,56 @@
 				</div>
 				<div class="tab-pane" id="tab_default_2" ng-class="{'active': selectedTab == 'CURRENT' }">
 						<h5>CURRENT SPRINT STORIES</h5>
-					    <table id="mytable" class="table table-hover table-bordered table-striped">
+					    <table id="mytable" class="table table-hover table-bordered table-striped" width="100%">
 					      <thead>
 					        <tr>
-				          		<th>S.No</th>
-					          	<th>CREATED DATE</th>
-					          	<th>ASSIGNED DATE</th>
-					          	<th>JIRA ID</th>
-					          	<th>MODULE</th>
-					          	<th>STORY POINT</th>
-					          	<th>STATUS</th>
-					          	<th>Edit</th>
+				          		<th class="text-center" width="3%">S.No</th>
+					          	<th class="text-center" width="13%">CREATED DATE</th>
+					          	<th class="text-center" width="13%">ASSIGNED DATE</th>
+					          	<th class="text-center" width="13%">JIRA ID</th>
+					          	<th class="text-center" width="10%">MODULE</th>
+					          	<th class="text-center" width="12%">STORY POINT</th>
+					          	<th class="text-center" width="20%">STATUS</th>
+					          	<th class="text-center" width="15%">Edit</th>
 					        </tr>
 					      </thead>
 					      <tbody>
 					        <tr ng-repeat="story in stories track by $index">
-					          	<td>{{$index+1}}
-					          	<td>{{story.userStoryStatus.createdDate}}</td>
-					          	<td>{{story.userStoryStatus.assignedDate}}</td>
-					          	<td>{{story.jiraId}}</td>
-					          	<td>{{story.moduleName}}</td>
-				          		<td>{{story.storyPoint}}</td>
-					          	<td>{{story.userStoryStatus.status}}</td>
-					          	<td class="text-center table-actions-medium">
-					          		<button class='btn btn-info btn-xs' type="button">
-					          			<span class="glyphicon glyphicon-edit"></span> 
-					          			Edit
-				          			</button> 
-					          </td>
+					          	<td align="center">{{$index+1}}
+					          	<td align="center">{{story.userStoryStatus.createdDate}}</td>
+					          	<td align="center">{{story.userStoryStatus.assignedDate}}</td>
+					          	<td align="center">{{story.jiraId}}</td>
+					          	<td align="center">{{story.moduleName}}</td>
+				          		<td align="center">{{story.storyPoint}}</td>
+					          	<td align="center">
+				                    <div  ng-show="oldStoryStatus">
+				                    	{{story.userStoryStatus.status}}
+				                     </div>
+
+	                      			<div  ng-show="newStoryStatus">
+			                            <select ng-model="story.userStoryStatus.status">
+			                                <option value="">--Select --</option>
+			                                <option ng-repeat="option in availableOptions" ng-selected="{{story.userStoryStatus.status == option.value}}" value="{{option.value}}">{{option.name}}</option>
+			                            </select>
+			                        </div>  
+                      			</td>
+
+			                    <td align="center">
+				                    <div ng-show="editStatus">
+				                        <div data-placement="top" data-toggle="tooltip" title="Edit">
+				                        	<button class='btn btn-info btn-xs' type="button" data-title="Edit" data-toggle="modal" data-target="#edit" ng-click="editStory(story)"><span class="glyphicon glyphicon-edit"></span>Edit
+				                        	</button>
+				                        </div>
+				                     </div>
+
+			                      	<div  ng-show="saveStatus" >
+			                        	<div data-placement="top" data-toggle="tooltip">
+			                          		<button class='btn btn-success btn-xs' type="button" ng-click="saveStoryStatus(story)"><span class="glyphicon glyphicon-ok"></span>Save</button>
+
+			                          		<button class='btn btn-default btn-xs' type="button" ng-click="cancelEditStoryStatus()"><span class="glyphicon glyphicon-remove"></span>Cancel</button>
+			                        	</div>
+			                      	</div>
+			                    </td>
 					        </tr>
 					      </tbody>
 					    </table>

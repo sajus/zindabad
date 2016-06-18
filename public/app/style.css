@@ -242,3 +242,7 @@ used to vertically center elements, may need modification if you're not using de
   border-bottom: 1px solid #eee;
   padding-bottom: 15px;
 }
+
+[ng-cloak] {
+    display: none;
+}

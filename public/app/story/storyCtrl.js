@@ -112,8 +112,56 @@ define([], function() {
       });
   }
 
-  
-	$scope.$apply();
-		
+    // For Edit story
+
+    $scope.oldStoryStatus = true;
+    $scope.editStatus = true;
+
+    $scope.editStory = function(story){
+
+      $scope.availableOptions = [
+        {value: "BACKLOG", name: "BACKLOG"},
+        {value: "TODO", name: "TODO"},
+        {value: "DEVELOPMENT", name: "DEVELOPMENT"},
+        {value: "PULLREQUEST", name: "PULLREQUEST"},
+        {value: "INTERNAL_REVIEW", name: "INTERNAL_REVIEW"},
+        {value: "QUALITY", name: "QUALITY"},
+        {value: "REOPEN", name: "REOPEN"},
+        {value: "CODE_MERGED", name: "CODE_MERGED"},
+        {value: "CLOSED", name: "CLOSED"}
+      ];
+    
+      $scope.newStoryStatus = true;
+      $scope.oldStoryStatus = false;
+      $scope.editStatus = false;
+      $scope.saveStatus = true;
+    } 
+
+    $scope.saveStoryStatus = function(story) {
+
+      var storyValues = {
+        storyId : story.storyId,
+        status : story.userStoryStatus.status,
+        projectId : appConstants.user.projectId,
+        userId : appConstants.user.id
+      }
+
+      storyService.saveStoryStatus(storyValues)
+        .success(function () {
+         getStories();
+        })
+        .error(function (error) {
+          $scope.errorMessage = 'Unable to process your request';
+        });
+    }
+
+    $scope.cancelEditStoryStatus = function() { 
+      $scope.newStoryStatus = false;
+      $scope.oldStoryStatus = true;
+      $scope.saveStatus = false;
+      $scope.editStatus = true;
+    }
+
+	  $scope.$apply();
 	}];
 });
