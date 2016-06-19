@@ -1,8 +1,8 @@
 {
-  "name": "angular-requirejs-seed",
+  "name": "taskmanagement",
   "description": "A starter project for AngularJS",
-  "version": "0.3.0",
-  "homepage": "https://github.com/tnajdek/angular-requirejs-seed",
+  "version": "0.0.1",
+  "homepage": "https://github.com/sajus/zindabad",
   "license": "MIT",
   "private": true,
   "dependencies": {

@@ -1,11 +1,11 @@
 .loading-spiner{
-     position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:1000;
-    opacity: .8;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:1000;
+  opacity: .8;
 }
 
 .loading-spiner img{
@@ -33,6 +33,9 @@
   display: :inline-block;
 }
 
+.margin-left-medium{
+  margin-left: 20px;
+}
 .padding-bottom-small{
   padding-bottom: 15px;
 }
@@ -45,6 +48,10 @@
   float:left;
 }
 
+.table-striped th, .table-striped tr {
+  text-align: center;
+}
+/* table properties */
 .table-index-medium{
   width: 10%;
 }

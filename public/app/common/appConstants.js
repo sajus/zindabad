@@ -34,6 +34,20 @@ define([
 
 			clearAll: function() {
 				return localStorageService.clearAll();
+			},
+
+			getStatusList: function() {
+        return [
+          {value: "BACKLOG", name: "BACKLOG"},
+          {value: "TODO", name: "TODO"},
+          {value: "DEVELOPMENT", name: "DEVELOPMENT"},
+          {value: "PULLREQUEST", name: "PULLREQUEST"},
+          {value: "INTERNAL_REVIEW", name: "INTERNAL_REVIEW"},
+          {value: "QUALITY", name: "QUALITY"},
+          {value: "REOPEN", name: "REOPEN"},
+          {value: "CODE_MERGED", name: "CODE_MERGED"},
+          {value: "CLOSED", name: "CLOSED"}
+        ];
 			}
 
 		}

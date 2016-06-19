@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
@@ -58,6 +60,8 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Autowired
 	private TmsStatusDAO tmsStatusDAO;
 	
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@Override
 	public long createStory(StoryDTO storyDTO) {
@@ -79,25 +83,39 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	
 	@Override
 	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
-		Transaction tx = hibernateUtil.getCurrentSession().beginTransaction();
-		TmsStatusMst status = hibernateUtil.findByPropertyName("status", todo, TmsStatusMst.class);
-		TmsUsers assignedTo = hibernateUtil.fetchById(assignToId, TmsUsers.class);
-		TmsUsers modifiedBy = hibernateUtil.fetchById(modifiedById, TmsUsers.class);
-		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
-		for (StoryDTO storyDTO : storyDTOs) {
-			UserStoryStaus userStoryStatus = new UserStoryStaus();
-			TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
-			userStoryStatus.setTmsSprintMst(sprint);
-			userStoryStatus.setTmsStoryMst(tmsStoryMst);
-			userStoryStatus.setModifiedDate(new Date());
-			userStoryStatus.setAssignedDate(new Date());
-			userStoryStatus.setTmsUsersByAssignedTo(assignedTo);
-			userStoryStatus.setTmsUsersByModifiedBy(modifiedBy);
-			userStoryStatus.setTmsStatusMst(status);
-			userStoryStatus.setType(story);
-			long id = (long) hibernateUtil.create(tmsStoryMst);
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			TmsStatusMst status = hibernateUtil.findByProperty(session, "status", todo, TmsStatusMst.class);
+			TmsUsers assignedTo = (TmsUsers) session.get(TmsUsers.class, assignToId);//hibernateUtil.fetchById(assignToId, TmsUsers.class);
+			TmsUsers modifiedBy = (TmsUsers) session.get(TmsUsers.class, modifiedById);//hibernateUtil.fetchById(modifiedById, TmsUsers.class);
+			TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+			for (StoryDTO storyDTO : storyDTOs) {
+				UserStoryStaus userStoryStatus = new UserStoryStaus();
+				TmsStoryMst tmsStoryMst = (TmsStoryMst) session.get(TmsStoryMst.class, storyDTO.getStoryId());//hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
+				userStoryStatus.setTmsSprintMst(sprint);
+				userStoryStatus.setTmsStoryMst(tmsStoryMst);
+				userStoryStatus.setModifiedDate(new Date());
+				userStoryStatus.setAssignedDate(new Date());
+				userStoryStatus.setTmsUsersByAssignedTo(assignedTo);
+				userStoryStatus.setTmsUsersByModifiedBy(modifiedBy);
+				userStoryStatus.setTmsStatusMst(status);
+				userStoryStatus.setType(story);
+				session.save(userStoryStatus);
+			}
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+		} finally {
+			try {
+				session.flush();
+				session.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+			session = null;
+			tx = null;
 		}
-		tx.commit();
 	}
 
 	//------------------- Update a Story --------------------------------------------------------
@@ -106,7 +124,6 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		public long updateStory(StoryDTO storyDTO) {
 			TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
 			TmsUsers user = hibernateUtil.fetchById( storyDTO.getUserId(), TmsUsers.class);
-			//TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
 			TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
 			TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
 			UserStoryStaus userStoryStatus = new UserStoryStaus();
@@ -171,11 +188,11 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					.createAlias("tmsStoryMst", "story")
 					.createAlias("tmsUsersByAssignedTo", "user")
 					.setProjection( Projections.distinct(Projections.property("story.storyId")))
-					.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
+					/*.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
 							.createAlias("tmsStatusMst", "tsm")
 							.createAlias("tmsStoryMst", "story")
 							.add(Restrictions.eq("tsm.status", backlog))
-					        .setProjection(Property.forName("story.storyId"))))
+					        .setProjection(Property.forName("story.storyId"))))*/
 					.add(Restrictions.eq("user.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
@@ -226,6 +243,13 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
 				.createAlias("tmsStatusMst", "tsm")
 				.createAlias("tmsStoryMst", "story")
+				.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
+						.createAlias("tmsStatusMst", "tsm")
+						.createAlias("tmsStoryMst", "story")
+						.createAlias("tmsUsersByAssignedTo", "users")
+						.add(Restrictions.isNotNull("uss.tmsUsersByAssignedTo"))		
+						.add(Restrictions.ne("tsm.status", backlog))
+						.setProjection(Property.forName("story.storyId"))))
 				.setProjection( Projections.distinct(Projections.property("story.storyId")))
 				.add(Restrictions.eq("tsm.status", backlog)).list();
 		if(storyIds.size() > 0) {

@@ -7,8 +7,9 @@ define([
 	'angularResource',
 	'common/bootstrap',
 	'common/ga',
-	'angularLocalStorage'
-], function(angular, angularRoute, angularUiBootstrap, angularResource, bootstrap, ga) {
+	'angularLocalStorage',
+	'bootstrapDatepicker'
+], function(angular, angularRoute, angularUiBootstrap, angularResource, bootstrap, ga, bootstrapDatepicker) {
 	// Declare app level module which depends on views, and components
 
 	var app = angular.module('myApp', [
@@ -38,6 +39,8 @@ define([
 			app.service = $provide.service;
 
 			$routeProvider.otherwise({redirectTo: '/dashboard'});
+
+			$resourceProvider.defaults.stripTrailingSlashes = false;
 
 			// $locationProvider.hashPrefix('!');
 			//$locationProvider.html5Mode(true);

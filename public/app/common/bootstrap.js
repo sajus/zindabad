@@ -21,7 +21,12 @@ define([
 	'subtask/subtask',
 	'common/subtaskService',
 	'components/alerts/tmsalert',
-	'common/appErrors'
+	'common/appErrors',
+	'components/modal/tmsModal',
+	'components/modal/modalHeader',
+	'components/modal/modalBody',
+	'components/modal/modalFooter',
+	'components/datepicker/tms-datepicker'
 		], function(
 				loginView, 
 				homeView, 
@@ -44,7 +49,12 @@ define([
 				subtaskService,
 				subtaskView,
 				tmsalert,
-				appErrors
+				appErrors,
+				tmsModal,
+				modalHeader,
+				modalBody,
+				modalFooter,
+				tmsDatepicker
 			) {
 	return [
 		homeView, 
@@ -68,6 +78,11 @@ define([
 		subtaskService,
 		subtaskView,
 		tmsalert,
-		appErrors
+		appErrors,
+		tmsModal,
+		modalHeader,
+		modalBody,
+		modalFooter,
+		tmsDatepicker
 	];
 });

@@ -20,7 +20,7 @@ define([
     self.getStories = function () {
       var req = {
         method: 'GET',
-        url: appConstants.endPointBase+"api/story/sprint",
+        url: appConstants.endPointBase+"api/story/user/sprint",
         params: {
           projectId: appConstants.user.projectId,
           userId: appConstants.user.id
