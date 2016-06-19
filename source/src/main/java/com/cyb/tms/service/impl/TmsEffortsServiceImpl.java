@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cyb.tms.dao.TmsEffortsDAO;
+import com.cyb.tms.dto.TmsEffortsDTO;
 import com.cyb.tms.entity.TmsEfforts;
 import com.cyb.tms.service.TmsEffortsService;
 
@@ -19,8 +20,8 @@ public class TmsEffortsServiceImpl implements TmsEffortsService {
 	private TmsEffortsDAO tmsEffortsDAO;
 	
 	@Override
-	public long createEffort(TmsEfforts effort) {
-		return tmsEffortsDAO.createEffort(effort);
+	public long createEffort(TmsEffortsDTO tmseffortDTO) {
+		return tmsEffortsDAO.createEffort(tmseffortDTO);
 	}
 
 	@Override

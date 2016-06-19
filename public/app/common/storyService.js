@@ -20,7 +20,7 @@ define([
     self.getStories = function () {
       var req = {
         method: 'GET',
-        url: appConstants.endPointBase+"api/story/sprint",
+        url: appConstants.endPointBase+"api/story/user/sprint",
         params: {
           projectId: appConstants.user.projectId,
           userId: appConstants.user.id
@@ -45,7 +45,27 @@ define([
       return $http.get(appConstants.endPointBase+"api/story/list");
     };
 
-  });
+    self.assignToSprint = function(selectedStoryList, assignToId){
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/story/assign/sprint",
+        data: selectedStoryList,
+        params: {
+          projectId: appConstants.user.projectId,
+          assignToId: assignToId,
+          modifiedById: appConstants.user.id
+        }
+      }
+      return $http(req);
+    };
 
-	
+    self.saveStoryStatus = function (story) {
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/story/edit",
+        data: story
+      }
+      return $http(req);
+    };
+  });
 });

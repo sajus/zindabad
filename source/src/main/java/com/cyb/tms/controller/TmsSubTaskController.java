@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.dto.SubtaskDTO;
+import com.cyb.tms.dto.TmsSprintDTO;
 import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.entity.TmsSubtask;
 import com.cyb.tms.service.TmsSubTaskService;
@@ -36,6 +38,14 @@ public class TmsSubTaskController {
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
+	
+	// -------------------Add Story to current sprint---------------
+		@RequestMapping(value = URIConstants.ASSIGN_TO_SPRINT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<Void> addToCurrentSprint(@RequestBody List<SubtaskDTO> subtaskDTOs, @RequestParam Long projectId, @RequestParam Long assignToId, @RequestParam Long modifiedById) {
+			tmsSubTaskService.addToCurrentSprint(subtaskDTOs, projectId, assignToId, modifiedById);
+			HttpHeaders headers = new HttpHeaders();
+			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		}
 
 	// ------------------Retrieve All Subtasks --------------
 
@@ -65,6 +75,14 @@ public class TmsSubTaskController {
 	public ResponseEntity<List<LinkedHashMap<String, Object>>> getCurrentUserSubTasksBySprintBy(@RequestParam Long userId, Long projectId) throws Exception {
 		List<LinkedHashMap<String, Object>> stories = tmsSubTaskService.getCurrentUserSubTasksBySprintBy(userId, projectId);
 		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
+	}
+	
+	// -------------------Update a Subtask---------------
+	@RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> updateSubtask(@RequestBody SubtaskDTO subtaskDTO) {
+		tmsSubTaskService.updateSubtask(subtaskDTO);
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	}
 
 }

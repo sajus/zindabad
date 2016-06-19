@@ -26,8 +26,8 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	}
 
 	@Override
-	public TmsStoryMst updateStory(TmsStoryMst story) {
-		return tmsStoryDAO.updateStory(story);
+	public long updateStory(StoryDTO storyDTO) {
+		return tmsStoryDAO.updateStory(storyDTO);
 	}
 
 	@Override
@@ -46,12 +46,6 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	}
 
 	@Override
-	public void addToCurrentSprint(StoryDTO storyDTO) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public List<LinkedHashMap<String, Object>> getBackLogStories(Long projectId)throws Exception {
 		return tmsStoryDAO.getBackLogStories(projectId);
 	}
@@ -60,6 +54,11 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	public List<LinkedHashMap<String, Object>> getCurrentUserStoriesBySprint(
 			Long userId, Long projectId) {
 		return tmsStoryDAO.getCurrentUserStoriesBySprint(userId, projectId);
+	}
+
+	@Override
+	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
+		tmsStoryDAO.addToCurrentSprint(storyDTOs, projectId, assignToId, modifiedById);
 	}
 	
 	

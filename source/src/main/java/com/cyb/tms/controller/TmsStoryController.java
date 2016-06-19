@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cyb.tms.dto.StoryDTO;
+import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStoryMst;
@@ -50,13 +51,12 @@ public class TmsStoryController {
 	}
 	
 	// -------------------Add Story to current sprint---------------
-	/*	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<Void> addToCurrentSprint(@RequestBody StoryDTO storyDTO) {
-			// TODO
-			tmsStoryService.addToCurrentSprint(storyDTO);
-			HttpHeaders headers = new HttpHeaders();
-			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-		}*/
+	@RequestMapping(value = URIConstants.ASSIGN_TO_SPRINT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> addToCurrentSprint(@RequestBody List<StoryDTO> storyDTOs, @RequestParam Long projectId, @RequestParam Long assignToId, @RequestParam Long modifiedById) {
+		tmsStoryService.addToCurrentSprint(storyDTOs,projectId, assignToId, modifiedById);
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
 		
 
 	// ------------------Retrieve All Stories --------------
@@ -86,5 +86,13 @@ public class TmsStoryController {
 		List<LinkedHashMap<String, Object>> stories = tmsStoryService.getBackLogStories(projectId);
 		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
 	}
+	
+	// -------------------Update a Story---------------
+		@RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<Void> updateStory(@RequestBody StoryDTO storyDTO) {
+			tmsStoryService.updateStory(storyDTO);
+			HttpHeaders headers = new HttpHeaders();
+			return new ResponseEntity<Void>(headers, HttpStatus.OK);
+		}
 	
 }

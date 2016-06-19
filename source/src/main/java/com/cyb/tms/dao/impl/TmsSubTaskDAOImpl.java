@@ -1,10 +1,14 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
@@ -17,11 +21,13 @@ import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsSubTaskDAO;
+import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.entity.TmsSubtask;
+import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.util.HibernateUtil;
 
@@ -30,6 +36,9 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 
 	@Value("${tms.status.backlog}")
 	private String backlog;
+	
+	@Value("${tms.status.todo}")
+	private String todo;
 	
 	@Value("${tms.status.closed}")
 	private String closed;
@@ -42,7 +51,11 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 
 	@Autowired
 	private TmsSprintDAO tmsSprintDAO;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 
+	// -------------------Create a Subtask---------------
 	@Override
 	public long createSubtask(SubtaskDTO subtaskDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
@@ -61,9 +74,78 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		return (Long)hibernateUtil.create(subtask);
 	}
 
+	//------------------- Update a Subtask --------------------------------------------------------
+	@SuppressWarnings("unchecked")
 	@Override
-	public TmsSubtask updateSubtask(TmsSubtask subtask) {
-		return hibernateUtil.update(subtask);
+	public long updateSubtask(SubtaskDTO subtaskDTO) {
+		TmsStatusMst status = hibernateUtil.findByPropertyName("status", subtaskDTO.getStatus(), TmsStatusMst.class);
+		TmsUsers user = hibernateUtil.fetchById( subtaskDTO.getUserId(), TmsUsers.class);
+		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(subtaskDTO.getProjectId());
+		UserStoryStaus userStoryStatus = new UserStoryStaus();
+		userStoryStatus.setTmsSprintMst(sprint);
+		userStoryStatus.setTmsStatusMst(status);
+		userStoryStatus.setTmsSubtask(tmsSubtask);
+		userStoryStatus.setType(tmsSubtask.getType());
+		userStoryStatus.setModifiedDate(new Date());
+		userStoryStatus.setTmsUsersByModifiedBy(user);
+		return (Long)hibernateUtil.create(userStoryStatus);
+	}
+	
+	//------------- Add to current Sprint ------------------------------------------------------------
+	
+	@Override
+	public void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById) {
+	/*	TmsStatusMst status = hibernateUtil.findByPropertyName("status", todo, TmsStatusMst.class);
+		TmsUsers assignedTo = hibernateUtil.fetchById(assignToId, TmsUsers.class);
+		TmsUsers modifiedBy = hibernateUtil.fetchById(modifiedById, TmsUsers.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		for (SubtaskDTO subtaskDTO : subtaskDTOs){
+			UserStoryStaus userStoryStatus = new UserStoryStaus();
+			TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
+			userStoryStatus.setTmsSprintMst(sprint);
+			userStoryStatus.setTmsSubtask(tmsSubtask);
+			userStoryStatus.setModifiedDate(new Date());
+			userStoryStatus.setAssignedDate(new Date());
+			userStoryStatus.setTmsUsersByAssignedTo(assignedTo);
+			userStoryStatus.setTmsUsersByModifiedBy(modifiedBy);
+			userStoryStatus.setTmsStatusMst(status);
+			userStoryStatus.setType(tmsSubtask.getType());
+			long id = (long) hibernateUtil.create(tmsSubtask);
+		}*/
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			TmsStatusMst status = hibernateUtil.findByProperty(session, "status", todo, TmsStatusMst.class);
+			TmsUsers assignedTo = (TmsUsers) session.get(TmsUsers.class, assignToId);//hibernateUtil.fetchById(assignToId, TmsUsers.class);
+			TmsUsers modifiedBy = (TmsUsers) session.get(TmsUsers.class, modifiedById);//hibernateUtil.fetchById(modifiedById, TmsUsers.class);
+			TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+			for (SubtaskDTO subtaskDTO : subtaskDTOs) {
+				UserStoryStaus userStoryStatus = new UserStoryStaus();
+				TmsSubtask tmsSubtask = (TmsSubtask) session.get(TmsSubtask.class, subtaskDTO.getSubtaskId());//hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
+				userStoryStatus.setTmsSprintMst(sprint);
+				userStoryStatus.setTmsSubtask(tmsSubtask);
+				userStoryStatus.setModifiedDate(new Date());
+				userStoryStatus.setAssignedDate(new Date());
+				userStoryStatus.setTmsUsersByAssignedTo(assignedTo);
+				userStoryStatus.setTmsUsersByModifiedBy(modifiedBy);
+				userStoryStatus.setTmsStatusMst(status);
+				userStoryStatus.setType(tmsSubtask.getType());
+				session.save(userStoryStatus);
+			}
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+		} finally {
+			try {
+				session.flush();
+				session.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+			session = null;
+			tx = null;
+		}
 	}
 
 	@Override
@@ -110,6 +192,13 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		List<Long> subtaskIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
 				.createAlias("tmsStatusMst", "tsm")
 				.createAlias("tmsSubtask", "sub")
+				.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
+						.createAlias("tmsStatusMst", "tsm")
+						.createAlias("tmsSubtask", "sub")
+						.createAlias("tmsUsersByAssignedTo", "users")
+						.add(Restrictions.isNotNull("uss.tmsUsersByAssignedTo"))		
+						.add(Restrictions.ne("tsm.status", backlog))
+						.setProjection(Property.forName("sub.subtaskId"))))
 				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
 				.add(Restrictions.eq("tsm.status", backlog)).list();
 		if(subtaskIds.size() > 0) {
@@ -129,11 +218,11 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 					.createAlias("tmsSubtask", "sub")
 					.createAlias("tmsUsersByAssignedTo", "users")
 					.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
-					.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
+					/*.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
 							.createAlias("tmsStatusMst", "tsm")
 							.createAlias("tmsSubtask", "sub")
 							.add(Restrictions.eq("tsm.status", backlog))
-							.setProjection(Property.forName("sub.subtaskId"))))
+							.setProjection(Property.forName("sub.subtaskId"))))*/
 					.add(Restrictions.eq("users.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(subtaskIds.size() > 0) {
@@ -196,4 +285,5 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		}
 		return userSubtasks;
 	}
+
 }

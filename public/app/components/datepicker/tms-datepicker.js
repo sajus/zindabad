@@ -10,11 +10,13 @@ define([
       require: ['ngModel'],
       replace:true,
       template: '<div class="form-group">'+
-                    '<input type="text" class="form-control" readonly="readonly">' +
-                     '<span class="input-group-addon" ng-click="openPicker();"><i class="glyphicon glyphicon-calendar"></i></span>' +
+                   '<label class="label-title">{{label}}</label>'+
+                    '<input type="text" class="form-control" ngModel required readonly="readonly">' +
+                   /*  '<span class="input-group-addon" ng-click="openPicker();"><i class="glyphicon glyphicon-calendar"></i></span>' +*/
                     '</div>',
       scope:{
-        ngModel: '='
+        ngModel: '=',
+        label: '@?'
       },   
       link:function(scope, element, attrs){
         var input = element.find('input');
