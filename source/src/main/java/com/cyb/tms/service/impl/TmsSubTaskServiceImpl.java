@@ -31,6 +31,11 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 	public long updateSubtask(SubtaskDTO subtaskDTO) {
 		return tmsSubTaskDAO.updateSubtask(subtaskDTO);
 	}
+	
+	@Override
+	public List<String> editSubtask(SubtaskDTO subtaskDTO) {
+		return tmsSubTaskDAO.editSubtask(subtaskDTO);
+	}
 
 	@Override
 	public List<TmsSubtask> getAllSubtasks() {
@@ -72,5 +77,6 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 		tmsSubTaskDAO.addToCurrentSprint(subtaskDTOs, projectId, assignToId, modifiedById);
 		
 	}
+
 
 }

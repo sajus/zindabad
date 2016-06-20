@@ -78,11 +78,20 @@ public class TmsSubTaskController {
 	}
 	
 	// -------------------Update a Subtask---------------
-	@RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = URIConstants.UPDATE_STATUS, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> updateSubtask(@RequestBody SubtaskDTO subtaskDTO) {
 		tmsSubTaskService.updateSubtask(subtaskDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.OK);
-	}
+		}
+	
+	//------------------- Edit a Subtask --------------------------------------------------------
+    
+    @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> editStory(@RequestBody SubtaskDTO subtaskDTO) {
+    	tmsSubTaskService.editSubtask(subtaskDTO);
+    	HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Void>(headers, HttpStatus.OK);
+	} 
 
 }

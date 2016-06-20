@@ -23,6 +23,7 @@ import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsSubTaskDAO;
 import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.dto.SubtaskDTO;
+import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
@@ -96,6 +97,20 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		} 
 		return (Long)hibernateUtil.create(userStoryStatus);
 	}
+	
+	// -------------------Edit backlog Subtask---------------
+		@SuppressWarnings("unchecked")
+	    @Override
+	    public List<String> editSubtask(SubtaskDTO subtaskDTO) {
+			TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
+	        tmsSubtask.setJiraId(subtaskDTO.getJiraId());
+	        tmsSubtask.setCreatedDate(subtaskDTO.getCreatedDate());
+	        tmsSubtask.setEfforts(subtaskDTO.getEfforts());
+	        tmsSubtask.setScope(subtaskDTO.getScope());
+	        tmsSubtask.setType(subtaskDTO.getType());
+	        hibernateUtil.update(tmsSubtask);
+	        return null;
+	    }
 	
 	//------------- Add to current Sprint ------------------------------------------------------------
 	

@@ -29,6 +29,11 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	public long updateStory(StoryDTO storyDTO) {
 		return tmsStoryDAO.updateStory(storyDTO);
 	}
+	
+	@Override
+	public List<String> editStory(StoryDTO storyDTO) {
+		return tmsStoryDAO.editStory(storyDTO);
+	}
 
 	@Override
 	public List<TmsStoryMst> getAllStories() {
@@ -60,6 +65,7 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
 		tmsStoryDAO.addToCurrentSprint(storyDTOs, projectId, assignToId, modifiedById);
 	}
+
 	
 	
 }

@@ -12,6 +12,7 @@ public interface TmsSubTaskService {
 	
 	public long createSubtask(SubtaskDTO subtaskDTO);
 	public long updateSubtask(SubtaskDTO subtaskDTO);
+	public List<String> editSubtask(SubtaskDTO subtaskDTO);
 	public List<TmsSubtask> getAllSubtasks();
 	public TmsSubtask getSubtask(long id);
 	public List<LinkedHashMap<String, Object>> getSubtasksBySprint(Long projectId) throws Exception;

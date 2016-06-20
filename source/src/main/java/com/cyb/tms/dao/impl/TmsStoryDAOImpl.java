@@ -119,29 +119,43 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	}
 
 	//------------------- Update a Story --------------------------------------------------------
-		@SuppressWarnings("unchecked")
-		@Override
-		public long updateStory(StoryDTO storyDTO) {
-			TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
-			TmsUsers user = hibernateUtil.fetchById( storyDTO.getUserId(), TmsUsers.class);
-			TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
-			TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
-			UserStoryStaus previousStatus = getLatestStatus(tmsStoryMst);
-			UserStoryStaus userStoryStatus = new UserStoryStaus();
-			userStoryStatus.setTmsSprintMst(sprint);
-			userStoryStatus.setTmsStatusMst(status);
-			userStoryStatus.setType(story);
-			userStoryStatus.setTmsStoryMst(tmsStoryMst);
-			userStoryStatus.setModifiedDate(new Date());
-			userStoryStatus.setTmsUsersByModifiedBy(user);
-			if(!storyDTO.getStatus().equalsIgnoreCase(backlog) && previousStatus != null) {
-				userStoryStatus.setTmsUsersByAssignedTo(previousStatus.getTmsUsersByAssignedTo());
-				userStoryStatus.setAssignedDate(previousStatus.getAssignedDate());
-			} else {
+	@SuppressWarnings("unchecked")
+	@Override
+	public long updateStory(StoryDTO storyDTO) {
+		TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
+		TmsUsers user = hibernateUtil.fetchById( storyDTO.getUserId(), TmsUsers.class);
+		TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
+		UserStoryStaus previousStatus = getLatestStatus(tmsStoryMst);
+		UserStoryStaus userStoryStatus = new UserStoryStaus();
+		userStoryStatus.setTmsSprintMst(sprint);
+		userStoryStatus.setTmsStatusMst(status);
+		userStoryStatus.setType(story);
+		userStoryStatus.setTmsStoryMst(tmsStoryMst);
+		userStoryStatus.setModifiedDate(new Date());
+		userStoryStatus.setTmsUsersByModifiedBy(user);
+		if(!storyDTO.getStatus().equalsIgnoreCase(backlog) && previousStatus != null) {
+			userStoryStatus.setTmsUsersByAssignedTo(previousStatus.getTmsUsersByAssignedTo());
+			userStoryStatus.setAssignedDate(previousStatus.getAssignedDate());
+		} else {
 				// TODO move corresponding subtasks to backlog
-			}
+		}
 			return (Long)hibernateUtil.create(userStoryStatus);
 		}
+		
+	// -------------------Edit backlog Story---------------
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> editStory(StoryDTO storyDTO) {
+		TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
+		TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
+		tmsStoryMst.setJiraId(storyDTO.getJiraId());
+		tmsStoryMst.setCreatedDate(storyDTO.getCreatedDate());
+		tmsStoryMst.setStoryPoint(storyDTO.getStoryPoint());
+		tmsStoryMst.setTmsModule(module);
+		hibernateUtil.update(tmsStoryMst);
+		return null;
+	}
 
 	@Override
 	public List<TmsStoryMst> getAllStories() {
