@@ -35,6 +35,7 @@ CREATE TABLE `tms_code_review` (
   `TASK_ID` bigint(20) NOT NULL,
   `DEVELOPER` bigint(20) NOT NULL,
   `FIXED_BY` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL,
   PRIMARY KEY (`REVIEW_ID`),
   KEY `FK_krht12jfxj0wciqnuwbxonyiu` (`TASK_ID`),
   KEY `FK_d0ey9b8s4h6wgyc98ido0nv3d` (`DEVELOPER`),
@@ -55,7 +56,7 @@ DROP TABLE IF EXISTS `tms_efforts`;
 CREATE TABLE `tms_efforts` (
   `EFFORT_ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `LOGGED_DATE` date NOT NULL,
-  `LOGGED_HOURS` int(11) NOT NULL,
+  `LOGGED_HOURS` double NOT NULL,
   `SPRINT_ID` bigint(20) NOT NULL,
   `SUBTASK_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`EFFORT_ID`),
@@ -63,7 +64,7 @@ CREATE TABLE `tms_efforts` (
   KEY `FK_ne1t65qxnm1ii7m4l30npiwnq` (`SUBTASK_ID`),
   CONSTRAINT `FK_ne1t65qxnm1ii7m4l30npiwnq` FOREIGN KEY (`SUBTASK_ID`) REFERENCES `tms_subtask` (`SUBTASK_ID`),
   CONSTRAINT `FK_qmk6u2p4g2pplud7wpgvgkytt` FOREIGN KEY (`SPRINT_ID`) REFERENCES `tms_sprint_mst` (`SPRINT_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,16 +76,18 @@ DROP TABLE IF EXISTS `tms_leave_mst`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tms_leave_mst` (
   `LEAVE_ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `DATE` date NOT NULL,
-  `LEAVETYPE` varchar(9) NOT NULL,
   `SPRINTID` bigint(20) NOT NULL,
   `USERID` bigint(20) NOT NULL,
+  `DURATION` int(11) NOT NULL,
+  `ENDDATE` date NOT NULL,
+  `REASON` varchar(50) NOT NULL,
+  `STARTDATE` date NOT NULL,
   PRIMARY KEY (`LEAVE_ID`),
   KEY `FK_ct7i20aljt7lgsb4dinnibhai` (`SPRINTID`),
   KEY `FK_pouvsp9amppneogy7adwbv7fd` (`USERID`),
   CONSTRAINT `FK_ct7i20aljt7lgsb4dinnibhai` FOREIGN KEY (`SPRINTID`) REFERENCES `tms_sprint_mst` (`SPRINT_ID`),
   CONSTRAINT `FK_pouvsp9amppneogy7adwbv7fd` FOREIGN KEY (`USERID`) REFERENCES `tms_users` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -114,7 +117,7 @@ DROP TABLE IF EXISTS `tms_org_leaves`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tms_org_leaves` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `DATE` datetime DEFAULT NULL,
+  `DATE` date DEFAULT NULL,
   `DESCRIPTION` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_ny9fn5knmld6nl2ekfghhd3g4` (`DATE`)
@@ -157,7 +160,7 @@ CREATE TABLE `tms_sprint_mst` (
   PRIMARY KEY (`SPRINT_ID`),
   KEY `fk_project_id_idx` (`PROJECT_ID`),
   CONSTRAINT `fk_project_id` FOREIGN KEY (`PROJECT_ID`) REFERENCES `tms_project` (`PID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,10 +189,11 @@ CREATE TABLE `tms_story_mst` (
   `JIRA_ID` varchar(45) NOT NULL,
   `STORY_POINT` int(11) NOT NULL,
   `MODULE_ID` bigint(20) DEFAULT NULL,
+  `CREATED_DATE` date DEFAULT NULL,
   PRIMARY KEY (`STORY_ID`),
   KEY `FK_9sgvh9f7on64xo5dqhde8ds3f` (`MODULE_ID`),
   CONSTRAINT `FK_9sgvh9f7on64xo5dqhde8ds3f` FOREIGN KEY (`MODULE_ID`) REFERENCES `tms_module` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,15 +205,16 @@ DROP TABLE IF EXISTS `tms_subtask`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tms_subtask` (
   `SUBTASK_ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `EFFORTS` int(11) NOT NULL,
+  `EFFORTS` int(11) NOT NULL DEFAULT '0',
   `JIRA_ID` varchar(45) NOT NULL,
   `SCOPE` varchar(10) NOT NULL,
   `TYPE` varchar(8) NOT NULL,
   `STORY_ID` bigint(20) NOT NULL,
+  `CREATED_DATE` date DEFAULT NULL,
   PRIMARY KEY (`SUBTASK_ID`),
   KEY `FK_2kc52spu2h2a7ywk70fuae5eu` (`STORY_ID`),
   CONSTRAINT `FK_2kc52spu2h2a7ywk70fuae5eu` FOREIGN KEY (`STORY_ID`) REFERENCES `tms_story_mst` (`STORY_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,28 +251,28 @@ CREATE TABLE `user_story_staus` (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `STORY_ID` bigint(20) DEFAULT NULL,
   `SUBTASK_ID` bigint(20) DEFAULT NULL,
-  `MODIFIED_DATE` date NOT NULL,
-  `TYPE` varchar(45) NOT NULL,
+  `MODIFIED_DATE` date DEFAULT NULL,
+  `TYPE` varchar(45) DEFAULT NULL,
   `SPRINT_ID` bigint(20) DEFAULT NULL,
-  `STATUS` bigint(20) NOT NULL,
-  `MODIFIED_BY` bigint(20) NOT NULL,
+  `STATUS` bigint(20) DEFAULT NULL,
+  `MODIFIED_BY` bigint(20) DEFAULT NULL,
   `ASSIGNED_DATE` date DEFAULT NULL,
   `ASSIGNED_TO` bigint(20) DEFAULT NULL,
   `CREATED_DATE` date DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_4wiq9b9yngeywhei9bxg5tpa7` (`SPRINT_ID`),
-  KEY `FK_ouc84o4kbvnh2yfw9vnv2vt9l` (`STATUS`),
-  KEY `FK_dkfqgjstr5ecas3cqg53pngnx` (`MODIFIED_BY`),
   KEY `fk_storyid_idx` (`STORY_ID`),
   KEY `fk_subtask_id_idx` (`SUBTASK_ID`),
   KEY `fk_assigned_to_idx` (`ASSIGNED_TO`),
-  CONSTRAINT `fk_story_id` FOREIGN KEY (`STORY_ID`) REFERENCES `tms_story_mst` (`STORY_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_subtask_id` FOREIGN KEY (`SUBTASK_ID`) REFERENCES `tms_subtask` (`SUBTASK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_assigned_to` FOREIGN KEY (`ASSIGNED_TO`) REFERENCES `tms_users` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `FK_dkfqgjstr5ecas3cqg53pngnx` (`MODIFIED_BY`),
+  KEY `FK_ouc84o4kbvnh2yfw9vnv2vt9l` (`STATUS`),
   CONSTRAINT `FK_4wiq9b9yngeywhei9bxg5tpa7` FOREIGN KEY (`SPRINT_ID`) REFERENCES `tms_sprint_mst` (`SPRINT_ID`),
+  CONSTRAINT `fk_assigned_to` FOREIGN KEY (`ASSIGNED_TO`) REFERENCES `tms_users` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_dkfqgjstr5ecas3cqg53pngnx` FOREIGN KEY (`MODIFIED_BY`) REFERENCES `tms_users` (`ID`),
-  CONSTRAINT `FK_ouc84o4kbvnh2yfw9vnv2vt9l` FOREIGN KEY (`STATUS`) REFERENCES `tms_status_mst` (`STATUS_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  CONSTRAINT `FK_ouc84o4kbvnh2yfw9vnv2vt9l` FOREIGN KEY (`STATUS`) REFERENCES `tms_status_mst` (`STATUS_ID`),
+  CONSTRAINT `fk_story_id` FOREIGN KEY (`STORY_ID`) REFERENCES `tms_story_mst` (`STORY_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_subtask_id` FOREIGN KEY (`SUBTASK_ID`) REFERENCES `tms_subtask` (`SUBTASK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -279,4 +284,4 @@ CREATE TABLE `user_story_staus` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-03  8:02:17
+-- Dump completed on 2016-06-20  8:59:33
