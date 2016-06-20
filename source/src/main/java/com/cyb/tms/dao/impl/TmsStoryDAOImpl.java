@@ -126,6 +126,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			TmsUsers user = hibernateUtil.fetchById( storyDTO.getUserId(), TmsUsers.class);
 			TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
 			TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
+			UserStoryStaus previousStatus = getLatestStatus(tmsStoryMst);
 			UserStoryStaus userStoryStatus = new UserStoryStaus();
 			userStoryStatus.setTmsSprintMst(sprint);
 			userStoryStatus.setTmsStatusMst(status);
@@ -133,6 +134,12 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			userStoryStatus.setTmsStoryMst(tmsStoryMst);
 			userStoryStatus.setModifiedDate(new Date());
 			userStoryStatus.setTmsUsersByModifiedBy(user);
+			if(!storyDTO.getStatus().equalsIgnoreCase(backlog) && previousStatus != null) {
+				userStoryStatus.setTmsUsersByAssignedTo(previousStatus.getTmsUsersByAssignedTo());
+				userStoryStatus.setAssignedDate(previousStatus.getAssignedDate());
+			} else {
+				// TODO move corresponding subtasks to backlog
+			}
 			return (Long)hibernateUtil.create(userStoryStatus);
 		}
 
@@ -274,6 +281,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			map.put("storyPoint", tmsStoryMst.getStoryPoint());
 			map.put("moduleId", tmsStoryMst.getTmsModule().getId());
 			map.put("moduleName", tmsStoryMst.getTmsModule().getModuleName());
+			map.put("createdDate", tmsStoryMst.getCreatedDate());
 			
 			for (UserStoryStaus userStoryStatus : tmsStoryMst.getUserStoryStauses()) {
 				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
@@ -306,6 +314,12 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			jiraIds.add(tmsStoryMst.getJiraId());
 		}
 		return jiraIds;
+	}
+	
+	private UserStoryStaus getLatestStatus(TmsStoryMst tmsStoryMst) {
+		List<UserStoryStaus> userStoryStatusList = new ArrayList<UserStoryStaus>();
+		userStoryStatusList.addAll(tmsStoryMst.getUserStoryStauses());
+		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
 	}
 
 	

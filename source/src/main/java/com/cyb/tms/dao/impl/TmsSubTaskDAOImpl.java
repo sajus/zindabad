@@ -82,6 +82,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		TmsUsers user = hibernateUtil.fetchById( subtaskDTO.getUserId(), TmsUsers.class);
 		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(subtaskDTO.getProjectId());
+		UserStoryStaus previousStatus = getLatestStatus(tmsSubtask);
 		UserStoryStaus userStoryStatus = new UserStoryStaus();
 		userStoryStatus.setTmsSprintMst(sprint);
 		userStoryStatus.setTmsStatusMst(status);
@@ -89,6 +90,10 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		userStoryStatus.setType(tmsSubtask.getType());
 		userStoryStatus.setModifiedDate(new Date());
 		userStoryStatus.setTmsUsersByModifiedBy(user);
+		if (!subtaskDTO.getStatus().equalsIgnoreCase(backlog) && previousStatus != null) {
+			userStoryStatus.setTmsUsersByAssignedTo(previousStatus.getTmsUsersByAssignedTo());
+			userStoryStatus.setAssignedDate(previousStatus.getAssignedDate());
+		} 
 		return (Long)hibernateUtil.create(userStoryStatus);
 	}
 	
@@ -96,23 +101,6 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	
 	@Override
 	public void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById) {
-	/*	TmsStatusMst status = hibernateUtil.findByPropertyName("status", todo, TmsStatusMst.class);
-		TmsUsers assignedTo = hibernateUtil.fetchById(assignToId, TmsUsers.class);
-		TmsUsers modifiedBy = hibernateUtil.fetchById(modifiedById, TmsUsers.class);
-		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
-		for (SubtaskDTO subtaskDTO : subtaskDTOs){
-			UserStoryStaus userStoryStatus = new UserStoryStaus();
-			TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
-			userStoryStatus.setTmsSprintMst(sprint);
-			userStoryStatus.setTmsSubtask(tmsSubtask);
-			userStoryStatus.setModifiedDate(new Date());
-			userStoryStatus.setAssignedDate(new Date());
-			userStoryStatus.setTmsUsersByAssignedTo(assignedTo);
-			userStoryStatus.setTmsUsersByModifiedBy(modifiedBy);
-			userStoryStatus.setTmsStatusMst(status);
-			userStoryStatus.setType(tmsSubtask.getType());
-			long id = (long) hibernateUtil.create(tmsSubtask);
-		}*/
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		try {
@@ -158,6 +146,19 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		return hibernateUtil.fetchById(id, TmsSubtask.class);
 	}
 
+	@Override
+	public Long getTotalEstimatedHoursBySprint(Long sprintId, Long userId) {
+		Long efforts = (Long) hibernateUtil.getCurrentSession()
+				.createCriteria(UserStoryStaus.class, "uss")
+				.createAlias("tmsSprintMst", "sprint")
+				.createAlias("tmsSubtask", "sub")
+				.createAlias("tmsUsersByAssignedTo", "users")
+				.setProjection(Projections.sum("sub.efforts"))
+				.add(Restrictions.eq("users.id", userId))
+				.add(Restrictions.eq("sprint.sprintId", sprintId))
+				.uniqueResult();
+		return (efforts != null) ? efforts : 0;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -259,6 +260,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 			map.put("scope", tmsSubtask.getScope());
 			map.put("type", tmsSubtask.getType());
 			map.put("estEfforts", tmsSubtask.getEfforts());
+			map.put("createdDate", tmsSubtask.getCreatedDate());
 
 			for (UserStoryStaus userStoryStaus : tmsSubtask.getUserStoryStauses()) {
 				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
@@ -284,6 +286,12 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 			userSubtasks.add(map);
 		}
 		return userSubtasks;
+	}
+	
+	private UserStoryStaus getLatestStatus(TmsSubtask tmsSubtask) {
+		List<UserStoryStaus> userStoryStatusList = new ArrayList<UserStoryStaus>();
+		userStoryStatusList.addAll(tmsSubtask.getUserStoryStauses());
+		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
 	}
 
 }

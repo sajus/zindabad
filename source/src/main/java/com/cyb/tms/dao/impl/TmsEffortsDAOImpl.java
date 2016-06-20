@@ -89,11 +89,11 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 					.createAlias("tmsSubtask", "sub")
 					.createAlias("tmsUsersByAssignedTo", "users")
 					.setProjection( Projections.distinct(Projections.property("tmsSubtask")))
-					.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
+					/*.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
 							.createAlias("tmsStatusMst", "tsm")
 							.createAlias("tmsSubtask", "sub")
 							.add(Restrictions.eq("tsm.status", backlog))
-							.setProjection(Property.forName("sub.subtaskId"))))
+							.setProjection(Property.forName("sub.subtaskId"))))*/
 					.add(Restrictions.eq("users.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 		}

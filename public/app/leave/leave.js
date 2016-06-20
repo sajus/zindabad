@@ -8,13 +8,6 @@ define([
 	.controller('leaveCtrl', ['$scope', '$injector', function($scope, $injector) {
 		require(['leave/leaveCtrl'], function(controller) {
 			$injector.invoke(controller, this, {'$scope': $scope});
-
 		});
 	}]);
-
-
-    
-
-
-
 });

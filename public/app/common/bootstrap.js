@@ -26,7 +26,9 @@ define([
 	'components/modal/modalHeader',
 	'components/modal/modalBody',
 	'components/modal/modalFooter',
-	'components/datepicker/tms-datepicker'
+	'components/datepicker/tms-datepicker',
+	'dashboard/dashboard',
+  'common/dashboardService'
 		], function(
 				loginView, 
 				homeView, 
@@ -54,7 +56,9 @@ define([
 				modalHeader,
 				modalBody,
 				modalFooter,
-				tmsDatepicker
+				tmsDatepicker,
+				dashboardView,
+				dashboardService
 			) {
 	return [
 		homeView, 
@@ -83,6 +87,8 @@ define([
 		modalHeader,
 		modalBody,
 		modalFooter,
-		tmsDatepicker
+		tmsDatepicker,
+		dashboardView,
+    dashboardService
 	];
 });

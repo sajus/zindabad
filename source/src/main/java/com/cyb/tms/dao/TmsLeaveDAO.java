@@ -15,4 +15,5 @@ public interface TmsLeaveDAO {
     public TmsLeaveMst getLeave(long id);
     public List<TmsLeaveMst> getCurrentUserLeavesBySprint(Long userId, Long projectId) throws Exception;
     public int getTotalLeavesBySprint(Long projectId);
+	public int calculateUserLeavesTotalBySprint(Long userId, Long sprintId);
 }

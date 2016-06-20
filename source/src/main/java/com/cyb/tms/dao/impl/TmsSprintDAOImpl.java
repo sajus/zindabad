@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsLeaveDAO;
+import com.cyb.tms.dao.TmsOrgLeavesDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
@@ -40,6 +41,9 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	
 	@Autowired
 	private TmsLeaveDAO tmsLeaveDAO;
+	
+	@Autowired
+	private TmsOrgLeavesDAO tmsOrgLeavesDAO;
 	
 	@Value("${tms.workinghours}")
 	private String workingHours;
@@ -118,8 +122,8 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 		List<TmsUsers> users = tmsUserService.getUsersByStatus(tmsSprintDTO.getProjectId());
 		int sprintDays = WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(tmsSprintDTO.getSprintStartDate(), tmsSprintDTO.getSprintEndDate());
 		int leaves = tmsLeaveDAO.getTotalLeavesBySprint(tmsSprintDTO.getProjectId());
-		return (sprintDays * users.size() * Integer.parseInt(workingHours))-leaves;
+		int holidays = tmsOrgLeavesDAO.calculateTotalHolidays(tmsSprintDTO.getSprintStartDate(), tmsSprintDTO.getSprintEndDate());
+		return (sprintDays * users.size() * Integer.parseInt(workingHours))-(leaves+holidays);
 	}
-
 
 }

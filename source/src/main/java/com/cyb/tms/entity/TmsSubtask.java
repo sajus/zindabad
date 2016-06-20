@@ -3,6 +3,7 @@ package com.cyb.tms.entity;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
@@ -41,6 +44,7 @@ public class TmsSubtask extends BaseEntity {
 	private String jiraId;
 	private String scope;
 	private String type;
+	private Date createdDate;
 	private Set<TmsCodeReview> tmsCodeReviews = new HashSet<TmsCodeReview>(0);
 	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(
 			0);
@@ -50,22 +54,24 @@ public class TmsSubtask extends BaseEntity {
 	}
 
 	public TmsSubtask(TmsStoryMst tmsStoryMst, int efforts, String jiraId,
-			String scope, String type) {
+			String scope, String type, Date createdDate) {
 		this.tmsStoryMst = tmsStoryMst;
 		this.efforts = efforts;
 		this.jiraId = jiraId;
 		this.scope = scope;
 		this.type = type;
+		this.createdDate = createdDate;
 	}
 
 	public TmsSubtask(TmsStoryMst tmsStoryMst, int efforts, String jiraId,
 			String scope, String type, Set<TmsCodeReview> tmsCodeReviews,
-			Set<UserStoryStaus> userStoryStauses, Set<TmsEfforts> tmsEffortses) {
+			Set<UserStoryStaus> userStoryStauses, Set<TmsEfforts> tmsEffortses, Date createdDate) {
 		this.tmsStoryMst = tmsStoryMst;
 		this.efforts = efforts;
 		this.jiraId = jiraId;
 		this.scope = scope;
 		this.type = type;
+		this.createdDate = createdDate;
 		this.tmsCodeReviews = tmsCodeReviews;
 		this.userStoryStauses = userStoryStauses;
 		this.tmsEffortses = tmsEffortses;
@@ -126,6 +132,16 @@ public class TmsSubtask extends BaseEntity {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "CREATED_DATE", length = 10)
+	public Date getCreatedDate() {
+		return this.createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSubtask")

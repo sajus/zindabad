@@ -45,7 +45,7 @@
 
                 <div ng-hide="user.userRole === 'LEAD'">
                   <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()">
-                  <button class='btn btn-primary btn-sm' type="button">Assign To Me</button>
+                  <button class='btn btn-primary btn-sm' type="button" ng-click="assignToSprint()">Assign To Me</button>
                 </div>
               </th>
             </tr>
@@ -53,7 +53,7 @@
             <tbody>
             <tr ng-repeat="story in backlogtories track by $index">
               <td>{{$index+1}}
-              <td>{{story.userStoryStatus.createdDate}}</td>
+              <td>{{story.createdDate}}</td>
               <td>{{story.jiraId}}</td>
               <td>{{story.moduleName}}</td>
               <td>{{story.storyPoint}}</td>
@@ -87,7 +87,7 @@
             <tbody>
             <tr ng-repeat="story in stories track by $index">
               <td align="center">{{$index+1}}
-              <td align="center">{{story.userStoryStatus.createdDate}}</td>
+              <td align="center">{{story.createdDate}}</td>
               <td align="center">{{story.userStoryStatus.assignedDate}}</td>
               <td align="center">{{story.jiraId}}</td>
               <td align="center">{{story.moduleName}}</td>

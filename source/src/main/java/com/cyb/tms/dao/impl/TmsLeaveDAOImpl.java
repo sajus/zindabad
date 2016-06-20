@@ -112,4 +112,17 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 		leave.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
 		return leave;
 	}
+
+	@Override
+	public int calculateUserLeavesTotalBySprint(Long userId, Long sprintId) {
+		Long totalLeaves = (Long) hibernateUtil.getCurrentSession()
+				.createCriteria(TmsLeaveMst.class, "leave")
+				.createAlias("tmsUsers", "users")
+				.createAlias("tmsSprintMst", "sp")
+				.setProjection(Projections.sum("leave.duration"))
+				.add(Restrictions.eq("users.id", userId))
+				.add(Restrictions.eq("sp.sprintId", sprintId))
+				.uniqueResult();
+		return (totalLeaves != null) ? totalLeaves.intValue() : 0;
+	}
 }

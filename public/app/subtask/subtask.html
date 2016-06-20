@@ -57,7 +57,7 @@
               <tbody>
               <tr ng-repeat="subtask in unassignedTasks track by $index">
                 <td>{{$index+1}}
-                <td>{{subtask.userStoryStatus.createdDate}}</td>
+                <td>{{subtask.createdDate}}</td>
                 <td>{{subtask.jiraId}}</td>
                 <td>{{subtask.type}}</td>
                 <td>{{subtask.estEfforts}}</td>
@@ -98,7 +98,7 @@
               <tbody>
               <tr ng-repeat="subtask in subtasks track by $index">
                 <td align="center">{{$index+1}}
-                <td align="center">{{subtask.userStoryStatus.createdDate}}</td>
+                <td align="center">{{subtask.createdDate}}</td>
                 <td align="center">{{subtask.userStoryStatus.assignedDate}}</td>
                 <td align="center">{{subtask.jiraId}}</td>
                 <td align="center">{{subtask.type}}</td>

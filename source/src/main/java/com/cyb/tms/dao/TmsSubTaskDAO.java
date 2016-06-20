@@ -17,5 +17,6 @@ public interface TmsSubTaskDAO {
 	public List<LinkedHashMap<String, Object>> getSubtasksBySprint(Long projectId) throws Exception;
 	public List<LinkedHashMap<String, Object>> getCurrentUserSubTasksBySprintBy(Long userId, Long projectId) throws Exception;
 	public List<LinkedHashMap<String, Object>> getBackLogSubtasks(Long projectId);
-	void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById);
+	public void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById);
+	public Long getTotalEstimatedHoursBySprint(Long sprintId, Long userId);
 }
