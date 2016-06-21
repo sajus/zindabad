@@ -40,11 +40,11 @@ public class TmsSubTaskController {
 	}
 	
 	// -------------------Add Story to current sprint---------------
-		@RequestMapping(value = URIConstants.ASSIGN_TO_SPRINT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<Void> addToCurrentSprint(@RequestBody List<SubtaskDTO> subtaskDTOs, @RequestParam Long projectId, @RequestParam Long assignToId, @RequestParam Long modifiedById) {
-			tmsSubTaskService.addToCurrentSprint(subtaskDTOs, projectId, assignToId, modifiedById);
-			HttpHeaders headers = new HttpHeaders();
-			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	@RequestMapping(value = URIConstants.ASSIGN_TO_SPRINT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> addToCurrentSprint(@RequestBody List<SubtaskDTO> subtaskDTOs, @RequestParam Long projectId, @RequestParam Long assignToId, @RequestParam Long modifiedById) {
+		tmsSubTaskService.addToCurrentSprint(subtaskDTOs, projectId, assignToId, modifiedById);
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 		}
 
 	// ------------------Retrieve All Subtasks --------------
@@ -78,11 +78,20 @@ public class TmsSubTaskController {
 	}
 	
 	// -------------------Update a Subtask---------------
-	@RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> updateSubtask(@RequestBody SubtaskDTO subtaskDTO) {
-		tmsSubTaskService.updateSubtask(subtaskDTO);
+	@RequestMapping(value = URIConstants.UPDATE_STATUS, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> updateSubtaskStatus(@RequestBody SubtaskDTO subtaskDTO) {
+		tmsSubTaskService.updateSubtaskStatus(subtaskDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.OK);
-	}
+		}
+	
+	//------------------- Edit a Subtask --------------------------------------------------------
+    
+    @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> editStoryStatus(@RequestBody SubtaskDTO subtaskDTO) {
+    	tmsSubTaskService.editSubtask(subtaskDTO);
+    	HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Void>(headers, HttpStatus.OK);
+	} 
 
 }

@@ -11,7 +11,8 @@ import com.cyb.tms.entity.UserStoryStaus;
 public interface TmsSubTaskDAO {
 
 	public long createSubtask(SubtaskDTO subtaskDTO);
-	public long updateSubtask(SubtaskDTO subtaskDTO);
+	public long updateSubtaskStatus(SubtaskDTO subtaskDTO);
+	public void editSubtask(SubtaskDTO subtaskDTO);
 	public List<TmsSubtask> getAllSubtasks();
 	public TmsSubtask getSubtask(long id);
 	public List<LinkedHashMap<String, Object>> getSubtasksBySprint(Long projectId) throws Exception;

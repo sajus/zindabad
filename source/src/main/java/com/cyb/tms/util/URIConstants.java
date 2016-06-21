@@ -16,6 +16,7 @@ public class URIConstants {
 	public static final String GET_ALL_BY_PROJECT = "/list/project";
 	public static final String BACKLOG = "/backlog";
 	public static final String GET_ALL_BY_USER = "/list/user";
+	public static final String UPDATE_STATUS = "/update";
 	
 	// User
 	public static final String USER = "api/user";
@@ -43,10 +44,12 @@ public class URIConstants {
 	public static final String USER_STORIES_BY_SPRINT = "/user/sprint";
 	public static final String ASSIGN_TO_SPRINT = "/assign/sprint";
 	
+	
 	// Subtask
 	public static final String SUBTASK = "api/subtask";
 	public static final String SUBTASKS_BY_SPRINT = "/sprint";
 	public static final String USER_SUBTASKS_BY_SPRINT = "/user/sprint";
+	
 	
 	// Efforts
 	public static final String EFFORTS = "api/efforts";

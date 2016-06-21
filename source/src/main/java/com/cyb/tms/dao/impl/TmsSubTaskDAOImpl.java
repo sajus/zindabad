@@ -23,6 +23,7 @@ import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsSubTaskDAO;
 import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.dto.SubtaskDTO;
+import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
@@ -77,7 +78,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	//------------------- Update a Subtask --------------------------------------------------------
 	@SuppressWarnings("unchecked")
 	@Override
-	public long updateSubtask(SubtaskDTO subtaskDTO) {
+	public long updateSubtaskStatus(SubtaskDTO subtaskDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", subtaskDTO.getStatus(), TmsStatusMst.class);
 		TmsUsers user = hibernateUtil.fetchById( subtaskDTO.getUserId(), TmsUsers.class);
 		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
@@ -97,6 +98,20 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		return (Long)hibernateUtil.create(userStoryStatus);
 	}
 	
+	// -------------------Edit backlog Subtask---------------
+	@SuppressWarnings("unchecked")
+    @Override
+    public void editSubtask(SubtaskDTO subtaskDTO) {
+		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
+        tmsSubtask.setJiraId(subtaskDTO.getJiraId());
+        tmsSubtask.setCreatedDate(subtaskDTO.getCreatedDate());
+        tmsSubtask.setEfforts(subtaskDTO.getEfforts());
+        tmsSubtask.setScope(subtaskDTO.getScope());
+        tmsSubtask.setType(subtaskDTO.getType());
+        hibernateUtil.update(tmsSubtask);
+        
+    }
+
 	//------------- Add to current Sprint ------------------------------------------------------------
 	
 	@Override
@@ -237,10 +252,6 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		}
 	}
 
-	/**
-	 * @param subtaskIds
-	 * @return
-	 */
 	@SuppressWarnings("unchecked")
 	private List<TmsSubtask> getFilteredSubtasks(List<Long> subtaskIds) {
 		hibernateUtil.getCurrentSession().enableFilter(TmsSubtask.LATEST_STATUS_FILTER);
