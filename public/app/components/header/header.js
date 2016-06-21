@@ -23,9 +23,6 @@ return angular.module('myApp.directive',['appConstants', 'navMenus', '$location'
         $scope = null;
       })
 
-			//var init = function () {
-				
-				
       $scope.$watch('isAuthenticated', function () {
         $scope.user = appConstants.getItem('currentUser');
         $scope.isAuthenticated = appConstants.isAuthenticated();
@@ -34,7 +31,9 @@ return angular.module('myApp.directive',['appConstants', 'navMenus', '$location'
 
       function getFilteredMenus() {
         return _.filter(navMenus.getMenus(), function(menu){
-          return menu.accessTo.indexOf($scope.user.userRole) > -1;
+          if ($scope.user) {
+            return menu.accessTo.indexOf($scope.user.userRole) > -1;
+          }
         });
       }
 
@@ -71,6 +70,7 @@ return angular.module('myApp.directive',['appConstants', 'navMenus', '$location'
       $scope.$on('loginStatusChanged', function () {
         $scope.isAuthenticated = appConstants.isAuthenticated();
         if($scope.isAuthenticated) {
+          appConstants.user = appConstants.getItem('currentUser');
           $http.defaults.headers.common['X-Auth-Token'] = appConstants.getItem('token');
         }
       });

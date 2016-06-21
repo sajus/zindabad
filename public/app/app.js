@@ -8,8 +8,9 @@ define([
 	'common/bootstrap',
 	'common/ga',
 	'angularLocalStorage',
-	'bootstrapDatepicker'
-], function(angular, angularRoute, angularUiBootstrap, angularResource, bootstrap, ga, bootstrapDatepicker) {
+	'bootstrapDatepicker',
+	'angularNvd3'
+], function(angular, angularRoute, angularUiBootstrap, angularResource, bootstrap, ga, bootstrapDatepicker, angularNvd3) {
 	// Declare app level module which depends on views, and components
 
 	var app = angular.module('myApp', [
@@ -17,7 +18,8 @@ define([
 		'ui.bootstrap',
 		'ngResource',
 		'angularCSS',
-		'LocalStorageModule'
+		'LocalStorageModule',
+		'nvd3'
 	]).
 	config([
 		'$routeProvider',
