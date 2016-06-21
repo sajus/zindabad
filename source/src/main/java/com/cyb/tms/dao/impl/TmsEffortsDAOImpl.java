@@ -57,6 +57,35 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 	}
 
 	@Override
+	public Double getTotalHoursLoggedByUser(Long userId, Long projectId) {
+		List<TmsSubtask> subTasks = getCurrentUserSubtasksBySprint(userId, projectId);
+		List<Long> subTaskIds = getSubTaskIds(subTasks);
+		return getTotalHoursLoggedByUserInSprint(projectId, subTaskIds);
+	}
+	
+	private Double getTotalHoursLoggedByUserInSprint(Long projectId, List<Long> subTaskIds) {
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		Double efforts = 0.0;
+		if(sprint != null) {
+			efforts = (Double) hibernateUtil.getCurrentSession().createCriteria(TmsEfforts.class, "ef")
+					.createAlias("tmsSprintMst", "sprint")
+					.createAlias("tmsSubtask", "sub")
+					.setProjection( Projections.sum("ef.loggedHours"))
+					.add(Restrictions.in("sub.subtaskId", subTaskIds))
+					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).uniqueResult();
+		}
+		return (efforts == null) ? 0.0 : efforts;
+	}
+
+	private List<Long> getSubTaskIds(List<TmsSubtask> subTasks) {
+		List<Long> ids = new ArrayList<Long>();
+		for (TmsSubtask tmsSubtask : subTasks) {
+			ids.add(tmsSubtask.getSubtaskId());
+		}
+		return ids;
+	}
+
+	@Override
 	public List<LinkedHashMap<String, Object>> getCurrentUserEffortsBySprint(Long userId,
 			Long projectId) {
 		List<TmsSubtask> subTasks = getCurrentUserSubtasksBySprint(userId, projectId);
@@ -108,8 +137,8 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 			map.put("jiraId", tmsSubtask.getJiraId());
 			map.put("scope", tmsSubtask.getScope());
 			map.put("type", tmsSubtask.getType());
-			Double remainingEfforts = getTotalEffortsBySubtask(projectId, tmsSubtask.getSubtaskId());
-			map.put("remaingEfforts", (tmsSubtask.getEfforts() - remainingEfforts));
+			Double loggedHours = getTotalEffortsBySubtask(projectId, tmsSubtask.getSubtaskId());
+			map.put("remaingEfforts", (tmsSubtask.getEfforts() - loggedHours));
 			userSubtasks.add(map);
 		}
 		return userSubtasks;

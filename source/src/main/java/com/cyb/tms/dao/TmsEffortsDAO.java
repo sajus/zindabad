@@ -15,5 +15,5 @@ public interface TmsEffortsDAO {
 	public TmsEfforts getEffort(long id);
 	public List<LinkedHashMap<String, Object>> getCurrentUserEffortsBySprint(Long userId,
 			Long projectId);
-
+	public Double getTotalHoursLoggedByUser(Long userId, Long projectId);
 }
