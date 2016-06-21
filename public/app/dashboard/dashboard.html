@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row">
+    <div class="header">
+      <div class="padding-bottom-small">
+        <h4 class="leave-header">SPRINT DASHBOARD</h4>
+      </div>
+    </div>
+
+    <!-- <div class="row col-md-6 col-md-offset-2 custyle"> -->
+    <table class="table table-hover table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>Capacity</th>
+        <th>Sprint Capacity</th>
+        <th>Hours Consumed</th>
+        <th>Hours Burned</th>
+        <th>Remaining Work Hours</th>
+      </tr>
+      </thead>
+      <tr>
+        <td>{{ userDashBoardData.capacity }}</td>
+        <td>{{ userDashBoardData.sprintCapacity }}</td>
+        <td>{{ userDashBoardData.hoursConsumed }}</td>
+        <td>{{ userDashBoardData.hoursBurned }}</td>
+        <td>{{ userDashBoardData.remainingHours }}</td>
+    </table>
+  </div>
+</div>

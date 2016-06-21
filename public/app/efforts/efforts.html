@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row">
+    <div class="header">  
+      <div class="padding-bottom-small">
+        <h4 class="leave-header">Efforts</h4>
+      </div>                        
+    </div>
+    <table class="table table-hover table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>JIRA ID</th>
+        <th>SCOPE</th>
+        <th>TYPE</th>
+        <th>REMAINING HOURS</th>
+         <th>EFFORT</th>
+        <th class="text-center">ACTIONS</th>
+      </tr>
+    </thead>
+      <tr ng-repeat="effort in efforts track by $index">
+        <td class="table-index-medium">{{$index+1}}</td>
+        <td>{{ effort.jiraId }}</td>
+        <td>{{ effort.scope }}</td>
+        <td>{{ effort.type }}</td>
+        <td>{{ effort.remaingEfforts }}</td>
+        <td> <input type="text" name="loggedHours" ng-model="effort.loggedHours"> </td>
+        <td class="text-center table-actions-medium">
+          <button class='btn btn-info btn-xs' type="button" ng-click="saveEfforts(effort)"><span class="glyphicon glyphicon-edit"></span> Save</button>
+         
+      </tr>
+    </table>
+  </div>
+</div>

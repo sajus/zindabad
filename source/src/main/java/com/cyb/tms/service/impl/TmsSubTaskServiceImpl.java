@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cyb.tms.dao.TmsSubTaskDAO;
+import com.cyb.tms.dto.StoryDTO;
+import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsSubtask;
+import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.service.TmsSubTaskService;
 
 @Transactional
@@ -20,13 +23,13 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 	private TmsSubTaskDAO tmsSubTaskDAO;
 
 	@Override
-	public long createSubask(TmsSubtask subtask) {
-		return tmsSubTaskDAO.createSubtask(subtask);
+	public long createSubtask(SubtaskDTO subtaskDTO)  {
+		return tmsSubTaskDAO.createSubtask(subtaskDTO);
 	}
 
 	@Override
-	public TmsSubtask updateSubtask(TmsSubtask subtask) {
-		return tmsSubTaskDAO.updateSubtask(subtask);
+	public long updateSubtask(SubtaskDTO subtaskDTO) {
+		return tmsSubTaskDAO.updateSubtask(subtaskDTO);
 	}
 
 	@Override
@@ -62,6 +65,12 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 	public List<LinkedHashMap<String, Object>> getCurrentUserSubTasksBySprintBy(
 			Long userId, Long projectId) throws Exception {
 		return tmsSubTaskDAO.getCurrentUserSubTasksBySprintBy(userId, projectId);
+	}
+
+	@Override
+	public void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById) {
+		tmsSubTaskDAO.addToCurrentSprint(subtaskDTOs, projectId, assignToId, modifiedById);
+		
 	}
 
 }

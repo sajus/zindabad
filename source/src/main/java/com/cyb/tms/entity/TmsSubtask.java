@@ -1,18 +1,17 @@
 package com.cyb.tms.entity;
 // Generated May 17, 2016 12:38:28 PM by Hibernate Tools 4.3.1.Final
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-
-import static javax.persistence.GenerationType.IDENTITY;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -45,6 +44,7 @@ public class TmsSubtask extends BaseEntity {
 	private String jiraId;
 	private String scope;
 	private String type;
+	private Date createdDate;
 	private Set<TmsCodeReview> tmsCodeReviews = new HashSet<TmsCodeReview>(0);
 	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(
 			0);
@@ -54,22 +54,24 @@ public class TmsSubtask extends BaseEntity {
 	}
 
 	public TmsSubtask(TmsStoryMst tmsStoryMst, int efforts, String jiraId,
-			String scope, String type) {
+			String scope, String type, Date createdDate) {
 		this.tmsStoryMst = tmsStoryMst;
 		this.efforts = efforts;
 		this.jiraId = jiraId;
 		this.scope = scope;
 		this.type = type;
+		this.createdDate = createdDate;
 	}
 
 	public TmsSubtask(TmsStoryMst tmsStoryMst, int efforts, String jiraId,
 			String scope, String type, Set<TmsCodeReview> tmsCodeReviews,
-			Set<UserStoryStaus> userStoryStauses, Set<TmsEfforts> tmsEffortses) {
+			Set<UserStoryStaus> userStoryStauses, Set<TmsEfforts> tmsEffortses, Date createdDate) {
 		this.tmsStoryMst = tmsStoryMst;
 		this.efforts = efforts;
 		this.jiraId = jiraId;
 		this.scope = scope;
 		this.type = type;
+		this.createdDate = createdDate;
 		this.tmsCodeReviews = tmsCodeReviews;
 		this.userStoryStauses = userStoryStauses;
 		this.tmsEffortses = tmsEffortses;
@@ -130,6 +132,16 @@ public class TmsSubtask extends BaseEntity {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "CREATED_DATE", length = 10)
+	public Date getCreatedDate() {
+		return this.createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSubtask")

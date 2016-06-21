@@ -15,29 +15,32 @@ public class StoryDTO extends BaseDTO {
 	private static final long serialVersionUID = -2599696294099365925L;
 	
 	private Long storyId;
-	private String user;
+	private Long userId;
 	private String module;
 	private String status;
 	private Date assignedDate;
 	private Date createdDate;
 	private String jiraId;
 	private int storyPoint;
+	private Long projectId;
 	
 	public StoryDTO() {
 		super();
 	}
 
-	public StoryDTO(Long storyId, String user, String module, String status,
-			Date assignedDate, Date createdDate, String jiraId, int storyPoint) {
+	public StoryDTO(Long storyId, Long userId, String module, String status,
+			Date assignedDate, Date createdDate, String jiraId, int storyPoint,
+			Long projectId) {
 		super();
 		this.storyId = storyId;
-		this.user = user;
+		this.userId = userId;
 		this.module = module;
 		this.status = status;
 		this.assignedDate = assignedDate;
 		this.createdDate = createdDate;
 		this.jiraId = jiraId;
 		this.storyPoint = storyPoint;
+		this.projectId = projectId;
 	}
 
 	public Long getStoryId() {
@@ -48,12 +51,12 @@ public class StoryDTO extends BaseDTO {
 		this.storyId = storyId;
 	}
 
-	public String getUser() {
-		return user;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getModule() {
@@ -104,12 +107,11 @@ public class StoryDTO extends BaseDTO {
 		this.storyPoint = storyPoint;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Long getProjectId() {
+		return projectId;
 	}
-	
-	
-	
-	
 
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
+	}
 }

@@ -19,7 +19,8 @@ public class URIConstants {
 	
 	// User
 	public static final String USER = "api/user";
-	public static final String DASH_BOARD = "/dashboard";
+	public static final String DASH_BOARD = "api/dashboard";
+	public static final String GET_USER_DASH_BOARD = "/user";
 	
 	// OrgLeaves
 	public static final String ORG_LEAVE = "api/org/leave";
@@ -39,6 +40,8 @@ public class URIConstants {
 	// Story
 	public static final String STORY = "api/story";
 	public static final String STORIES_BY_SPRINT = "/sprint";
+	public static final String USER_STORIES_BY_SPRINT = "/user/sprint";
+	public static final String ASSIGN_TO_SPRINT = "/assign/sprint";
 	
 	// Subtask
 	public static final String SUBTASK = "api/subtask";
@@ -47,7 +50,10 @@ public class URIConstants {
 	
 	// Efforts
 	public static final String EFFORTS = "api/efforts";
-
+	public static final String USER_EFFORTS_BY_SPRINT = "/user/sprint";
+	
+	//Code Review
+	public static final String CODE_REVIEW = "api/review";
 
 	public static final String TOKEN_HEADER = "X-Auth-Token";
 	public static final String TOKEN_SECRET = "eHTRcUpaSWfGgTIJsC4rM6lPMm8es87pYPrELJUwoNqMXN7zWIzGQGq1hgdPCM5u";

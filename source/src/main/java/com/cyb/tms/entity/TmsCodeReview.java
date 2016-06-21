@@ -27,59 +27,51 @@ public class TmsCodeReview extends BaseEntity {
 	 * 
 	 */
 	private static final long serialVersionUID = -5889958340304604686L;
-	private Long reviewId;
+	private Long id;
 	private TmsSubtask tmsSubtask;
 	private TmsUsers tmsUsersByDeveloper;
 	private TmsUsers tmsUsersByFixedBy;
+	private TmsUsers tmsUsersByReviewer;
 	private String commentType;
 	private String comments;
 	private Date commentsFixedDate;
 	private String fileName;
 	private String pullRequest;
 	private Date reviewDate;
-	private String reviewer;
 	private String reviewerType;
 
 	public TmsCodeReview() {
 	}
 
-	public TmsCodeReview(TmsSubtask tmsSubtask, TmsUsers tmsUsersByDeveloper, TmsUsers tmsUsersByFixedBy,
-			Date commentsFixedDate, Date reviewDate, String reviewer, String reviewerType) {
+	public TmsCodeReview(Long id, TmsSubtask tmsSubtask, TmsUsers tmsUsersByDeveloper, TmsUsers tmsUsersByFixedBy,
+		TmsUsers tmsUsersByReviewer, String commentType, String comments, Date commentsFixedDate, String fileName,
+		String pullRequest, Date reviewDate, String reviewerType) {
+		super();
+		this.id = id;
 		this.tmsSubtask = tmsSubtask;
 		this.tmsUsersByDeveloper = tmsUsersByDeveloper;
 		this.tmsUsersByFixedBy = tmsUsersByFixedBy;
-		this.commentsFixedDate = commentsFixedDate;
-		this.reviewDate = reviewDate;
-		this.reviewer = reviewer;
-		this.reviewerType = reviewerType;
-	}
-
-	public TmsCodeReview(TmsSubtask tmsSubtask, TmsUsers tmsUsersByDeveloper, TmsUsers tmsUsersByFixedBy,
-			String commentType, String comments, Date commentsFixedDate, String fileName, String pullRequest,
-			Date reviewDate, String reviewer, String reviewerType) {
-		this.tmsSubtask = tmsSubtask;
-		this.tmsUsersByDeveloper = tmsUsersByDeveloper;
-		this.tmsUsersByFixedBy = tmsUsersByFixedBy;
+		this.tmsUsersByReviewer = tmsUsersByReviewer;
 		this.commentType = commentType;
 		this.comments = comments;
 		this.commentsFixedDate = commentsFixedDate;
 		this.fileName = fileName;
 		this.pullRequest = pullRequest;
 		this.reviewDate = reviewDate;
-		this.reviewer = reviewer;
 		this.reviewerType = reviewerType;
 	}
 
+
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
-	@Column(name = "REVIEW_ID", unique = true, nullable = false)
-	public Long getReviewId() {
-		return this.reviewId;
+	@Column(name = "ID", unique = true, nullable = false)
+	public Long getId() {
+		return this.id;
 	}
 
-	public void setReviewId(Long reviewId) {
-		this.reviewId = reviewId;
+	public void setId(Long Id) {
+		this.id = Id;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -168,13 +160,14 @@ public class TmsCodeReview extends BaseEntity {
 		this.reviewDate = reviewDate;
 	}
 
-	@Column(name = "REVIEWER", nullable = false, length = 45)
-	public String getReviewer() {
-		return this.reviewer;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "REVIEWER", nullable = false)
+	public TmsUsers getTmsUsersByReviewer() {
+		return tmsUsersByReviewer;
 	}
-
-	public void setReviewer(String reviewer) {
-		this.reviewer = reviewer;
+	
+	public void setTmsUsersByReviewer(TmsUsers tmsUsersByReviewer) {
+		this.tmsUsersByReviewer = tmsUsersByReviewer;
 	}
 
 	@Column(name = "REVIEWER_TYPE", nullable = false, length = 45)

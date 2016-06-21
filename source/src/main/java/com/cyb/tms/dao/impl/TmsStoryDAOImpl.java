@@ -1,9 +1,13 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
@@ -14,14 +18,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.cyb.tms.dao.TmsModuleDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsStatusDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
+import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
+import com.cyb.tms.entity.TmsSubtask;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.util.HibernateUtil;
@@ -32,11 +39,17 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Value("${tms.status.backlog}")
 	private String backlog;
 	
+	@Value("${tms.status.todo}")
+	private String todo;
+	
 	@Value("${tms.status.closed}")
 	private String closed;
 	
 	@Value("${tms.status.code_merged}")
 	private String code_merged;
+	
+	@Value("${tms.story}")
+	private String story;
 
 	@Autowired
 	private HibernateUtil hibernateUtil;
@@ -46,22 +59,89 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	
 	@Autowired
 	private TmsStatusDAO tmsStatusDAO;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@Override
 	public long createStory(StoryDTO storyDTO) {
-		TmsUsers user = hibernateUtil.findByPropertyName("userName", storyDTO.getUser(), TmsUsers.class);
+		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
 		TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
-		TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
-		TmsStoryMst storyMst = new TmsStoryMst();
-		BeanUtils.copyProperties(storyDTO, storyMst);
-		storyMst.setTmsModule(module);
-		return (Long)hibernateUtil.create(storyMst);
+		TmsStoryMst tmsStoryMst = new TmsStoryMst();
+		BeanUtils.copyProperties(storyDTO, tmsStoryMst);
+		tmsStoryMst.setTmsModule(module);
+		UserStoryStaus userStoryStatus = new UserStoryStaus();
+		userStoryStatus.setCreatedDate(storyDTO.getCreatedDate());
+		userStoryStatus.setType(story);
+		userStoryStatus.setTmsSprintMst(sprint);
+		userStoryStatus.setTmsStatusMst(status);
+		userStoryStatus.setTmsStoryMst(tmsStoryMst);
+		tmsStoryMst.getUserStoryStauses().add(userStoryStatus);
+		return (Long)hibernateUtil.create(tmsStoryMst);
+	}
+	
+	@Override
+	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			TmsStatusMst status = hibernateUtil.findByProperty(session, "status", todo, TmsStatusMst.class);
+			TmsUsers assignedTo = (TmsUsers) session.get(TmsUsers.class, assignToId);//hibernateUtil.fetchById(assignToId, TmsUsers.class);
+			TmsUsers modifiedBy = (TmsUsers) session.get(TmsUsers.class, modifiedById);//hibernateUtil.fetchById(modifiedById, TmsUsers.class);
+			TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+			for (StoryDTO storyDTO : storyDTOs) {
+				UserStoryStaus userStoryStatus = new UserStoryStaus();
+				TmsStoryMst tmsStoryMst = (TmsStoryMst) session.get(TmsStoryMst.class, storyDTO.getStoryId());//hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
+				userStoryStatus.setTmsSprintMst(sprint);
+				userStoryStatus.setTmsStoryMst(tmsStoryMst);
+				userStoryStatus.setModifiedDate(new Date());
+				userStoryStatus.setAssignedDate(new Date());
+				userStoryStatus.setTmsUsersByAssignedTo(assignedTo);
+				userStoryStatus.setTmsUsersByModifiedBy(modifiedBy);
+				userStoryStatus.setTmsStatusMst(status);
+				userStoryStatus.setType(story);
+				session.save(userStoryStatus);
+			}
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+		} finally {
+			try {
+				session.flush();
+				session.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+			session = null;
+			tx = null;
+		}
 	}
 
-	@Override
-	public TmsStoryMst updateStory(TmsStoryMst story) {
-		return hibernateUtil.update(story);
-	}
+	//------------------- Update a Story --------------------------------------------------------
+		@SuppressWarnings("unchecked")
+		@Override
+		public long updateStory(StoryDTO storyDTO) {
+			TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
+			TmsUsers user = hibernateUtil.fetchById( storyDTO.getUserId(), TmsUsers.class);
+			TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
+			TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
+			UserStoryStaus previousStatus = getLatestStatus(tmsStoryMst);
+			UserStoryStaus userStoryStatus = new UserStoryStaus();
+			userStoryStatus.setTmsSprintMst(sprint);
+			userStoryStatus.setTmsStatusMst(status);
+			userStoryStatus.setType(story);
+			userStoryStatus.setTmsStoryMst(tmsStoryMst);
+			userStoryStatus.setModifiedDate(new Date());
+			userStoryStatus.setTmsUsersByModifiedBy(user);
+			if(!storyDTO.getStatus().equalsIgnoreCase(backlog) && previousStatus != null) {
+				userStoryStatus.setTmsUsersByAssignedTo(previousStatus.getTmsUsersByAssignedTo());
+				userStoryStatus.setAssignedDate(previousStatus.getAssignedDate());
+			} else {
+				// TODO move corresponding subtasks to backlog
+			}
+			return (Long)hibernateUtil.create(userStoryStatus);
+		}
 
 	@Override
 	public List<TmsStoryMst> getAllStories() {
@@ -106,6 +186,38 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<LinkedHashMap<String, Object>> getCurrentUserStoriesBySprint(
+			Long userId, Long projectId) {
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		if(sprint != null) {
+			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+					.createAlias("tmsSprintMst", "sprint")
+					.createAlias("tmsStoryMst", "story")
+					.createAlias("tmsUsersByAssignedTo", "user")
+					.setProjection( Projections.distinct(Projections.property("story.storyId")))
+					/*.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
+							.createAlias("tmsStatusMst", "tsm")
+							.createAlias("tmsStoryMst", "story")
+							.add(Restrictions.eq("tsm.status", backlog))
+					        .setProjection(Property.forName("story.storyId"))))*/
+					.add(Restrictions.eq("user.id", userId))
+					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
+			if(storyIds.size() > 0) {
+				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
+											.add(Restrictions.in("storyId", storyIds)).list();
+				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+				return parseStories(stories);
+			} else {
+				return null;
+			}
+
+		}
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<String> getIncompleteStoriesInSprint(Long projectId) {
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		Object[] status = {backlog, closed, code_merged};
@@ -138,6 +250,13 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
 				.createAlias("tmsStatusMst", "tsm")
 				.createAlias("tmsStoryMst", "story")
+				.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
+						.createAlias("tmsStatusMst", "tsm")
+						.createAlias("tmsStoryMst", "story")
+						.createAlias("tmsUsersByAssignedTo", "users")
+						.add(Restrictions.isNotNull("uss.tmsUsersByAssignedTo"))		
+						.add(Restrictions.ne("tsm.status", backlog))
+						.setProjection(Property.forName("story.storyId"))))
 				.setProjection( Projections.distinct(Projections.property("story.storyId")))
 				.add(Restrictions.eq("tsm.status", backlog)).list();
 		if(storyIds.size() > 0) {
@@ -162,6 +281,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			map.put("storyPoint", tmsStoryMst.getStoryPoint());
 			map.put("moduleId", tmsStoryMst.getTmsModule().getId());
 			map.put("moduleName", tmsStoryMst.getTmsModule().getModuleName());
+			map.put("createdDate", tmsStoryMst.getCreatedDate());
 			
 			for (UserStoryStaus userStoryStatus : tmsStoryMst.getUserStoryStauses()) {
 				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
@@ -195,5 +315,12 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		}
 		return jiraIds;
 	}
+	
+	private UserStoryStaus getLatestStatus(TmsStoryMst tmsStoryMst) {
+		List<UserStoryStaus> userStoryStatusList = new ArrayList<UserStoryStaus>();
+		userStoryStatusList.addAll(tmsStoryMst.getUserStoryStauses());
+		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
+	}
 
+	
 }

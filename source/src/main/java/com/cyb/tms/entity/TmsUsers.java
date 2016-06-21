@@ -49,28 +49,20 @@ public class TmsUsers extends BaseEntity {
 			0);
 	private Set<TmsCodeReview> tmsCodeReviewsForDeveloper = new HashSet<TmsCodeReview>(
 			0);
+	private Set<TmsCodeReview> tmsCodeReviewsForReviewer = new HashSet<TmsCodeReview>(
+			0);
 	private Set<UserStoryStaus> userStoryStausesForModifiedBy = new HashSet<UserStoryStaus>(
 			0);
 
 	public TmsUsers() {
 	}
 
-	public TmsUsers(String email, String isActive, String password,
-			String userName, String userRole) {
-		this.email = email;
-		this.isActive = isActive;
-		this.password = password;
-		this.userName = userName;
-		this.userRole = userRole;
-	}
-
-	public TmsUsers(TmsProject tmsProject, String email, String isActive,
-			String password, String userName, String userRole,
-			Set<TmsLeaveMst> tmsLeaveMsts,
-			Set<UserStoryStaus> userStoryStausesForAssignedTo,
-			Set<TmsCodeReview> tmsCodeReviewsForFixedBy,
-			Set<TmsCodeReview> tmsCodeReviewsForDeveloper,
-			Set<UserStoryStaus> userStoryStausesForModifiedBy) {
+	public TmsUsers(Long id, TmsProject tmsProject, String email, String isActive, String password, String userName,
+		String userRole, Set<TmsLeaveMst> tmsLeaveMsts, Set<UserStoryStaus> userStoryStausesForAssignedTo,
+		Set<TmsCodeReview> tmsCodeReviewsForFixedBy, Set<TmsCodeReview> tmsCodeReviewsForDeveloper,
+		Set<TmsCodeReview> tmsCodeReviewsForReviewer, Set<UserStoryStaus> userStoryStausesForModifiedBy) {
+		super();
+		this.id = id;
 		this.tmsProject = tmsProject;
 		this.email = email;
 		this.isActive = isActive;
@@ -81,8 +73,11 @@ public class TmsUsers extends BaseEntity {
 		this.userStoryStausesForAssignedTo = userStoryStausesForAssignedTo;
 		this.tmsCodeReviewsForFixedBy = tmsCodeReviewsForFixedBy;
 		this.tmsCodeReviewsForDeveloper = tmsCodeReviewsForDeveloper;
+		this.tmsCodeReviewsForReviewer = tmsCodeReviewsForReviewer;
 		this.userStoryStausesForModifiedBy = userStoryStausesForModifiedBy;
 	}
+
+
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -192,6 +187,16 @@ public class TmsUsers extends BaseEntity {
 	public void setTmsCodeReviewsForDeveloper(
 			Set<TmsCodeReview> tmsCodeReviewsForDeveloper) {
 		this.tmsCodeReviewsForDeveloper = tmsCodeReviewsForDeveloper;
+	}
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsUsersByReviewer")
+	public Set<TmsCodeReview> getTmsCodeReviewsForReviewer() {
+		return tmsCodeReviewsForReviewer;
+	}
+
+	public void setTmsCodeReviewsForReviewer(Set<TmsCodeReview> tmsCodeReviewsForReviewer) {
+		this.tmsCodeReviewsForReviewer = tmsCodeReviewsForReviewer;
 	}
 
 	@JsonIgnore

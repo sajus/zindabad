@@ -79,6 +79,15 @@ public class HibernateUtil {
 	}
 
 	
+	@SuppressWarnings("unchecked")
+	public <T> T findByProperty(Session session, String propertyName, String value,
+			Class<T> entityClass) {
+		List<?> list = null;
+    	list = session.createCriteria(entityClass)
+    						.add(Restrictions.eq(propertyName, value)).list();
+    	return (T) ((list != null && list.size() > 0) ? list.get(0) : null);
+	}
+	
     
     
 	

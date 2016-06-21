@@ -1,5 +1,6 @@
 package com.cyb.tms.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.cyb.tms.entity.TmsOrgLeaves;
@@ -12,5 +13,6 @@ public interface TmsOrgLeavesDAO {
     public void deleteLeave(long id);
     public List<TmsOrgLeaves> getAllLeaves();
     public TmsOrgLeaves getLeave(long id);
+    public int calculateTotalHolidays(Date startDate, Date endDate);
     
 }

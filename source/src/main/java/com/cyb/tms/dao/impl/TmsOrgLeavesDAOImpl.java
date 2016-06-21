@@ -1,7 +1,10 @@
 package com.cyb.tms.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +44,14 @@ public class TmsOrgLeavesDAOImpl implements TmsOrgLeavesDAO {
 	@Override
 	public TmsOrgLeaves getLeave(long id) {
 		return hibernateUtil.fetchById(id, TmsOrgLeaves.class);
+	}
+
+	@Override
+	public int calculateTotalHolidays(Date startDate, Date endDate) {
+		@SuppressWarnings("unchecked")
+		List<TmsOrgLeaves> days = hibernateUtil.getCurrentSession().createCriteria(TmsOrgLeaves.class, "tol")
+				   .add(Restrictions.between("tol.date", startDate, endDate)).list();	
+		return (days == null) ? 0 : days.size();
 	}
 
 	

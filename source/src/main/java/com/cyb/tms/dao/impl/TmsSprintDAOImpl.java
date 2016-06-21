@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsLeaveDAO;
+import com.cyb.tms.dao.TmsOrgLeavesDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
@@ -41,6 +42,9 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	@Autowired
 	private TmsLeaveDAO tmsLeaveDAO;
 	
+	@Autowired
+	private TmsOrgLeavesDAO tmsOrgLeavesDAO;
+	
 	@Value("${tms.workinghours}")
 	private String workingHours;
 	
@@ -50,6 +54,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	@Value("${tms.sprint.open}")
 	private String sprint_open;
 
+	// -------------------Create a Sprint---------------
 	@Override
 	public long createSprint(TmsSprintDTO tmsSprintDTO){
 		TmsProject project = hibernateUtil.fetchById(tmsSprintDTO.getProjectId(), TmsProject.class); 
@@ -62,6 +67,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 		return (Long)hibernateUtil.create(tmsSprintMst);
 	}
 
+	//------------------- Update a Sprint --------------------------------------------------------
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> updateSprint(TmsSprintDTO tmsSprintDTO) {
@@ -109,15 +115,15 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 				.createAlias("tmsProject", "proj")
 				.setProjection(Projections.avg("sp.sprintVelocity"))
 				.add(Restrictions.eq("proj.pid", projectId)).uniqueResult();
-		return sprintVelocity.intValue();
+		return (sprintVelocity != null) ? sprintVelocity.intValue() : 0;
 	}
 
 	private int getSprintHours(TmsSprintDTO tmsSprintDTO) {
 		List<TmsUsers> users = tmsUserService.getUsersByStatus(tmsSprintDTO.getProjectId());
 		int sprintDays = WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(tmsSprintDTO.getSprintStartDate(), tmsSprintDTO.getSprintEndDate());
 		int leaves = tmsLeaveDAO.getTotalLeavesBySprint(tmsSprintDTO.getProjectId());
-		return (sprintDays * users.size() * Integer.parseInt(workingHours))-leaves;
+		int holidays = tmsOrgLeavesDAO.calculateTotalHolidays(tmsSprintDTO.getSprintStartDate(), tmsSprintDTO.getSprintEndDate());
+		return (sprintDays * users.size() * Integer.parseInt(workingHours))-(leaves+holidays);
 	}
-
 
 }

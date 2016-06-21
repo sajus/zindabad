@@ -44,6 +44,7 @@ public class TmsStoryMst extends BaseEntity {
 	private TmsModule tmsModule;
 	private String jiraId;
 	private int storyPoint;
+	private Date createdDate;
 	private Set<TmsSubtask> tmsSubtasks = new HashSet<TmsSubtask>(0);
 	private Set<UserStoryStaus> userStoryStauses = new HashSet<UserStoryStaus>(
 			0);
@@ -51,16 +52,14 @@ public class TmsStoryMst extends BaseEntity {
 	public TmsStoryMst() {
 	}
 
-	public TmsStoryMst(String jiraId, int storyPoint) {
-		this.jiraId = jiraId;
-		this.storyPoint = storyPoint;
-	}
-
-	public TmsStoryMst(TmsModule tmsModule, String jiraId, int storyPoint,
-			Set<TmsSubtask> tmsSubtasks, Set<UserStoryStaus> userStoryStauses) {
+	public TmsStoryMst(Long storyId, TmsModule tmsModule, String jiraId,
+			int storyPoint, Date createdDate, Set<TmsSubtask> tmsSubtasks,
+			Set<UserStoryStaus> userStoryStauses) {
+		this.storyId = storyId;
 		this.tmsModule = tmsModule;
 		this.jiraId = jiraId;
 		this.storyPoint = storyPoint;
+		this.createdDate = createdDate;
 		this.tmsSubtasks = tmsSubtasks;
 		this.userStoryStauses = userStoryStauses;
 	}
@@ -104,6 +103,16 @@ public class TmsStoryMst extends BaseEntity {
 		this.storyPoint = storyPoint;
 	}
 
+	@Temporal(TemporalType.DATE)
+	@Column(name = "CREATED_DATE", length = 10)
+	public Date getCreatedDate() {
+		return this.createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsStoryMst")
 	public Set<TmsSubtask> getTmsSubtasks() {
 		return this.tmsSubtasks;

@@ -12,6 +12,8 @@ define([
 	'common/sprintService',
 	'leave/leave',
 	'common/leaveService',
+	'efforts/efforts',
+	'common/effortsService',
 	'user/user',
 	'common/userService',
 	'components/loader/loader',
@@ -19,7 +21,14 @@ define([
 	'subtask/subtask',
 	'common/subtaskService',
 	'components/alerts/tmsalert',
-	'common/appErrors'
+	'common/appErrors',
+	'components/modal/tmsModal',
+	'components/modal/modalHeader',
+	'components/modal/modalBody',
+	'components/modal/modalFooter',
+	'components/datepicker/tms-datepicker',
+	'dashboard/dashboard',
+  'common/dashboardService'
 		], function(
 				loginView, 
 				homeView, 
@@ -34,13 +43,22 @@ define([
 				sprintService,
 				leaveView, 
 				leaveService, 
+				effortsView, 
+				effortsService, 
 				userService,
 				loader,
 				storyService,
 				subtaskService,
 				subtaskView,
 				tmsalert,
-				appErrors
+				appErrors,
+				tmsModal,
+				modalHeader,
+				modalBody,
+				modalFooter,
+				tmsDatepicker,
+				dashboardView,
+				dashboardService
 			) {
 	return [
 		homeView, 
@@ -55,6 +73,8 @@ define([
 		sprintService, 
 		leaveView, 
 		leaveService, 
+		effortsView, 
+		effortsService, 
 		userView,
 		userService,
 		loader,
@@ -62,6 +82,13 @@ define([
 		subtaskService,
 		subtaskView,
 		tmsalert,
-		appErrors
+		appErrors,
+		tmsModal,
+		modalHeader,
+		modalBody,
+		modalFooter,
+		tmsDatepicker,
+		dashboardView,
+    dashboardService
 	];
 });

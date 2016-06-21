@@ -1,46 +1,95 @@
 'use strict';
 define([
-	'angular',
+  'angular',
 ], function(angular) {
-	return angular.module('myApp.factory', ['$http', 'appConstants']).factory("subtaskService", function($http, appConstants) {
+  return angular.module('myApp.factory', ['$http', 'appConstants']).factory("subtaskService", function($http, appConstants) {
 
-var subtaskService = {};
+    var subtaskService = {};
 
-		subtaskService.getSubtask = function () {
+    subtaskService.addSubtask = function (subtask) {
+      subtask.projectId = appConstants.user.projectId;
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/subtask/create",
+        data: subtask
+      }
+      return $http(req);
+    };
 
-			var req = {
-				 method: 'GET',
-				 url: appConstants.endPointBase+"api/subtask/user/sprint", 
-				 params: {
-			  		projectId: appConstants.user.projectId, 
-			    	userId: appConstants.user.id
-			  	}
-			}
+    subtaskService.getStories = function () {
+      var req = {
+        method: 'GET',
+        url: appConstants.endPointBase+"api/story/sprint",
+        params: {
+          projectId: appConstants.user.projectId,
+          userId: appConstants.user.id
+        }
+      }
+      return $http(req);
+    };
 
-			return $http(req);
-   	    };
+    subtaskService.getSubtasks = function () {
+      var req = {
+        method: 'GET',
+        url: appConstants.endPointBase+"api/subtask/user/sprint",
+        params: {
+          projectId: appConstants.user.projectId,
+          userId: appConstants.user.id
+        }
+      }
+      return $http(req);
+    };
 
+    subtaskService.getUnassignedSubtasks = function () {
+      var req = {
+        method: 'GET',
+        url: appConstants.endPointBase+"api/subtask/backlog",
+        params: {
+          projectId: appConstants.user.projectId
+        }
+      }
+      return $http(req);
+    };
+          
+    subtaskService.update = function () {
+      return $http.get(appConstants.endPointBase+"api/subtask/list");
+    };
 
-   	    subtaskService.getUnassignedSubtask = function () {
-   	    	var req = {
-				 method: 'GET',
-				 url: appConstants.endPointBase+"api/subtask/backlog", 
-				 params: {
-			  		projectId: appConstants.user.projectId
-			  	}
-			}
-			return $http(req);
+    subtaskService.saveSubtaskStatus = function (subtask) {
+     
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/subtask/update",
+        data: subtask
+      }
+      return $http(req);
+    };
 
-   	    };
-   	    	
-   		 subtaskService.update = function () {
-        	return $http.get(appConstants.endPointBase+"api/subtask/list");
-    	};
+    subtaskService.assignToSprint = function(selectedSubtaskList, assignToId){
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/subtask/assign/sprint",
+        data: selectedSubtaskList,
+        params: {
+          projectId: appConstants.user.projectId,
+          assignToId: assignToId,
+          modifiedById: appConstants.user.id
+        }
+      }
+      return $http(req);
+    };
 
-	 return subtaskService;
+    subtaskService.editSubtask = function(subtask){
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/subtask/edit",
+        data: subtask
+      }
+      return $http(req);
+    };
+    
+  return subtaskService;
 
-	});
-	
-	
-	
+  });
+  
 });
