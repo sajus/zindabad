@@ -10,19 +10,19 @@
     <table class="table table-hover table-bordered table-striped">
       <thead>
       <tr>
-        <th>Total Sprint Capacity</th>
-        <th>User Sprint Capacity</th>
-        <th>Estimated hrs</th>
-        <th>Consumed hrs</th>
-        <th>Remaining hrs</th>
+        <th>Capacity</th>
+        <th>Sprint Capacity</th>
+        <th>Hours Consumed</th>
+        <th>Hours Burned</th>
+        <th>Remaining Work Hours</th>
       </tr>
       </thead>
       <tr>
+        <td>{{ userDashBoardData.capacity }}</td>
         <td>{{ userDashBoardData.sprintCapacity }}</td>
-        <td>{{ userDashBoardData.userCapacity }}</td>
-        <td>{{ userDashBoardData.totalEstHours }}</td>
         <td>{{ userDashBoardData.hoursConsumed }}</td>
-        <td>{{ userDashBoardData.totalEstHours - userDashBoardData.hoursConsumed }}</td>
+        <td>{{ userDashBoardData.hoursBurned }}</td>
+        <td>{{ userDashBoardData.remainingHours }}</td>
     </table>
   </div>
 </div>

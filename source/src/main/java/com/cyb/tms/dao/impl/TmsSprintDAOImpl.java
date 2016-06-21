@@ -115,7 +115,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 				.createAlias("tmsProject", "proj")
 				.setProjection(Projections.avg("sp.sprintVelocity"))
 				.add(Restrictions.eq("proj.pid", projectId)).uniqueResult();
-		return sprintVelocity.intValue();
+		return (sprintVelocity != null) ? sprintVelocity.intValue() : 0;
 	}
 
 	private int getSprintHours(TmsSprintDTO tmsSprintDTO) {
