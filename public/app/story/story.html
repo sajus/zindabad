@@ -17,7 +17,7 @@
           <h5>BACKLOG STORIES</h5>
 
           <div class="float-right">
-            <button class="btn btn-success btn-add" type="button" ng-click="showModal('#add')">
+            <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()">
               <i class="glyphicon glyphicon-plus gs"></i>
               Add Story
             </button>
@@ -58,9 +58,9 @@
               <td>{{story.moduleName}}</td>
               <td>{{story.storyPoint}}</td>
               <td class="text-center table-actions-medium">
-                <button class='btn btn-info btn-xs' type="button"><span class="glyphicon glyphicon-edit"></span> Edit
+                <button class='btn btn-info btn-xs' type="button" ng-click="showEditModal(story)"><span class="glyphicon glyphicon-edit"></span> Edit
                 </button>
-                <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button>
+                <!-- <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button> -->
               </td>
               <td class="assign-selection-checkbox">
                 <input type="checkbox" ng-model="storySelection[$index]"
@@ -136,62 +136,8 @@
     </div>
   </div>
 </div>
-
-<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" ng-click="closeModal('#add')" aria-hidden="true"><span
-            class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Edit Your Detail</h4>
-      </div>
-      <div class="modal-body">
-
-        <div class="sprint-errors" ng-show="errorMessage">
-          <div class="alert alert-warning">
-            <strong>Error. </strong> {{errorMessage}}
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">Jira Id:</label>
-          <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text"
-                 ng-model="story.jiraId">
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">Created Date:</label>
-          <input class="form-control" id="disabledInput" placeholder="Created Date (yyyy-MM-dd)" type="text"
-                 ng-model="story.createdDate">
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">Story Point:</label>
-          <input class="form-control" type="text" placeholder="Story Point(1,2,3,5,8,13)" ng-model="story.storyPoint">
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">Module:</label>
-          <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control"
-                  ng-model=story.module>
-            <option value="GAMBIT">Gambit</option>
-            <option value="GOONIS">Goonis</option>
-            <option value="MATRIX">Matrix</option>
-          </select>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal('#add')">Cancel
-          </button>
-          <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="addStory(story)">Add</button>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-  </div>
-
-  <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+ 
+  <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true" >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -215,5 +161,99 @@
     </div>
     <!-- /.modal-dialog -->
   </div>
-    
-    
+  
+  <tms-modal modal-visible="isAddModalVisible" backdrop="static" on-sown="" on-hide="" >
+  <modal-header title="Add Story"></modal-header>
+  <modal-body>
+    <div class="sprint-errors" ng-show="errorMessage">
+      <div class="alert alert-warning">
+        <strong>Error. </strong> {{errorMessage}}
+      </div>
+    </div>
+
+    <!-- <div class="form-group">
+      <label class="label-title">Story:</label>
+      <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model=subtask.storyId>
+        <option value="{{story.storyId}}" data-ng-repeat="story in stories">{{story.jiraId}}</option>
+      </select>
+    </div> -->
+
+    <div class="form-group">
+      <tms-datepicker label="Created Date:" ng-model="story.createdDate"></tms-datepicker>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Jira Id:</label>
+      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text"  ng-model="story.jiraId">
+    </div>
+
+    <div class="form-group">
+          <label class="label-title">Module:</label>
+          <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control"
+                  ng-model=story.moduleName>
+            <option value="">--Select --</option>      
+            <option value="GAMBIT">Gambit</option>
+            <option value="GOONIS">Goonis</option>
+            <option value="MATRIX">Matrix</option>
+          </select>
+    </div>
+
+    <div class="form-group">
+          <label class="label-title">Story Point:</label>
+          <input class="form-control" type="text" placeholder="Story Point(1,2,3,5,8,13)" ng-model="story.storyPoint">
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
+    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="addStory(story)">Add</button>
+  </modal-footer>
+</tms-modal>
+ 
+ <!-- Edit Story Modal -->
+<tms-modal modal-visible="isEditModalVisible" backdrop="static" on-sown="" on-hide="" >
+  <modal-header title="Edit Story"></modal-header>
+  <modal-body>
+    <div class="sprint-errors" ng-show="errorMessage">
+      <div class="alert alert-warning">
+        <strong>Error. </strong> {{errorMessage}}
+      </div>
+    </div>
+
+    <!-- <div class="form-group">
+      <label class="label-title">Story:</label>
+      <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model=subtask.storyId>
+        <option value="{{story.storyId}}" data-ng-repeat="story in stories">{{story.jiraId}}</option>
+      </select>
+    </div> -->
+
+    <div class="form-group">
+      <!-- <tms-datepicker label="Created Date:" ng-model="story.createdDate"></tms-datepicker> -->
+      <label class="label-title">Created Date: </label>
+          <input class="form-control" type="text" ng-model="story.createdDate">
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Jira Id:</label>
+      <input class="form-control" id="disabledInput" type="text"  ng-model="story.jiraId">
+    </div>
+
+    <div class="form-group">
+          <label class="label-title">Module:</label>
+          <select id="moduleDropdown" name="module" class="form-control" ng-model=story.moduleName>
+            <option value="GAMBIT">Gambit</option>
+            <option value="GOONIS">Goonis</option>
+            <option value="MATRIX">Matrix</option>
+          </select>
+    </div>
+
+    <div class="form-group">
+          <label class="label-title">Story Point:</label>
+          <input class="form-control" type="text" ng-model="story.storyPoint">
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
+    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="editStory(story)">Save</button>
+  </modal-footer>
+</tms-modal>
+

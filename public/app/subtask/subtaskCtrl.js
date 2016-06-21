@@ -5,7 +5,8 @@ define([], function() {
 
     function init() {
       $scope.closeModal = closeModal;
-      $scope.isModalVisible = false;
+      $scope.isAddModalVisible = false;
+      $scope.isEditModalVisible = false;
       $scope.errorMessage = undefined;
       $scope.changeTab('ASSIGNED');
       $scope.selectedSubtaskList = [];
@@ -24,10 +25,16 @@ define([], function() {
       $scope.selectedTab = currentTab;
     };
 
-    $scope.showModal = function(subtask) {
+    $scope.showAddModal = function(subtask) {
       $scope.subtask = angular.copy(subtask) || {};
-      $scope.isModalVisible = true;
+      $scope.isAddModalVisible = true;
     }
+
+    $scope.showEditModal = function(subtask) {
+      $scope.subtask = angular.copy(subtask) || {};
+      $scope.isEditModalVisible = true;
+    }
+
 
     $scope.checkAll = function(){
       if($scope.isAllSelected){
@@ -49,7 +56,8 @@ define([], function() {
 
     function closeModal() {
       clearErrorMessages();
-      $scope.isModalVisible = false;
+      $scope.isAddModalVisible = false;
+      $scope.isEditModalVisible = false;
     }
 
     function clearErrorMessages() {
@@ -149,7 +157,18 @@ define([], function() {
         });
     }
 
+    $scope.editSubtask = function(subtask){
+      subtaskService.editSubtask(subtask)
+        .success(function () {
+        getUnassignedSubtasks();
+        })
+        .error(function (error) {
+          $scope.status = 'Unable to process your request: ' + error.message;
+        });
+    }
+
     init();
     $scope.$apply();
+    
   }];
 });

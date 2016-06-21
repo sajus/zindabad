@@ -23,10 +23,14 @@ define([], function() {
       $scope.selectedTab = currentTab;
     };
 
-    $scope.showModal = function(id, story) {
+    $scope.showAddModal = function(story) {
       $scope.story = angular.copy(story) || {};
-      var element = angular.element(id);
-      element.modal('show');
+      $scope.isAddModalVisible = true;
+    }
+
+    $scope.showEditModal = function(story) {
+      $scope.story = angular.copy(story) || {};
+      $scope.isEditModalVisible = true;
     }
 
     $scope.checkAll = function(){
@@ -66,8 +70,8 @@ define([], function() {
 
     function closeModal(id) {
       clearErrorMessages();
-      var element = angular.element(id);
-      element.modal('hide');
+      $scope.isAddModalVisible = false;
+      $scope.isEditModalVisible = false;
     }
 
     function getStories() {
@@ -131,7 +135,20 @@ define([], function() {
           $scope.errorMessage = 'Unable to process your request';
         });
     }
+
+    $scope.editStory = function(story){
+      storyService.editStory(story)
+        .success(function () {
+         getBackLogStories();
+        })
+        .error(function (error) {
+            $scope.status = 'Unable to process your request: ' + error.message;
+        });
+    }
+
+
     init();
 	  $scope.$apply();
+    
 	}];
 });
