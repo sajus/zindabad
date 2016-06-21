@@ -78,7 +78,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	//------------------- Update a Subtask --------------------------------------------------------
 	@SuppressWarnings("unchecked")
 	@Override
-	public long updateSubtask(SubtaskDTO subtaskDTO) {
+	public long updateSubtaskStatus(SubtaskDTO subtaskDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", subtaskDTO.getStatus(), TmsStatusMst.class);
 		TmsUsers user = hibernateUtil.fetchById( subtaskDTO.getUserId(), TmsUsers.class);
 		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
@@ -99,19 +99,19 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	}
 	
 	// -------------------Edit backlog Subtask---------------
-		@SuppressWarnings("unchecked")
-	    @Override
-	    public List<String> editSubtask(SubtaskDTO subtaskDTO) {
-			TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
-	        tmsSubtask.setJiraId(subtaskDTO.getJiraId());
-	        tmsSubtask.setCreatedDate(subtaskDTO.getCreatedDate());
-	        tmsSubtask.setEfforts(subtaskDTO.getEfforts());
-	        tmsSubtask.setScope(subtaskDTO.getScope());
-	        tmsSubtask.setType(subtaskDTO.getType());
-	        hibernateUtil.update(tmsSubtask);
-	        return null;
-	    }
-	
+	@SuppressWarnings("unchecked")
+    @Override
+    public void editSubtask(SubtaskDTO subtaskDTO) {
+		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
+        tmsSubtask.setJiraId(subtaskDTO.getJiraId());
+        tmsSubtask.setCreatedDate(subtaskDTO.getCreatedDate());
+        tmsSubtask.setEfforts(subtaskDTO.getEfforts());
+        tmsSubtask.setScope(subtaskDTO.getScope());
+        tmsSubtask.setType(subtaskDTO.getType());
+        hibernateUtil.update(tmsSubtask);
+        
+    }
+
 	//------------- Add to current Sprint ------------------------------------------------------------
 	
 	@Override
@@ -252,10 +252,6 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		}
 	}
 
-	/**
-	 * @param subtaskIds
-	 * @return
-	 */
 	@SuppressWarnings("unchecked")
 	private List<TmsSubtask> getFilteredSubtasks(List<Long> subtaskIds) {
 		hibernateUtil.getCurrentSession().enableFilter(TmsSubtask.LATEST_STATUS_FILTER);

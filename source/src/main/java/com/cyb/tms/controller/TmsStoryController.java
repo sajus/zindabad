@@ -40,8 +40,6 @@ public class TmsStoryController {
 	@Autowired
 	private TmsUserService tmsUserService;
 
-	
-
 	// -------------------Create a Story---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> createStory(@RequestBody StoryDTO storyDTO) {
@@ -88,21 +86,20 @@ public class TmsStoryController {
 	}
 	
 	// -------------------Update a Story---------------
-		@RequestMapping(value = URIConstants.UPDATE_STATUS, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<Void> updateStory(@RequestBody StoryDTO storyDTO) {
-			tmsStoryService.updateStory(storyDTO);
-			HttpHeaders headers = new HttpHeaders();
-			return new ResponseEntity<Void>(headers, HttpStatus.OK);
-		}
+	@RequestMapping(value = URIConstants.UPDATE_STATUS, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> updateStoryStatus(@RequestBody StoryDTO storyDTO) {
+		tmsStoryService.updateStoryStatus(storyDTO);
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.OK);
+	}
 		
-
 	//------------------- Edit a Story --------------------------------------------------------
 		           
-	     @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
-	     public ResponseEntity<Void> editStory(@RequestBody StoryDTO storyDTO) {
-	        tmsStoryService.editStory(storyDTO);
-	        HttpHeaders headers = new HttpHeaders();
-	        return new ResponseEntity<Void>(headers, HttpStatus.OK);
-		} 
+     @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+     public ResponseEntity<Void> editStory(@RequestBody StoryDTO storyDTO) {
+        tmsStoryService.editStory(storyDTO);
+        HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Void>(headers, HttpStatus.OK);
+	} 
 
 }

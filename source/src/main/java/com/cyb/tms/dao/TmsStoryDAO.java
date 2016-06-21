@@ -11,8 +11,8 @@ import com.cyb.tms.entity.TmsStoryMst;
 public interface TmsStoryDAO {
 
 	public long createStory(StoryDTO storyDTO);
-	public long updateStory(StoryDTO storyDTO);
-	public List<String> editStory(StoryDTO storyDTO);
+	public long updateStoryStatus(StoryDTO storyDTO);
+	public void editStory(StoryDTO storyDTO);
 	public List<TmsStoryMst> getAllStories();
 	public TmsStoryMst getSprint(long id);
 	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception;

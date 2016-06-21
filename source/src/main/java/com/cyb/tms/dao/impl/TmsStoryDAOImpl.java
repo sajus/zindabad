@@ -121,7 +121,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	//------------------- Update a Story --------------------------------------------------------
 	@SuppressWarnings("unchecked")
 	@Override
-	public long updateStory(StoryDTO storyDTO) {
+	public long updateStoryStatus(StoryDTO storyDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
 		TmsUsers user = hibernateUtil.fetchById( storyDTO.getUserId(), TmsUsers.class);
 		TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
@@ -146,7 +146,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	// -------------------Edit backlog Story---------------
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> editStory(StoryDTO storyDTO) {
+	public void editStory(StoryDTO storyDTO) {
 		TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
 		TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
 		tmsStoryMst.setJiraId(storyDTO.getJiraId());
@@ -154,7 +154,6 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		tmsStoryMst.setStoryPoint(storyDTO.getStoryPoint());
 		tmsStoryMst.setTmsModule(module);
 		hibernateUtil.update(tmsStoryMst);
-		return null;
 	}
 
 	@Override
