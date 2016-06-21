@@ -25,16 +25,15 @@ define([], function() {
       $scope.selectedTab = currentTab;
     };
 
-    $scope.showAddModal = function(subtask) {
-      $scope.subtask = angular.copy(subtask) || {};
+    $scope.showAddModal = function() {
+      $scope.subtask = {};
       $scope.isAddModalVisible = true;
     }
 
     $scope.showEditModal = function(subtask) {
-      $scope.subtask = angular.copy(subtask) || {};
+      $scope.subtask = angular.copy(subtask);
       $scope.isEditModalVisible = true;
     }
-
 
     $scope.checkAll = function(){
       if($scope.isAllSelected){
@@ -161,6 +160,7 @@ define([], function() {
       subtaskService.editSubtask(subtask)
         .success(function () {
         getUnassignedSubtasks();
+        closeModal();
         })
         .error(function (error) {
           $scope.status = 'Unable to process your request: ' + error.message;
