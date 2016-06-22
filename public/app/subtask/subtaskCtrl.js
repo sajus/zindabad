@@ -5,7 +5,9 @@ define([], function() {
 
     function init() {
       $scope.closeModal = closeModal;
+      $scope.closeCodeReviewModal = closeCodeReviewModal;
       $scope.isModalVisible = false;
+      $scope.isCodeReviewModalVisible = false;
       $scope.errorMessage = undefined;
       $scope.changeTab('ASSIGNED');
       $scope.selectedSubtaskList = [];
@@ -27,6 +29,12 @@ define([], function() {
     $scope.showModal = function(subtask) {
       $scope.subtask = angular.copy(subtask) || {};
       $scope.isModalVisible = true;
+    }
+
+    $scope.showCodeReviewModal = function(subtask) {
+      $scope.codeReview = {};
+      $scope.codeReview.jiraId = subtask.jiraId;
+      $scope.isCodeReviewModalVisible = true;
     }
 
     $scope.checkAll = function(){
@@ -51,6 +59,12 @@ define([], function() {
       clearErrorMessages();
       $scope.isModalVisible = false;
     }
+
+    function closeCodeReviewModal() {
+      clearErrorMessages();
+      $scope.isCodeReviewModalVisible = false;
+    }
+
 
     function clearErrorMessages() {
       $scope.errorMessage = undefined;
@@ -148,6 +162,19 @@ define([], function() {
           $scope.status = 'Unable to process your request: ' + error.message;
         });
     }
+
+     $scope.addReview = function(review){
+      subtaskService.addReview(review)
+        .success(function () {
+           //getReviews();
+           closeCodeReviewModal();
+        }).
+        error(function (error) {
+            $scope.status = 'Unable to insert Sprint: ' + error.message;
+        });
+    };
+
+
 
     init();
     $scope.$apply();

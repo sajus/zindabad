@@ -56,7 +56,7 @@ define([], function() {
     $scope.showModal = function(id, leave) {
         $scope.hasErrors = false;
         $scope.leave = leave || {};
-        var element = angular.element(id);
+        var element = angular.element(document.querySelectorAll(id));
         element.modal('show');
     }
 
@@ -65,7 +65,7 @@ define([], function() {
     }
 
     function closeModal(id) {
-        var element = angular.element(id);
+        var element = angular.element(document.querySelectorAll(id));
         element.modal('hide');
     }
 

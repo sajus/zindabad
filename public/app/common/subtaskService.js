@@ -79,6 +79,18 @@ define([
       return $http(req);
     };
 
+    subtaskService.addReview = function (review) {
+      // subtask.projectId = appConstants.user.projectId;
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/review/create",
+        data: review
+      }
+      return $http(req);
+    };
+
+
+
     
   return subtaskService;
 
