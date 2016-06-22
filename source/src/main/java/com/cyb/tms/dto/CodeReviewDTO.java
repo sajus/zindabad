@@ -3,6 +3,8 @@ package com.cyb.tms.dto;
 import java.util.Date;
 
 import com.cyb.tms.dto.base.BaseDTO;
+import com.cyb.tms.entity.TmsSubtask;
+import com.cyb.tms.entity.TmsUsers;
 
 public class CodeReviewDTO extends BaseDTO{
 
@@ -10,11 +12,14 @@ public class CodeReviewDTO extends BaseDTO{
 	 * 
 	 */
 	private static final long serialVersionUID = -2805315708370963378L;
-	private Long Id;
+	private Long reviewId;
 	private String jiraId;
-	private Long tmsUsersByDeveloper;    
-	private Long tmsUsersByFixedBy;  
-	private Long reviewer;   
+	private Long developerId;    
+	private Long fixedById;  
+	private Long reviewerId;   
+	private String developerName;
+	private String fixedByName;
+	private String reviewerName;
 	private String commentType;
 	private String comments;
 	private Date commentsFixedDate;
@@ -27,15 +32,18 @@ public class CodeReviewDTO extends BaseDTO{
 		super();
 	}
 
-	public CodeReviewDTO(Long id, String jiraId, Long tmsUsersByDeveloper, Long tmsUsersByFixedBy, Long reviewer,
-			String commentType, String comments, Date commentsFixedDate, String fileName, String pullRequest,
-			Date reviewDate, String reviewerType) {
+	public CodeReviewDTO(Long reviewId, String jiraId, Long developerId, Long fixedById, Long reviewerId,
+			String developerName, String fixedByName, String reviewerName, String commentType, String comments,
+			Date commentsFixedDate, String fileName, String pullRequest, Date reviewDate, String reviewerType) {
 		super();
-		Id = id;
+		this.reviewId = reviewId;
 		this.jiraId = jiraId;
-		this.tmsUsersByDeveloper = tmsUsersByDeveloper;
-		this.tmsUsersByFixedBy = tmsUsersByFixedBy;
-		this.reviewer = reviewer;
+		this.developerId = developerId;
+		this.fixedById = fixedById;
+		this.reviewerId = reviewerId;
+		this.developerName = developerName;
+		this.fixedByName = fixedByName;
+		this.reviewerName = reviewerName;
 		this.commentType = commentType;
 		this.comments = comments;
 		this.commentsFixedDate = commentsFixedDate;
@@ -45,12 +53,12 @@ public class CodeReviewDTO extends BaseDTO{
 		this.reviewerType = reviewerType;
 	}
 
-	public Long getId() {
-		return Id;
+	public Long getReviewId() {
+		return reviewId;
 	}
 
-	public void setId(Long id) {
-		Id = id;
+	public void setReviewId(Long reviewId) {
+		this.reviewId = reviewId;
 	}
 
 	public String getJiraId() {
@@ -61,28 +69,52 @@ public class CodeReviewDTO extends BaseDTO{
 		this.jiraId = jiraId;
 	}
 
-	public Long getTmsUsersByDeveloper() {
-		return tmsUsersByDeveloper;
+	public Long getDeveloperId() {
+		return developerId;
 	}
 
-	public void setTmsUsersByDeveloper(Long tmsUsersByDeveloper) {
-		this.tmsUsersByDeveloper = tmsUsersByDeveloper;
+	public void setDeveloperId(Long developerId) {
+		this.developerId = developerId;
 	}
 
-	public Long getTmsUsersByFixedBy() {
-		return tmsUsersByFixedBy;
+	public Long getFixedById() {
+		return fixedById;
 	}
 
-	public void setTmsUsersByFixedBy(Long tmsUsersByFixedBy) {
-		this.tmsUsersByFixedBy = tmsUsersByFixedBy;
+	public void setFixedById(Long fixedById) {
+		this.fixedById = fixedById;
 	}
 
-	public Long getReviewer() {
-		return reviewer;
+	public Long getReviewerId() {
+		return reviewerId;
 	}
 
-	public void setReviewer(Long reviewer) {
-		this.reviewer = reviewer;
+	public void setReviewerId(Long reviewerId) {
+		this.reviewerId = reviewerId;
+	}
+
+	public String getDeveloperName() {
+		return developerName;
+	}
+
+	public void setDeveloperName(String developerName) {
+		this.developerName = developerName;
+	}
+
+	public String getFixedByName() {
+		return fixedByName;
+	}
+
+	public void setFixedByName(String fixedByName) {
+		this.fixedByName = fixedByName;
+	}
+
+	public String getReviewerName() {
+		return reviewerName;
+	}
+
+	public void setReviewerName(String reviewerName) {
+		this.reviewerName = reviewerName;
 	}
 
 	public String getCommentType() {
@@ -120,7 +152,7 @@ public class CodeReviewDTO extends BaseDTO{
 	public String getPullRequest() {
 		return pullRequest;
 	}
-
+	
 	public void setPullRequest(String pullRequest) {
 		this.pullRequest = pullRequest;
 	}
@@ -140,9 +172,5 @@ public class CodeReviewDTO extends BaseDTO{
 	public void setReviewerType(String reviewerType) {
 		this.reviewerType = reviewerType;
 	}
-	
-	
-	
-	
 	
 }

@@ -153,7 +153,7 @@ public class TmsSubtask extends BaseEntity {
 		this.tmsCodeReviews = tmsCodeReviews;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tmsSubtask", cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSubtask", cascade=CascadeType.ALL)
 	@Filter(name = LATEST_STATUS_FILTER, condition = "ID = (select max(uss.ID) from user_story_staus uss where uss.SUBTASK_ID = SUBTASK_ID)")
 	public Set<UserStoryStaus> getUserStoryStauses() {
 		return this.userStoryStauses;
