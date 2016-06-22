@@ -62,10 +62,20 @@ define([
     self.saveStoryStatus = function (story) {
       var req = {
         method: 'POST',
+        url: appConstants.endPointBase+"api/story/update",
+        data: story
+      }
+      return $http(req);
+    };
+
+    self.editStory = function (story) {
+      var req = {
+        method: 'POST',
         url: appConstants.endPointBase+"api/story/edit",
         data: story
       }
       return $http(req);
     };
+
   });
 });
