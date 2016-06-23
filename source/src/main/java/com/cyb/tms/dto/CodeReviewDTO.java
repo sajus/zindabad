@@ -25,6 +25,7 @@ public class CodeReviewDTO extends BaseDTO{
 	private Date commentsFixedDate;
 	private String fileName;
 	private String pullRequest;
+	private Date pullRequestDate;
 	private Date reviewDate;
 	private String reviewerType;
 	
@@ -34,7 +35,8 @@ public class CodeReviewDTO extends BaseDTO{
 
 	public CodeReviewDTO(Long reviewId, String jiraId, Long developerId, Long fixedById, Long reviewerId,
 			String developerName, String fixedByName, String reviewerName, String commentType, String comments,
-			Date commentsFixedDate, String fileName, String pullRequest, Date reviewDate, String reviewerType) {
+			Date commentsFixedDate, String fileName, String pullRequest, Date pullRequestDate, Date reviewDate,
+			String reviewerType) {
 		super();
 		this.reviewId = reviewId;
 		this.jiraId = jiraId;
@@ -49,6 +51,7 @@ public class CodeReviewDTO extends BaseDTO{
 		this.commentsFixedDate = commentsFixedDate;
 		this.fileName = fileName;
 		this.pullRequest = pullRequest;
+		this.pullRequestDate = pullRequestDate;
 		this.reviewDate = reviewDate;
 		this.reviewerType = reviewerType;
 	}
@@ -171,6 +174,14 @@ public class CodeReviewDTO extends BaseDTO{
 
 	public void setReviewerType(String reviewerType) {
 		this.reviewerType = reviewerType;
+	}
+	
+	public Date getPullRequestDate() {
+		return pullRequestDate;
+	}
+
+	public void setPullRequestDate(Date pullRequestDate) {
+		this.pullRequestDate = pullRequestDate;
 	}
 	
 }

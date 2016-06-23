@@ -30,7 +30,6 @@ public class TmsCodeReview extends BaseEntity {
 	private static final long serialVersionUID = -5889958340304604686L;
 	private Long reviewId;
 	private TmsSubtask tmsSubtask;
-	private TmsSprintMst tmsSprintMst;
 	private TmsUsers tmsUsersByDeveloper;
 	private TmsUsers tmsUsersByFixedBy;
 	private TmsUsers tmsUsersByReviewer;
@@ -39,6 +38,7 @@ public class TmsCodeReview extends BaseEntity {
 	private Date commentsFixedDate;
 	private String fileName;
 	private String pullRequest;
+	private Date pullRequestDate;
 	private Date reviewDate;
 	private String reviewerType;
 
@@ -47,27 +47,24 @@ public class TmsCodeReview extends BaseEntity {
 	public TmsCodeReview() {
 	}
 
-	public TmsCodeReview(Long reviewId, TmsSubtask tmsSubtask, TmsSprintMst tmsSprintMst, TmsUsers tmsUsersByDeveloper, TmsUsers tmsUsersByFixedBy,
-			TmsUsers tmsUsersByReviewer, TmsUsers developerName, TmsUsers fixedByName, TmsUsers reviewerName,
-			String commentType, String comments, Date commentsFixedDate, String fileName, String pullRequest,
-			Date reviewDate, String reviewerType) {
+	public TmsCodeReview(Long reviewId, TmsSubtask tmsSubtask, TmsUsers tmsUsersByDeveloper, TmsUsers tmsUsersByFixedBy,
+			TmsUsers tmsUsersByReviewer, String commentType, String comments, Date commentsFixedDate, String fileName,
+			String pullRequest, Date pullRequestDate, Date reviewDate, String reviewerType) {
 		super();
 		this.reviewId = reviewId;
 		this.tmsSubtask = tmsSubtask;
-		this.tmsSprintMst = tmsSprintMst;
 		this.tmsUsersByDeveloper = tmsUsersByDeveloper;
 		this.tmsUsersByFixedBy = tmsUsersByFixedBy;
 		this.tmsUsersByReviewer = tmsUsersByReviewer;
-		
 		this.commentType = commentType;
 		this.comments = comments;
 		this.commentsFixedDate = commentsFixedDate;
 		this.fileName = fileName;
 		this.pullRequest = pullRequest;
+		this.pullRequestDate = pullRequestDate;
 		this.reviewDate = reviewDate;
 		this.reviewerType = reviewerType;
 	}
-
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -79,7 +76,7 @@ public class TmsCodeReview extends BaseEntity {
 	public void setReviewId(Long reviewId) {
 		this.reviewId = reviewId;
 	}
-
+   
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TASK_ID", nullable = false)
@@ -104,7 +101,7 @@ public class TmsCodeReview extends BaseEntity {
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "FIXED_BY", nullable = false)
+	@JoinColumn(name = "FIXED_BY")
 	public TmsUsers getTmsUsersByFixedBy() {
 		return this.tmsUsersByFixedBy;
 	}
@@ -132,7 +129,7 @@ public class TmsCodeReview extends BaseEntity {
 	}
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "COMMENTS_FIXED_DATE", nullable = false, length = 10)
+	@Column(name = "COMMENTS_FIXED_DATE", length = 10)
 	public Date getCommentsFixedDate() {
 		return this.commentsFixedDate;
 	}
@@ -160,7 +157,7 @@ public class TmsCodeReview extends BaseEntity {
 	}
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "REVIEW_DATE", nullable = false, length = 10)
+	@Column(name = "REVIEW_DATE", length = 10)
 	public Date getReviewDate() {
 		return this.reviewDate;
 	}
@@ -171,7 +168,7 @@ public class TmsCodeReview extends BaseEntity {
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "REVIEWER", nullable = false)
+	@JoinColumn(name = "REVIEWER")
 	public TmsUsers getTmsUsersByReviewer() {
 		return tmsUsersByReviewer;
 	}
@@ -189,14 +186,15 @@ public class TmsCodeReview extends BaseEntity {
 		this.reviewerType = reviewerType;
 	}
 
-	public TmsSprintMst getTmsSprintMst() {
-		return tmsSprintMst;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "PULL_REQUEST_DATE", length = 10)
+	public Date getPullRequestDate() {
+		return this.pullRequestDate;
 	}
 
-	public void setTmsSprintMst(TmsSprintMst tmsSprintMst) {
-		this.tmsSprintMst = tmsSprintMst;
+	public void setPullRequestDate(Date pullRequestDate) {
+		this.pullRequestDate = pullRequestDate;
 	}
 	
-	
-
+		
 }

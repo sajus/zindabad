@@ -52,19 +52,20 @@ public class TmsCodeReviewDAOImpl implements TmsCodeReviewDAO {
 	
 	private TmsCodeReview setDtoToDo(CodeReviewDTO codeReviewDTO) {
    		TmsSubtask subtask = hibernateUtil.findByPropertyName("jiraId", codeReviewDTO.getJiraId(), TmsSubtask.class);
-		TmsUsers tmsUsersByDeveloper = hibernateUtil.fetchById( codeReviewDTO.getDeveloperId(), TmsUsers.class);
-		TmsUsers tmsUsersByFixedBy = hibernateUtil.fetchById( codeReviewDTO.getFixedById(), TmsUsers.class);
-		TmsUsers reviewer = hibernateUtil.fetchById( codeReviewDTO.getReviewerId(), TmsUsers.class);
+		TmsUsers developerId = hibernateUtil.fetchById( codeReviewDTO.getDeveloperId(), TmsUsers.class);
+		TmsUsers fixedById = hibernateUtil.fetchById( codeReviewDTO.getFixedById(), TmsUsers.class);
+		TmsUsers reviewerId = hibernateUtil.fetchById( codeReviewDTO.getReviewerId(), TmsUsers.class);
 		TmsCodeReview review= new TmsCodeReview();
 		review.setTmsSubtask(subtask);
-		review.setTmsUsersByDeveloper(tmsUsersByDeveloper);
-		review.setTmsUsersByFixedBy(tmsUsersByFixedBy);
-		review.setTmsUsersByReviewer(reviewer);
+		review.setTmsUsersByDeveloper(developerId);
+		review.setTmsUsersByFixedBy(fixedById);
+		review.setTmsUsersByReviewer(reviewerId);
 		review.setCommentType(codeReviewDTO.getCommentType());
 		review.setComments(codeReviewDTO.getComments());
 		review.setCommentsFixedDate(codeReviewDTO.getCommentsFixedDate());
 		review.setFileName(codeReviewDTO.getFileName());
 		review.setPullRequest(codeReviewDTO.getPullRequest());
+		review.setPullRequestDate(codeReviewDTO.getPullRequestDate());
 		review.setReviewDate(codeReviewDTO.getReviewDate());
 		review.setReviewerType(codeReviewDTO.getReviewerType());		
 		return review;
@@ -75,11 +76,13 @@ public class TmsCodeReviewDAOImpl implements TmsCodeReviewDAO {
 	    @Override
 	    public void editCodeReview(CodeReviewDTO codeReviewDTO) {
 			TmsCodeReview tmsCodeReview = hibernateUtil.fetchById(codeReviewDTO.getReviewId(), TmsCodeReview.class);
+			TmsUsers user = hibernateUtil.findByPropertyName("userName", codeReviewDTO.getFixedByName(), TmsUsers.class);
 			tmsCodeReview.setPullRequest(codeReviewDTO.getPullRequest());
+			tmsCodeReview.setPullRequestDate(codeReviewDTO.getPullRequestDate());
 			tmsCodeReview.setFileName(codeReviewDTO.getFileName());
 			tmsCodeReview.setComments(codeReviewDTO.getComments());
 			tmsCodeReview.setCommentsFixedDate(codeReviewDTO.getCommentsFixedDate());
-			//tmsCodeReview.setTmsUsersByFixedBy(codeReviewDTO.getTmsUsers());
+			tmsCodeReview.setTmsUsersByFixedBy(user);
 	        hibernateUtil.update(tmsCodeReview);   
 	    }
 			
@@ -122,6 +125,7 @@ public class TmsCodeReviewDAOImpl implements TmsCodeReviewDAO {
 			map.put("developerName", tmsCodeReview.getTmsUsersByDeveloper().getUserName());
 			map.put("reviewerName", tmsCodeReview.getTmsUsersByReviewer().getUserName());
 			map.put("pullRequest", tmsCodeReview.getPullRequest());
+			map.put("pullRequestDate", tmsCodeReview.getPullRequestDate());
 			map.put("reviewDate", tmsCodeReview.getReviewDate());
 			map.put("fileName", tmsCodeReview.getFileName());
 			map.put("comments", tmsCodeReview.getComments());
