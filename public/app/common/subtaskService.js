@@ -59,7 +59,7 @@ define([
      
       var req = {
         method: 'POST',
-        url: appConstants.endPointBase+"api/subtask/edit",
+        url: appConstants.endPointBase+"api/subtask/update",
         data: subtask
       }
       return $http(req);
@@ -80,7 +80,6 @@ define([
     };
 
     subtaskService.addReview = function (review) {
-      // subtask.projectId = appConstants.user.projectId;
       var req = {
         method: 'POST',
         url: appConstants.endPointBase+"api/review/create",
@@ -89,9 +88,15 @@ define([
       return $http(req);
     };
 
+    subtaskService.editSubtask = function(subtask){
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/subtask/edit",
+        data: subtask
+      }
+      return $http(req);
+    };
 
-
-    
   return subtaskService;
 
   });

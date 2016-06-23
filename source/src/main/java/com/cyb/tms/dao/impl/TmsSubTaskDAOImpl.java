@@ -229,19 +229,8 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	public List<LinkedHashMap<String, Object>> getCurrentUserSubTasksBySprintBy(Long userId, Long projectId) throws Exception {
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
-			List<Long> subtaskIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
-					.createAlias("tmsSprintMst", "sprint")
-					.createAlias("tmsSubtask", "sub")
-					.createAlias("tmsUsersByAssignedTo", "users")
-					.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
-					/*.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
-							.createAlias("tmsStatusMst", "tsm")
-							.createAlias("tmsSubtask", "sub")
-							.add(Restrictions.eq("tsm.status", backlog))
-							.setProjection(Property.forName("sub.subtaskId"))))*/
-					.add(Restrictions.eq("users.id", userId))
-					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
-			if(subtaskIds.size() > 0) {
+			List<Long> subtaskIds = fetchCurrentUserSubtasksBySprint(userId, sprint.getSprintId());
+			if(subtaskIds != null &&subtaskIds.size() > 0) {
 				return parseSubtasks(getFilteredSubtasks(subtaskIds));
 			} else {
 				return null;
@@ -250,6 +239,21 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		} else {
 			throw new Exception("Sprint not found");
 		}
+	}
+
+	public List fetchCurrentUserSubtasksBySprint(Long userId, Long sprintId) {
+		return hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+				.createAlias("tmsSprintMst", "sprint")
+				.createAlias("tmsSubtask", "sub")
+				.createAlias("tmsUsersByAssignedTo", "users")
+				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
+				/*.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
+						.createAlias("tmsStatusMst", "tsm")
+						.createAlias("tmsSubtask", "sub")
+						.add(Restrictions.eq("tsm.status", backlog))
+						.setProjection(Property.forName("sub.subtaskId"))))*/
+				.add(Restrictions.eq("users.id", userId))
+				.add(Restrictions.eq("sprint.sprintId", sprintId)).list();
 	}
 
 	@SuppressWarnings("unchecked")
