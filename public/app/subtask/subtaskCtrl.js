@@ -166,8 +166,8 @@ define([], function() {
      $scope.addReview = function(review){
       subtaskService.addReview(review)
         .success(function () {
-           //getReviews();
-           closeCodeReviewModal();
+          //getReviews();
+          closeCodeReviewModal();
         }).
         error(function (error) {
             $scope.status = 'Unable to insert Sprint: ' + error.message;

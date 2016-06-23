@@ -54,7 +54,6 @@ define([], function() {
             closeModal();
         }).
         error(function (error) {
-            processErrorMessage(error);
             $scope.status = 'Unable to edit Review: ' + error.message;
         });
     }

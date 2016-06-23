@@ -8,6 +8,7 @@
         <th>Review Type</th>
         <th>Developer</th>
         <th>Reviewer</th>
+        <th>Pull Request Date</th>
         <th>Pull Request Id</th>
         <th>Date of Review</th>
         <th>File Name</th>
@@ -26,6 +27,7 @@
         <td>{{review.reviewerType}}</td>
         <td>{{review.developerName}}</td>
         <td>{{review.reviewerName}}</td>
+        <td>{{review.pullRequestDate}}</td>
         <td>{{review.pullRequest}}</td>
         <td>{{review.reviewDate}}</td>
         <td>{{review.fileName}}</td>
@@ -74,6 +76,10 @@
       <label class="label-title" >Reviewer:</label>
       <input type= "text" class="form-control" id="disabledInput" id="review_type" ng-model="review.reviewerName" disabled> 
     </div>
+
+    <div class="form-group">
+        <tms-datepicker label="Pull Request Date:" ng-model="review.pullRequestDate"></tms-datepicker>
+    </div>
    
     <div class="form-group">
       <label class="label-title">Pull Request Id</label>
@@ -94,7 +100,7 @@
 
     <div class="form-group">
       <label class="label-title">Comments:</label>
-      <input class="form-control" id="disabledInput"  type="text"  ng-model="review.comments">
+      <input class="form-control" id="disabledInput" type="text" ng-model="review.comments">
     </div>
 
     <div class="form-group">
@@ -103,9 +109,9 @@
 
     <div class="form-group">                    
       <label class="label-title">Fixed By:</label>
-      <select class="form-control" name="selectUser" ng-model="review.tmsUsersByFixedBy">
+      <select class="form-control" name="selectUser" ng-model="review.fixedByName">
         <option value="">--Select --</option>
-        <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+        <option ng-repeat="user in users" value="{{user.userName}}">{{user.userName}}</option>
       </select>
     </div>
 
