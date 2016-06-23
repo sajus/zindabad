@@ -79,6 +79,15 @@ define([
       return $http(req);
     };
 
+    subtaskService.addReview = function (review) {
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/review/create",
+        data: review
+      }
+      return $http(req);
+    };
+
     subtaskService.editSubtask = function(subtask){
       var req = {
         method: 'POST',
@@ -87,7 +96,7 @@ define([
       }
       return $http(req);
     };
-    
+
   return subtaskService;
 
   });

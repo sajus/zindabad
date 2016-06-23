@@ -47,7 +47,8 @@
 
                   <div ng-hide="user.userRole === 'LEAD'">
                     <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()">
-                    <button class='btn btn-primary btn-sm' type="button" ng-click="assignToSprint()">Assign To Me</button>
+                    <button class='btn btn-primary btn-sm' type="button" ng-click="assignToSprint()">Assign To Me
+                    </button>
                   </div>
 
                 </th>
@@ -81,14 +82,15 @@
               <thead>
               <tr>
                 <th class="text-center" width="2%">S.No</th>
-                <th class="text-center" width="13%">CREATED DATE</th>
-                <th class="text-center" width="13%">ASSIGNED DATE</th>
-                <th class="text-center" width="12%">JIRA ID</th>
-                <th class="text-center" width="9%">TYPE</th>
-                <th class="text-center" width="8%">EFFORTS</th>
-                <th class="text-center" width="9%">SCOPE</th>
-                <th class="text-center" width="20%">STATUS</th>
-                <th class="text-center" width="12%">Action</th>
+                <th class="text-center" width="11%">CREATED DATE</th>
+                <th class="text-center" width="11%">ASSIGNED DATE</th>
+                <th class="text-center" width="11%">JIRA ID</th>
+                <th class="text-center" width="8%">TYPE</th>
+                <th class="text-center" width="7%">EFFORTS</th>
+                <th class="text-center" width="8%">SCOPE</th>
+                <th class="text-center" width="15%">STATUS</th>
+                <th class="text-center" width="10%">CODE REVIEW</th>
+                <th class="text-center" width="15%">ACTION</th>
               </tr>
               </thead>
 
@@ -116,19 +118,32 @@
                   </div>
                 </td>
                 <td align="center">
+                  <div>
+                    <div data-placement="top" data-toggle="tooltip" title="Add">
+                      <button class='btn btn-info btn-xs' type="button" data-title="Add"
+                              ng-click="showCodeReviewModal(subtask)">
+                        <span class="glyphicon glyphicon-edit"></span> Add
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td align="center">
                   <div ng-show="!editStorySelection[$index]">
                     <div data-placement="top" data-toggle="tooltip" title="Edit">
-                      <button class='btn btn-info btn-xs' type="button" data-title="Edit" ng-click="editStorySelection[$index] = true"><span
+                      <button class='btn btn-info btn-xs' type="button" data-title="Edit"
+                              ng-click="editStorySelection[$index] = true"><span
                           class="glyphicon glyphicon-edit"></span>Edit
                       </button>
                     </div>
                   </div>
                   <div ng-show="editStorySelection[$index]">
                     <div data-placement="top" data-toggle="tooltip">
-                      <button class='btn btn-success btn-xs' type="button" ng-click="saveSubtaskStatus(subtask, $index)"><span
+                      <button class='btn btn-success btn-xs' type="button"
+                              ng-click="saveSubtaskStatus(subtask, $index)"><span
                           class="glyphicon glyphicon-ok"></span>Save
                       </button>
-                      <button class='btn btn-default btn-xs' type="button" ng-click="editStorySelection[$index] = false"><span
+                      <button class='btn btn-default btn-xs' type="button"
+                              ng-click="editStorySelection[$index] = false"><span
                           class="glyphicon glyphicon-remove"></span>Cancel
                       </button>
                     </div>
@@ -162,37 +177,36 @@
 
     <div class="form-group">
       <label class="label-title">Jira Id:</label>
-      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text"  ng-model="subtask.jiraId">
+      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text"
+             ng-model="subtask.jiraId">
     </div>
 
     <div class="form-group">
-      <!--<label class="label-title">Created Date:</label>-->
       <tms-datepicker label="Created Date:" ng-model="subtask.createdDate"></tms-datepicker>
+      <div class="form-group">
+        <label class="label-title">Efforts:</label>
+        <input class="form-control" type="text" placeholder="Efforts" ng-model="subtask.estEfforts" ng-required="true">
+      </div>
 
-    </div>
+      <div class="form-group">
+        <label class="label-title">Scope:</label>
+        <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control"
+                ng-model=subtask.scope>
+          <option value="">--Select --</option>
+          <option value="PLANED">Planed</option>
+          <option value="UNPLANED">Unplaned</option>
+        </select>
+      </div>
 
-    <div class="form-group">
-      <label class="label-title">Efforts:</label>
-      <input class="form-control" type="text" placeholder="Efforts" ng-model="subtask.estEfforts" ng-required ="true">
-    </div>
-
-    <div class="form-group">
-      <label class="label-title">Scope:</label>
-      <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=subtask.scope>
-        <option value="">--Select --</option>
-        <option value="PLANED" >Planed</option>
-        <option value="UNPLANED" >Unplaned</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label class="label-title">Type:</label>
-      <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=subtask.type>
-        <option value="">--Select --</option>
-        <option value="BUG" >Bug</option>
-        <option value="SUBTASK">Subtask</option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label class="label-title">Type:</label>
+        <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control"
+                ng-model=subtask.type>
+          <option value="">--Select --</option>
+          <option value="BUG">Bug</option>
+          <option value="SUBTASK">Subtask</option>
+        </select>
+      </div>
   </modal-body>
   <modal-footer>
     <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
@@ -210,7 +224,7 @@
       </div>
     </div>
 
-     <div class="form-group">
+    <div class="form-group">
       <label class="label-title">Story:</label>
       <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model=subtask.storyId>
         <option value="{{story.storyId}}" data-ng-repeat="story in stories">{{story.jiraId}}</option>
@@ -218,36 +232,36 @@
     </div>
 
     <div class="form-group">
-      <!--<label class="label-title">Created Date:</label>-->
-       <tms-datepicker label="Created Date:" ng-model="subtask.createdDate"></tms-datepicker>
-    </div> 
+      <tms-datepicker label="Created Date:" ng-model="subtask.createdDate"></tms-datepicker>
+    </div>
 
     <div class="form-group">
       <label class="label-title">Jira Id:</label>
-      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text"  ng-model="subtask.jiraId">
+      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text"
+             ng-model="subtask.jiraId">
     </div>
 
     <div class="form-group">
       <label class="label-title">Type:</label>
       <select id="moduleDropdown" name="module" class="form-control" ng-model="subtask.type">
-        <option value="BUG" >Bug</option>
+        <option value="BUG">Bug</option>
         <option value="SUBTASK">Subtask</option>
       </select>
     </div>
 
     <div class="form-group">
       <label class="label-title">Efforts:</label>
-      <input class="form-control" type="text" ng-model="subtask.estEfforts" ng-required ="true">
+      <input class="form-control" type="text" ng-model="subtask.estEfforts" ng-required="true">
     </div>
 
     <div class="form-group">
       <label class="label-title">Scope:</label>
       <select id="moduleDropdown" name="module" class="form-control" ng-model="subtask.scope">
-        <option value="PLANED" >Planed</option>
-        <option value="UNPLANED" >Unplaned</option>
+        <option value="PLANED">Planed</option>
+        <option value="UNPLANED">Unplaned</option>
       </select>
     </div>
-  
+
   </modal-body>
   <modal-footer>
     <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
@@ -255,4 +269,104 @@
   </modal-footer>
 </tms-modal>
 
+<!-- add review -->
 
+<tms-modal modal-visible="isCodeReviewModalVisible" backdrop="static" on-sown="" on-hide="">
+  <modal-header title="Add Code Review"></modal-header>
+  <modal-body>
+    <div class="sprint-errors" ng-show="errorMessage">
+      <div class="alert alert-warning">
+        <strong>Error. </strong> {{errorMessage}}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Jira Id:</label>
+      <input class="form-control" id="disabledInput" type="text" ng-model="codeReview.jiraId">
+    </div>
+
+    <div class="form-group">
+      <label class="label-title" for="codeReview_type">Review Type:</label>
+      <select class="form-control" name="review_type" id="review_type" ng-model="codeReview.reviewerType">
+        <option value="">--Select --</option>
+        <option value="Peer">Peer</option>
+        <option value="Client">Client</option>
+        <option value="QA">QA</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title" for="review_type">Developer:</label>
+      <select class="form-control" name="selectUser" ng-model="codeReview.developerId">
+        <option value="">--Select --</option>
+        <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title" for="review_type">Reviewer:</label>
+      <select class="form-control" name="selectUser" ng-model="codeReview.reviewerId">
+        <option value="">--Select --</option>
+        <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <tms-datepicker label="Pull Request Date:" ng-model="codeReview.pullRequestDate"></tms-datepicker>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Pull Request Id</label>
+      <input class="form-control" type="text" placeholder=" Pull Request Id"
+             ng-model="codeReview.pullRequest" ng-required="true">
+    </div>
+
+    <div class="form-group">
+      <tms-datepicker label="Review Date:" ng-model="codeReview.reviewDate"></tms-datepicker>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">File Name</label>
+      <input class="form-control" type="text" placeholder="FileName"
+             ng-model="codeReview.fileName" ng-required="true">
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Comments:</label>
+      <input class="form-control" id="disabledInput" placeholder="Comments" type="text" ng-model="codeReview.comments">
+    </div>
+
+    <div class="form-group">
+      <tms-datepicker label="Fixed Date:" ng-model="codeReview.commentsFixedDate"></tms-datepicker>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title" for="review_type">Fixed By:</label>
+      <select class="form-control" name="selectUser" ng-model="codeReview.fixedById">
+        <option value="">--Select --</option>
+        <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title" for="status">RCA:</label>
+      <select class="form-control" name="rca" id="rca" ng-model="codeReview.commentType">
+        <option value="">--Select --</option>
+        <option value="DOMO Standard">DOMO Standard</option>
+        <option value="AngularJS Experience">AngularJS Experience</option>
+        <option value="Client Code">Client Code</option>
+        <option value="Enhancement">Enhancement</option>
+        <option value="Code Optimization">Code Optimization</option>
+        <option value="Requirement Conflict">Requirement Conflict</option>
+        <option value="Reviewer Conflict">Reviewer Conflict</option>
+        <option value="Appreciation">Appreciation</option>
+        <option value="NA">NA</option>
+      </select>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-secondary" ng-click="closeCodeReviewModal()">Cancel</button>
+    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="addReview(codeReview)">Add</button>
+  </modal-footer>
+</tms-modal>

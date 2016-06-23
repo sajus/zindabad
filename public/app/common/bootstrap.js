@@ -28,7 +28,10 @@ define([
 	'components/modal/modalFooter',
 	'components/datepicker/tms-datepicker',
 	'dashboard/dashboard',
-  'common/dashboardService'
+	'common/dashboardService',
+	'codereview/codereview',
+	'common/codereviewService',
+	
 		], function(
 				loginView, 
 				homeView, 
@@ -58,7 +61,10 @@ define([
 				modalFooter,
 				tmsDatepicker,
 				dashboardView,
-				dashboardService
+				dashboardService,
+				codereviewView,
+				codereviewService
+				
 			) {
 	return [
 		homeView, 
@@ -89,6 +95,9 @@ define([
 		modalFooter,
 		tmsDatepicker,
 		dashboardView,
-    dashboardService
+    	dashboardService,
+    	codereviewView,
+		codereviewService
+    	
 	];
 });

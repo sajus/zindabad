@@ -121,6 +121,12 @@ return angular.module('myApp.directive',['appConstants', 'navMenus', '$location'
         css: 'user/user.css',
         controller  : 'userCtrl'
       })
+      .when('/codereview', {
+        templateUrl : 'codereview/codereview.html',
+        css: 'codereview/codereview.css',
+        controller  : 'codereviewCtrl'
+      })
+
       .otherwise({
         redirectTo: '/dashboard'
       });

@@ -16,6 +16,7 @@ define([
                     {label: 'Subtask', key: 'subtask', accessTo: ['LEAD', 'DEVELOPER']},
                     {label: 'Efforts', key: 'efforts', accessTo: ['LEAD', 'DEVELOPER']},
                     {label: 'Leaves', key: 'leave', accessTo: ['LEAD', 'DEVELOPER']},
+                    {label: 'CodeReview', key: 'codereview', accessTo: ['DEVELOPER']},
                 ]
 
             } // IF multiple functions user ','
