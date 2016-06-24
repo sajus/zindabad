@@ -59,8 +59,7 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 	@Override
 	public Double getTotalHoursLoggedByUser(Long userId, Long projectId) {
 		List<TmsSubtask> subTasks = getCurrentUserSubtasksBySprint(userId, projectId);
-		List<Long> subTaskIds = getSubTaskIds(subTasks);
-		return getTotalHoursLoggedByUserInSprint(projectId, subTaskIds);
+		return (subTasks != null && subTasks.size() > 0) ? getTotalHoursLoggedByUserInSprint(projectId, getSubTaskIds(subTasks)) : 0.0 ;
 	}
 	
 	private Double getTotalHoursLoggedByUserInSprint(Long projectId, List<Long> subTaskIds) {

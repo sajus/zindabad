@@ -206,7 +206,6 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		List<Long> subtaskIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
 				.createAlias("tmsStatusMst", "tsm")
 				.createAlias("tmsSubtask", "sub")
-				.createAlias("tmsSprintMst", "sprint")	
 				.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
 						.createAlias("tmsStatusMst", "tsm")
 						.createAlias("tmsSubtask", "sub")
@@ -215,7 +214,6 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 						.add(Restrictions.ne("tsm.status", backlog))
 						.setProjection(Property.forName("sub.subtaskId"))))
 				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
-				.add(Restrictions.isNull("sprint.sprintId"))
 				.add(Restrictions.eq("tsm.status", backlog)).list();
 		if(subtaskIds.size() > 0) {
 			return parseSubtasks(getFilteredSubtasks(subtaskIds));
@@ -274,7 +272,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 			map.put("jiraId", tmsSubtask.getJiraId());
 			map.put("scope", tmsSubtask.getScope());
 			map.put("type", tmsSubtask.getType());
-			map.put("estEfforts", tmsSubtask.getEfforts());
+			map.put("efforts", tmsSubtask.getEfforts());
 			map.put("createdDate", tmsSubtask.getCreatedDate());
 
 			for (UserStoryStaus userStoryStaus : tmsSubtask.getUserStoryStauses()) {

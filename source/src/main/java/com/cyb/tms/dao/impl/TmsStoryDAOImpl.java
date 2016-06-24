@@ -173,11 +173,11 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					.createAlias("tmsSprintMst", "sprint")
 					.createAlias("tmsStoryMst", "story")
 					.setProjection( Projections.distinct(Projections.property("story.storyId")))
-					.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
+					/*.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
 							.createAlias("tmsStatusMst", "tsm")
 							.createAlias("tmsStoryMst", "story")
 							.add(Restrictions.eq("tsm.status", backlog))
-					        .setProjection(Property.forName("story.storyId"))))
+					        .setProjection(Property.forName("story.storyId"))))*/
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
 				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
