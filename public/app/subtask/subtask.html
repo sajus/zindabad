@@ -61,7 +61,7 @@
                 <td>{{subtask.createdDate}}</td>
                 <td>{{subtask.jiraId}}</td>
                 <td>{{subtask.type}}</td>
-                <td>{{subtask.estEfforts}}</td>
+                <td>{{subtask.efforts}}</td>
                 <td>{{subtask.scope}}</td>
                 <td class="text-center table-actions-medium">
                   <button class='btn btn-info btn-xs' type="button" ng-click="showEditModal(subtask)">
@@ -101,7 +101,7 @@
                 <td align="center">{{subtask.userStoryStatus.assignedDate}}</td>
                 <td align="center">{{subtask.jiraId}}</td>
                 <td align="center">{{subtask.type}}</td>
-                <td align="center">{{subtask.estEfforts}}</td>
+                <td align="center">{{subtask.efforts}}</td>
                 <td align="center">{{subtask.scope}}</td>
                 <td align="center">
                   <div ng-show="!editStorySelection[$index]">
@@ -158,6 +158,7 @@
     </div>
   </div>
 </div>
+
 <!-- Add Subtask Modal -->
 <tms-modal modal-visible="isAddModalVisible" backdrop="static" on-sown="" on-hide="">
   <modal-header title="Add Subtask"></modal-header>
@@ -183,9 +184,10 @@
 
     <div class="form-group">
       <tms-datepicker label="Created Date:" ng-model="subtask.createdDate"></tms-datepicker>
+    </div>
       <div class="form-group">
         <label class="label-title">Efforts:</label>
-        <input class="form-control" type="text" placeholder="Efforts" ng-model="subtask.estEfforts" ng-required="true">
+        <input class="form-control" type="text" placeholder="Efforts" ng-model="subtask.efforts" ng-required="true">
       </div>
 
       <div class="form-group">
@@ -210,7 +212,7 @@
   </modal-body>
   <modal-footer>
     <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
-    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="addSubtask(subtask)">Add</button>
+    <button type="button" class="btn btn-primary" ng-disabled="errorMessage" ng-click="addSubtask(subtask)">Add</button>
   </modal-footer>
 </tms-modal>
 
@@ -226,13 +228,13 @@
 
     <div class="form-group">
       <label class="label-title">Story:</label>
-      <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model=subtask.storyId>
+      <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model=editSubtask.storyId>
         <option value="{{story.storyId}}" data-ng-repeat="story in stories">{{story.jiraId}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <tms-datepicker label="Created Date:" ng-model="subtask.createdDate"></tms-datepicker>
+      <tms-datepicker label="Created Date:" ng-model="editSubtask.createdDate"></tms-datepicker>
     </div>
 
     <div class="form-group">
@@ -243,7 +245,7 @@
 
     <div class="form-group">
       <label class="label-title">Type:</label>
-      <select id="moduleDropdown" name="module" class="form-control" ng-model="subtask.type">
+      <select id="moduleDropdown" name="module" class="form-control" ng-model="editSubtask.type">
         <option value="BUG">Bug</option>
         <option value="SUBTASK">Subtask</option>
       </select>
@@ -251,12 +253,12 @@
 
     <div class="form-group">
       <label class="label-title">Efforts:</label>
-      <input class="form-control" type="text" ng-model="subtask.estEfforts" ng-required="true">
+      <input class="form-control" type="text" ng-model="editSubtask.efforts" ng-required="true">
     </div>
 
     <div class="form-group">
       <label class="label-title">Scope:</label>
-      <select id="moduleDropdown" name="module" class="form-control" ng-model="subtask.scope">
+      <select id="moduleDropdown" name="module" class="form-control" ng-model="editSubtask.scope">
         <option value="PLANED">Planed</option>
         <option value="UNPLANED">Unplaned</option>
       </select>
@@ -265,7 +267,8 @@
   </modal-body>
   <modal-footer>
     <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
-    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="editSubtask(subtask)">Save</button>
+    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="editSubtask(editSubtask)">Save
+    </button>
   </modal-footer>
 </tms-modal>
 
