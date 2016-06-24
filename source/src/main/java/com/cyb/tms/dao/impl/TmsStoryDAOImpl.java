@@ -18,17 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import com.cyb.tms.dao.TmsModuleDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsStatusDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
-import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
-import com.cyb.tms.entity.TmsSubtask;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.util.HibernateUtil;
@@ -66,7 +63,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Override
 	public long createStory(StoryDTO storyDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
-		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
+	//	TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
 		TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
 		TmsStoryMst tmsStoryMst = new TmsStoryMst();
 		BeanUtils.copyProperties(storyDTO, tmsStoryMst);
@@ -74,7 +71,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		UserStoryStaus userStoryStatus = new UserStoryStaus();
 		userStoryStatus.setCreatedDate(storyDTO.getCreatedDate());
 		userStoryStatus.setType(story);
-		userStoryStatus.setTmsSprintMst(sprint);
+	//	userStoryStatus.setTmsSprintMst(sprint); // For backlog tickets sprint id not required
 		userStoryStatus.setTmsStatusMst(status);
 		userStoryStatus.setTmsStoryMst(tmsStoryMst);
 		tmsStoryMst.getUserStoryStauses().add(userStoryStatus);
@@ -92,7 +89,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 			for (StoryDTO storyDTO : storyDTOs) {
 				UserStoryStaus userStoryStatus = new UserStoryStaus();
-				TmsStoryMst tmsStoryMst = (TmsStoryMst) session.get(TmsStoryMst.class, storyDTO.getStoryId());//hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
+				TmsStoryMst tmsStoryMst = (TmsStoryMst) session.get(TmsStoryMst.class, storyDTO.getStoryId());
 				userStoryStatus.setTmsSprintMst(sprint);
 				userStoryStatus.setTmsStoryMst(tmsStoryMst);
 				userStoryStatus.setModifiedDate(new Date());

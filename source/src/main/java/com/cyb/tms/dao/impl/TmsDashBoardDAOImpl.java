@@ -13,7 +13,6 @@ import com.cyb.tms.dao.TmsLeaveDAO;
 import com.cyb.tms.dao.TmsOrgLeavesDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsSubTaskDAO;
-import com.cyb.tms.entity.TmsOrgLeaves;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.util.HibernateUtil;
 import com.cyb.tms.util.WorkingDaysCalculator;
@@ -65,14 +64,14 @@ public class TmsDashBoardDAOImpl implements TmsDashBoardDAO {
 	private Long calculateCapacity(TmsSprintMst sprint) {
 		int days = WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(sprint.getSprintStartDate(), sprint.getSprintEndDate());
 		int holidays = tmsOrgLeavesDAO.calculateTotalHolidays(sprint.getSprintStartDate(), sprint.getSprintEndDate());
-		return (long) ((days * Integer.parseInt(workingHours)) - holidays);
+		return (long) ((days - holidays) * Integer.parseInt(workingHours));
 	}
 
 	private Long calculateSprintCapacity(TmsSprintMst sprint, Long userId) {
 		int days = WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(sprint.getSprintStartDate(), sprint.getSprintEndDate());
 		int leaves = tmsLeaveDAO.calculateUserLeavesTotalBySprint(userId, sprint.getSprintId());	
 		int holidays = tmsOrgLeavesDAO.calculateTotalHolidays(sprint.getSprintStartDate(), sprint.getSprintEndDate());
-		return (long) ((days * Integer.parseInt(workingHours)) - (holidays + leaves));
+		return (long) ((days - (holidays + leaves)) * Integer.parseInt(workingHours));
 	}
 
 	private Long getEstimatedHours(Long sprintId, Long userId) {

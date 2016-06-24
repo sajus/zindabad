@@ -1,25 +1,22 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsCodeReviewDAO;
 import com.cyb.tms.dao.TmsSprintDAO;
-import com.cyb.tms.dao.TmsSubTaskDAO;
 import com.cyb.tms.dto.CodeReviewDTO;
-import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsCodeReview;
 import com.cyb.tms.entity.TmsSprintMst;
-import com.cyb.tms.entity.TmsStatusMst;
-import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.entity.TmsSubtask;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.entity.UserStoryStaus;
@@ -37,8 +34,6 @@ public class TmsCodeReviewDAOImpl implements TmsCodeReviewDAO {
 	@Autowired
 	private TmsSprintDAO tmsSprintDAO;
 	
-	@Autowired
-	private TmsSubTaskDAO tmsSubTaskDAO;
 	
 	@Override
 	public long createReview(CodeReviewDTO codeReviewDTO) {
@@ -88,32 +83,26 @@ public class TmsCodeReviewDAOImpl implements TmsCodeReviewDAO {
 			
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<LinkedHashMap<String, Object>> getCodeReviewForCureentUserBySprint(
-			Long userId, Long projectId) {
+	public List<LinkedHashMap<String, Object>> getCodeReviewForCureentUserBySprint(Long userId, Long projectId) {
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
-		List<Long> subtaskIds = fetchCurrentUserSubtasksBySprint(userId, sprint.getSprintId());
 		if(sprint != null) {
-			List<TmsCodeReview> reviewIds = hibernateUtil.getCurrentSession().createCriteria(TmsCodeReview.class)
+			List<TmsCodeReview> tmsCodeReview = hibernateUtil.getCurrentSession().createCriteria(TmsCodeReview.class)
 					.createAlias("tmsSubtask", "subtask")
-					.add(Restrictions.in("subtask.subtaskId", subtaskIds)).list();
-			if(reviewIds != null && reviewIds.size() > 0) {
-				return parseCodeReview(reviewIds);			
+					.add(Subqueries.propertyIn("subtask.subtaskId", DetachedCriteria.forClass(UserStoryStaus.class, "uss")
+							.createAlias("tmsSprintMst", "sprint")
+							.createAlias("tmsSubtask", "sub")
+							.createAlias("tmsUsersByAssignedTo", "users")
+							.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
+							.add(Restrictions.eq("users.id", userId))
+							.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())))).list();
+			if(tmsCodeReview != null && tmsCodeReview.size() > 0) {
+				return parseCodeReview(tmsCodeReview);			
 			}
 		}
 		return null;	
 	}
 	
-	@SuppressWarnings("unchecked")
-	private List<Long> fetchCurrentUserSubtasksBySprint(Long userId, Long sprintId) {
-		return hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
-			.createAlias("tmsSprintMst", "sprint")
-			.createAlias("tmsSubtask", "sub")
-			.createAlias("tmsUsersByAssignedTo", "users")
-			.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
-			.add(Restrictions.eq("users.id", userId))
-			.add(Restrictions.eq("sprint.sprintId", sprintId)).list();
-	}
-	
+
 	private List<LinkedHashMap<String, Object>> parseCodeReview(List<TmsCodeReview> codeReviews) {
 
 		List<LinkedHashMap<String, Object>> userCodeReviews = new ArrayList<LinkedHashMap<String, Object>>();
@@ -132,7 +121,6 @@ public class TmsCodeReviewDAOImpl implements TmsCodeReviewDAO {
 			map.put("commentsFixedDate", tmsCodeReview.getCommentsFixedDate());
 			map.put("fixedByName", tmsCodeReview.getTmsUsersByFixedBy().getUserName());
 			map.put("commentType", tmsCodeReview.getCommentType());
-			
 		    userCodeReviews.add(map);
 			}
 		return userCodeReviews;

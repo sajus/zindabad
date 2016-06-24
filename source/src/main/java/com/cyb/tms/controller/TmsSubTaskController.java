@@ -25,11 +25,11 @@ import com.cyb.tms.util.URIConstants;
 @RestController
 @RequestMapping(URIConstants.SUBTASK)
 public class TmsSubTaskController {
-	
+
 	@Autowired
 	private TmsSubTaskService tmsSubTaskService;
-	
-	
+
+
 
 	// -------------------Create a Subtask---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -38,14 +38,14 @@ public class TmsSubTaskController {
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
-	
+
 	// -------------------Add Story to current sprint---------------
 	@RequestMapping(value = URIConstants.ASSIGN_TO_SPRINT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> addToCurrentSprint(@RequestBody List<SubtaskDTO> subtaskDTOs, @RequestParam Long projectId, @RequestParam Long assignToId, @RequestParam Long modifiedById) {
 		tmsSubTaskService.addToCurrentSprint(subtaskDTOs, projectId, assignToId, modifiedById);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-		}
+	}
 
 	// ------------------Retrieve All Subtasks --------------
 
@@ -54,8 +54,8 @@ public class TmsSubTaskController {
 		List<TmsSubtask> stories = tmsSubTaskService.getAllSubtasks();
 		return new ResponseEntity<List<TmsSubtask>>(stories, HttpStatus.OK);
 	}
-	
-	
+
+
 	// ------------------Retrieve All Subtasks by Sprint --------------
 
 	@RequestMapping(value = URIConstants.SUBTASKS_BY_SPRINT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -63,7 +63,7 @@ public class TmsSubTaskController {
 		List<LinkedHashMap<String, Object>> subtasks = tmsSubTaskService.getSubtasksBySprint(projectId);
 		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(subtasks, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = URIConstants.BACKLOG, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<LinkedHashMap<String, Object>>> listBackLogStories(@RequestParam Long projectId) throws Exception {
 		List<LinkedHashMap<String, Object>> stories = tmsSubTaskService.getBackLogSubtasks(projectId);
@@ -76,22 +76,22 @@ public class TmsSubTaskController {
 		List<LinkedHashMap<String, Object>> stories = tmsSubTaskService.getCurrentUserSubTasksBySprintBy(userId, projectId);
 		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
 	}
-	
+
 	// -------------------Update a Subtask---------------
 	@RequestMapping(value = URIConstants.UPDATE_STATUS, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> updateSubtaskStatus(@RequestBody SubtaskDTO subtaskDTO) {
 		tmsSubTaskService.updateSubtaskStatus(subtaskDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.OK);
-		}
-	
+	}
+
 	//------------------- Edit a Subtask --------------------------------------------------------
-    
-    @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> editStoryStatus(@RequestBody SubtaskDTO subtaskDTO) {
-    	tmsSubTaskService.editSubtask(subtaskDTO);
-    	HttpHeaders headers = new HttpHeaders();
-        return new ResponseEntity<Void>(headers, HttpStatus.OK);
+
+	@RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> editSubtask(@RequestBody SubtaskDTO subtaskDTO) {
+		tmsSubTaskService.editSubtask(subtaskDTO);
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	} 
 
 }

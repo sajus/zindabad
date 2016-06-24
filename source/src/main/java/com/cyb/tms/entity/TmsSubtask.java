@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 
@@ -153,7 +155,8 @@ public class TmsSubtask extends BaseEntity {
 		this.tmsCodeReviews = tmsCodeReviews;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmsSubtask", cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "tmsSubtask", cascade=CascadeType.ALL)
+	@Fetch (FetchMode.SELECT)
 	@Filter(name = LATEST_STATUS_FILTER, condition = "ID = (select max(uss.ID) from user_story_staus uss where uss.SUBTASK_ID = SUBTASK_ID)")
 	public Set<UserStoryStaus> getUserStoryStauses() {
 		return this.userStoryStauses;
