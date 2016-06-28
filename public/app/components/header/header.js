@@ -116,10 +116,10 @@ return angular.module('myApp.directive',['appConstants', 'navMenus', '$location'
         css: 'leave/leave.css',
         controller  : 'leaveCtrl'
       })
-      .when('/users', {
-        templateUrl : 'user/user.html',
-        css: 'user/user.css',
-        controller  : 'userCtrl'
+      .when('/manage', {
+        templateUrl : 'manage/manage.html',
+        css: 'manage/manage.css',
+        controller  : 'manageCtrl'
       })
       .when('/codereview', {
         templateUrl : 'codereview/codereview.html',
