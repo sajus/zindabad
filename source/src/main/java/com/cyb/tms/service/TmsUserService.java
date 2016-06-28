@@ -7,12 +7,12 @@ import com.cyb.tms.entity.TmsUsers;
 
 public interface TmsUserService {
 	
-	public long createUser(TmsUsers tmsUser);
-    public TmsUsers updateUser(TmsUsers tmsUser);
+	public long createUser(TmsUsersDTO tmsUserDTO);
+	public void updateUser(TmsUsersDTO tmsUserDTO);
     public void deleteUser(long id);
     public List<TmsUsers> getAllUsers();
     public TmsUsers getUser(long id);
-	public boolean isUserExist(TmsUsers tmsUser);
+	public boolean isUserExist(String userName);
 	public TmsUsersDTO findByName(String userName);
 	public List<TmsUsers> getUsersByStatus(long projectId);
 }

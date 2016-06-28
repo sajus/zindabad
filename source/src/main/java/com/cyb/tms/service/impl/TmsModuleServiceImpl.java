@@ -33,4 +33,10 @@ public class TmsModuleServiceImpl implements TmsModuleService {
 		return tmsModuleDAO.getAllModules();
 	}
 
+	@Override
+	public void editModule(TmsModuleDTO moduleDTO) {
+		tmsModuleDAO.editModule(moduleDTO);
+		
+	}
+
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.dto.CodeReviewDTO;
 import com.cyb.tms.dto.TmsModuleDTO;
 import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsProject;
@@ -54,5 +55,14 @@ public class TmsModuleController {
 		tmsModule.setModuleDescription(moduleDto.getModuleDescription());
 		tmsModule.setTmsProject(tmsProjectService.getProject(moduleDto.getProjectId()));
 	}
+	
+	//------------------- Edit a Module --------------------------------------------------------
+    
+    @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> editModule(@RequestBody TmsModuleDTO moduleDto) {
+    	tmsModuleService.editModule(moduleDto);
+    	HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Void>(headers, HttpStatus.OK);
+	} 
 
 }

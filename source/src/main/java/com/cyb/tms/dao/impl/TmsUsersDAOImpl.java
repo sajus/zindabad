@@ -3,11 +3,16 @@ package com.cyb.tms.dao.impl;
 import java.util.List;
 
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsUsersDAO;
+import com.cyb.tms.dto.TmsProjectDTO;
+import com.cyb.tms.dto.TmsUsersDTO;
+import com.cyb.tms.entity.TmsCodeReview;
+import com.cyb.tms.entity.TmsProject;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.util.HibernateUtil;
 
@@ -28,14 +33,23 @@ private static final String USER_NAME = "userName";
 	}
 
 	@Override
-	public long createUser(TmsUsers user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+	public long createUser(TmsUsersDTO tmsUserDTO) {
+		TmsProject project = hibernateUtil.fetchById(tmsUserDTO.getProjectId(), TmsProject.class);
+		TmsUsers user= new TmsUsers();
+		BeanUtils.copyProperties(tmsUserDTO, user);
+		user.setTmsProject(project);
+		user.setPassword(passwordEncoder.encode(tmsUserDTO.getPassword()));
 		return (Long) hibernateUtil.create(user);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public TmsUsers updateUser(TmsUsers tmsUser) {
-		return hibernateUtil.update(tmsUser);
+	public void updateUser(TmsUsersDTO tmsUserDTO) {
+		TmsUsers user = hibernateUtil.fetchById(tmsUserDTO.getId(), TmsUsers.class);
+		user.setUserRole(tmsUserDTO.getUserRole());
+		user.setIsActive(tmsUserDTO.getIsActive());
+		hibernateUtil.update(user); 
+		
 	}
 
 	@Override

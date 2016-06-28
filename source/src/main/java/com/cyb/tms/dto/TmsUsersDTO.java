@@ -16,6 +16,8 @@ public class TmsUsersDTO extends BaseDTO {
 	private String userRole;
 	private String projectName;
 	private Long projectId;
+	private String isActive;
+	private String password;
 	
 	public TmsUsersDTO() {
 		super();
@@ -30,9 +32,8 @@ public class TmsUsersDTO extends BaseDTO {
 		this.userRole = userRole;
 	}
 
-	 
 	public TmsUsersDTO(Long id, TmsProjectDTO tmsProjectDTO, String email, String userName, String userRole,
-			String projectName, Long projectId) {
+			String projectName, Long projectId, String isActive, String password) {
 		super();
 		this.id = id;
 		this.tmsProjectDTO = tmsProjectDTO;
@@ -41,6 +42,8 @@ public class TmsUsersDTO extends BaseDTO {
 		this.userRole = userRole;
 		this.projectName = projectName;
 		this.projectId = projectId;
+		this.isActive = isActive;
+		this.password = password;
 	}
 
 	public String getProjectName() {
@@ -100,7 +103,21 @@ public class TmsUsersDTO extends BaseDTO {
 		this.userRole = userRole;
 	}
 	
-	
+	public String getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(String isActive) {
+		this.isActive = isActive;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	
 
 }
