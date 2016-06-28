@@ -28,11 +28,27 @@ require.config({
 		angularUiBootstrap: 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
 		bootstrapDatepicker: 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min',
 		underscore: 'bower_components/underscore/underscore-min',
+		angularNvd3: 'bower_components/angular-nvd3/dist/angular-nvd3.min',
+		d3: 'bower_components/d3/d3.min',
+		nvD3: 'bower_components/nvd3/build/nv.d3.min',
 		text: 'bower_components/requirejs-text/text',
 		css: 'bower_components/angular-css/angular-css'
 	},
 	shim: {
+		'jQuery': {
+			exports: 'jQuery'
+		},
+		'tBootstrap': {
+		  exports: 'tBootstrap',
+      deps: ['jQuery']
+		},
+		'angularUiBootstrap': {
+			deps: ['jQuery', 'tBootstrap']
+		},
 		'angular' : {'exports' : 'angular'},
+		'angularResource': {
+			deps: ['angular']
+		},
 		'angularRoute': ['angular'],
 		'angularMocks': {
 			deps:['angular'],
@@ -41,29 +57,23 @@ require.config({
 		'angularLocalStorage': {
 			deps: ['angular']
 		},
-		'jQuery': {
-			exports: 'jQuery'
-		},
-		'tBootstrap': {
-		  exports: 'tBootstrap',
-      deps: ['jQuery', 'angular']
-		},
 		'underscore' : {
 			exports: 'underscore'
 		},
 		'css': ['angular'],
-		'angularResource': {
-			deps: ['angular']
-		},
-		'angularUiBootstrap': {
-			deps: ['angular']
+		'd3': ['angular'],
+		'nvD3': {
+			deps: ['d3']
 		},
 		'bootstrapDatepicker': {
 			deps: ['jQuery', 'angular']
 		},
-
+		'angularNvd3': {
+			deps: ['angular', 'nvD3', 'd3']
+		}
 	},
 	priority: [
+		"jQuery",
 		"angular"
 	],
 	deps: window.__karma__ ? allTestFiles : [],
