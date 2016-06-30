@@ -63,7 +63,6 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Override
 	public long createStory(StoryDTO storyDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
-	//	TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(storyDTO.getProjectId());
 		TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
 		TmsStoryMst tmsStoryMst = new TmsStoryMst();
 		BeanUtils.copyProperties(storyDTO, tmsStoryMst);
@@ -71,7 +70,6 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		UserStoryStaus userStoryStatus = new UserStoryStaus();
 		userStoryStatus.setCreatedDate(storyDTO.getCreatedDate());
 		userStoryStatus.setType(story);
-	//	userStoryStatus.setTmsSprintMst(sprint); // For backlog tickets sprint id not required
 		userStoryStatus.setTmsStatusMst(status);
 		userStoryStatus.setTmsStoryMst(tmsStoryMst);
 		tmsStoryMst.getUserStoryStauses().add(userStoryStatus);
@@ -173,11 +171,6 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					.createAlias("tmsSprintMst", "sprint")
 					.createAlias("tmsStoryMst", "story")
 					.setProjection( Projections.distinct(Projections.property("story.storyId")))
-					/*.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
-							.createAlias("tmsStatusMst", "tsm")
-							.createAlias("tmsStoryMst", "story")
-							.add(Restrictions.eq("tsm.status", backlog))
-					        .setProjection(Property.forName("story.storyId"))))*/
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
 				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
@@ -203,14 +196,10 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
 					.createAlias("tmsSprintMst", "sprint")
 					.createAlias("tmsStoryMst", "story")
-					.createAlias("tmsUsersByAssignedTo", "user")
+					.createAlias("tmsUsersByAssignedTo", "users")
 					.setProjection( Projections.distinct(Projections.property("story.storyId")))
-					/*.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
-							.createAlias("tmsStatusMst", "tsm")
-							.createAlias("tmsStoryMst", "story")
-							.add(Restrictions.eq("tsm.status", backlog))
-					        .setProjection(Property.forName("story.storyId"))))*/
-					.add(Restrictions.eq("user.id", userId))
+					.add(Restrictions.not(Restrictions.in("story.storyId", getBackLogStorieIds())))
+					.add(Restrictions.eq("users.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
 				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
@@ -257,18 +246,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Override
 	public List<LinkedHashMap<String, Object>> getBackLogStories(Long projectId)
 			throws Exception {
-		List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
-				.createAlias("tmsStatusMst", "tsm")
-				.createAlias("tmsStoryMst", "story")
-				.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
-						.createAlias("tmsStatusMst", "tsm")
-						.createAlias("tmsStoryMst", "story")
-						.createAlias("tmsUsersByAssignedTo", "users")
-						.add(Restrictions.isNotNull("uss.tmsUsersByAssignedTo"))		
-						.add(Restrictions.ne("tsm.status", backlog))
-						.setProjection(Property.forName("story.storyId"))))
-				.setProjection( Projections.distinct(Projections.property("story.storyId")))
-				.add(Restrictions.eq("tsm.status", backlog)).list();
+		List<Long> storyIds = getBackLogStorieIds();
 		if(storyIds.size() > 0) {
 			hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
 			List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
@@ -279,6 +257,22 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private List<Long> getBackLogStorieIds() {
+		List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+				.createAlias("tmsStoryMst", "story")
+				.createAlias("tmsStatusMst", "tsm")
+				.add(Subqueries.propertyIn("uss.id",  DetachedCriteria.forClass(UserStoryStaus.class, "status")
+						.add(Restrictions.eqProperty("uss.tmsStoryMst", "status.tmsStoryMst"))
+						.setProjection(Projections.max("status.id"))))
+						.add(Restrictions.eq("tsm.status", backlog))
+						.setProjection( Projections.distinct(Projections.property("story.storyId"))).list();
+		return storyIds;
 	}
 		
 	private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stories) {

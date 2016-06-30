@@ -34,13 +34,13 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 
 	@Value("${tms.status.backlog}")
 	private String backlog;
-	
+
 	@Value("${tms.status.todo}")
 	private String todo;
-	
+
 	@Value("${tms.status.closed}")
 	private String closed;
-	
+
 	@Value("${tms.status.code_merged}")
 	private String code_merged;
 
@@ -49,7 +49,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 
 	@Autowired
 	private TmsSprintDAO tmsSprintDAO;
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -58,13 +58,11 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	public long createSubtask(SubtaskDTO subtaskDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
 		TmsStoryMst storyId = hibernateUtil.fetchById(subtaskDTO.getStoryId(), TmsStoryMst.class);
-		//TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(subtaskDTO.getProjectId());
 		TmsSubtask subtask = new TmsSubtask();
 		BeanUtils.copyProperties(subtaskDTO, subtask);
 		subtask.setTmsStoryMst(storyId);
 		UserStoryStaus userStoryStatus = new UserStoryStaus();
 		userStoryStatus.setCreatedDate(subtaskDTO.getCreatedDate());
-		//userStoryStatus.setTmsSprintMst(sprint);
 		userStoryStatus.setTmsStatusMst(status);
 		userStoryStatus.setType(subtaskDTO.getType());
 		userStoryStatus.setTmsSubtask(subtask);
@@ -94,23 +92,23 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		} 
 		return (Long)hibernateUtil.create(userStoryStatus);
 	}
-	
+
 	// -------------------Edit backlog Subtask---------------
 	@SuppressWarnings("unchecked")
-    @Override
-    public void editSubtask(SubtaskDTO subtaskDTO) {
+	@Override
+	public void editSubtask(SubtaskDTO subtaskDTO) {
 		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
-        tmsSubtask.setJiraId(subtaskDTO.getJiraId());
-        tmsSubtask.setCreatedDate(subtaskDTO.getCreatedDate());
-        tmsSubtask.setEfforts(subtaskDTO.getEfforts());
-        tmsSubtask.setScope(subtaskDTO.getScope());
-        tmsSubtask.setType(subtaskDTO.getType());
-        hibernateUtil.update(tmsSubtask);
-        
-    }
+		tmsSubtask.setJiraId(subtaskDTO.getJiraId());
+		tmsSubtask.setCreatedDate(subtaskDTO.getCreatedDate());
+		tmsSubtask.setEfforts(subtaskDTO.getEfforts());
+		tmsSubtask.setScope(subtaskDTO.getScope());
+		tmsSubtask.setType(subtaskDTO.getType());
+		hibernateUtil.update(tmsSubtask);
+
+	}
 
 	//------------- Add to current Sprint ------------------------------------------------------------
-	
+
 	@Override
 	public void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById) {
 		Session session = sessionFactory.openSession();
@@ -202,7 +200,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<LinkedHashMap<String, Object>> getBackLogSubtasks(Long projectId) {
-		
+
 		List<Long> subtaskIds = getBackLogSubtaskIds();
 		if(subtaskIds.size() > 0) {
 			return parseSubtasks(getFilteredSubtasks(subtaskIds));
@@ -220,9 +218,9 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 				.createAlias("tmsSubtask", "sub")
 				.createAlias("tmsStatusMst", "tsm")
 				.add(Subqueries.propertyIn("uss.id",  DetachedCriteria.forClass(UserStoryStaus.class, "status")
-					.add(Restrictions.eqProperty("uss.tmsSubtask", "status.tmsSubtask"))
-					.setProjection(Projections.max("status.id"))))
-				.add(Restrictions.eq("tsm.status", "BACKLOG"))
+						.add(Restrictions.eqProperty("uss.tmsSubtask", "status.tmsSubtask"))
+						.setProjection(Projections.max("status.id"))))
+						.add(Restrictions.eq("tsm.status", "BACKLOG"))
 				.setProjection( Projections.distinct(Projections.property("sub.subtaskId"))).list();
 		return subtaskIds;
 	}
@@ -251,7 +249,6 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 				.createAlias("tmsUsersByAssignedTo", "users")
 				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
 				.add(Restrictions.not(Restrictions.in("sub.subtaskId", getBackLogSubtaskIds())))
-				//.add(Subqueries.propertyNotIn("sub.subtaskId",  getBackLogSubtaskIds())
 				.add(Restrictions.eq("users.id", userId))
 				.add(Restrictions.eq("sprint.sprintId", sprintId)).list();
 	}
@@ -302,7 +299,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		}
 		return userSubtasks;
 	}
-	
+
 	private UserStoryStaus getLatestStatus(TmsSubtask tmsSubtask) {
 		List<UserStoryStaus> userStoryStatusList = new ArrayList<UserStoryStaus>();
 		userStoryStatusList.addAll(tmsSubtask.getUserStoryStauses());
