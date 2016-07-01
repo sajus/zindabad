@@ -8,14 +8,7 @@ define([
 	.controller('manageCtrl', ['$scope', '$injector', function($scope, $injector) {
 		require(['manage/manageCtrl'], function(controller) {
 			$injector.invoke(controller, this, {'$scope': $scope});
-
 		});
 	}]);
-
-
-    
-
-
-
 });
 

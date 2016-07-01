@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-	return ['$scope','appConstants','$http','manageService', function($scope, appConstants, $http, manageService) {
+	return ['$scope','appConstants','manageService', function($scope, appConstants, manageService) {
 	
   	function init(){
       $scope.closeModal = closeModal;
@@ -52,7 +52,6 @@ define([], function() {
       $scope.isAddModalVisible = false;
       $scope.isModuleVisible = false;
       $scope.isEditModalVisible = false;
-
     }
 
     $scope.saveUserStatus = function(user, index) {
