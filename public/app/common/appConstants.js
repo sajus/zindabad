@@ -48,12 +48,26 @@ define([
           {value: "CODE_MERGED", name: "CODE_MERGED"},
           {value: "CLOSED", name: "CLOSED"}
         ];
+		
+			},
+
+			getStatus: function() {
+	      return [
+	        {value: "ACTIVE", name: "ACTIVE"},
+	        {value: "INACTIVE", name: "INACTIVE"}
+	      ];
+		
+			},
+			
+			getRole: function(){
+				return [
+					{value: "LEAD", name: "LEAD"},
+					{value: "DEVELOPER", name:"DEVELOPER"}
+				];
 			}
 
 		}
-	
+		
 	});
 	
-	
-
 });    

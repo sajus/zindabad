@@ -4,25 +4,36 @@ define([
 ], function(angular) {
 	return angular.module('myApp.factory', ['$http', 'appConstants']).factory("userService", function($http, appConstants) {
 
+        var userService = {};
 
-		var userService = {};
+    		userService.getUser = function () {
+          return $http.get(appConstants.endPointBase+"api/user/list");
 
-		userService.getUser = function () {
-        return $http.get(appConstants.endPointBase+"api/user/list");
-        
-    };
+        };
 
-    // 	sprintService.updateSprintData= function (id) {
+        userService.addUser = function (user) {
+            var req = {
+                method: 'POST',
+                url: appConstants.endPointBase+"api/user/create",
+                data: user
+            }
+            return $http(req);
+        };
 
-    //     return $http.put(appConstants.endPointBase+"api/sprint/edit/{id}",sprint);
-    // };
+        userService.saveUserStatus = function (user) {
+            var req = {
+                method: 'POST',
+                url: appConstants.endPointBase+"api/user/update",
+                data: user
+            }
+            return $http(req);
+        };
 
 
- return userService;
+    return userService;
 
-  
 
-	});
+    });
 	
 	
 });

@@ -1,0 +1,25 @@
+.modal-body .form-group{
+    white-space: nowrap;
+}
+.label-title{
+    display:inline-block;
+    min-width: 30%;
+    text-align: right;
+    margin-right: 10px;
+}
+.form-control{
+    display:inline-block;
+    width:50%;
+}
+.assign-section {
+  float: left;
+  margin-left: 20px;
+}
+
+th, td{
+	text-align: center;
+}
+
+th{
+	width: 12%;
+}
