@@ -22,13 +22,13 @@ public class TmsUserServiceImpl implements TmsUserService {
 	private TmsUsersDAO tmsUsersDao;
 
 	@Override
-	public long createUser(TmsUsers tmsUser) {
-		return (Long) tmsUsersDao.createUser(tmsUser);
+	public long createUser(TmsUsersDTO tmsUserDTO) {
+		return (Long) tmsUsersDao.createUser(tmsUserDTO);
 	}
 
 	@Override
-	public TmsUsers updateUser(TmsUsers tmsUser) {
-		return tmsUsersDao.updateUser(tmsUser);
+	public void updateUser(TmsUsersDTO tmsUserDTO) {
+		tmsUsersDao.updateUser(tmsUserDTO);
 	}
 
 	@Override
@@ -47,8 +47,8 @@ public class TmsUserServiceImpl implements TmsUserService {
 	}
 
 	@Override
-	public boolean isUserExist(TmsUsers tmsUser) {
-		return tmsUsersDao.findByUsername(tmsUser.getUserName())!=null;
+	public boolean isUserExist(String userName) {
+		return tmsUsersDao.findByUsername(userName)!=null;
 	}
 
 	@Override
@@ -73,6 +73,8 @@ public class TmsUserServiceImpl implements TmsUserService {
 	public List<TmsUsers> getUsersByStatus(long projectId) {
         return tmsUsersDao.getUsersByStatus(projectId);
 	}
+
+	
 	
 	
 

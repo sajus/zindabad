@@ -9,6 +9,7 @@ public interface TmsModuleService {
 	
 	public long createModule(TmsModule module);
 	public TmsModule getModule(Long  mouduleId);
+	public void editModule(TmsModuleDTO moduleDTO);
 	public List<TmsModuleDTO> getAllModules();
 	
 }

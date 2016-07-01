@@ -88,7 +88,6 @@ public class TmsModuleDTO extends BaseDTO{
 		this.moduleDescription = moduleDescription;
 	}
 
-	@JsonIgnore
 	public Long getProjectId() {
 		return projectId;
 	}

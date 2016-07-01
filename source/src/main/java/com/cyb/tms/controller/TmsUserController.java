@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.dto.CodeReviewDTO;
+import com.cyb.tms.dto.TmsUsersDTO;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.service.TmsUserService;
 import com.cyb.tms.util.URIConstants;
@@ -25,16 +27,16 @@ public class TmsUserController {
 	private TmsUserService tmsUserService;
 
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST)
-	public ResponseEntity<?> createUser(@RequestBody TmsUsers tmsUser) {
+	public ResponseEntity<?> createUser(@RequestBody TmsUsersDTO tmsUserDTO) {
 
-		System.out.println("Creating User " + tmsUser.getUserName());
+		System.out.println("Creating User " + tmsUserDTO.getUserName());
 
-		if (tmsUserService.isUserExist(tmsUser)) {
-			System.out.println("A User with name " + tmsUser.getUserName() + " already exist");
+		if (tmsUserService.isUserExist(tmsUserDTO.getUserName())) {
+			System.out.println("A User with name " + tmsUserDTO.getUserName() + " already exist");
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
 
-		tmsUserService.createUser(tmsUser);
+		tmsUserService.createUser(tmsUserDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
@@ -54,5 +56,13 @@ public class TmsUserController {
 		return new ResponseEntity<List<TmsUsers>>(activeuser, HttpStatus.OK);
 	}
 
+//------------------- Edit User --------------------------------------------------------
+    
+    @RequestMapping(value = URIConstants.UPDATE_STATUS, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> editCodeReview(@RequestBody TmsUsersDTO tmsUserDTO) {
+    	tmsUserService.updateUser(tmsUserDTO);
+    	HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Void>(headers, HttpStatus.OK);
+	}
 
 }

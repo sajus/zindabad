@@ -9,8 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsModuleDAO;
 import com.cyb.tms.dto.TmsModuleDTO;
+import com.cyb.tms.entity.TmsCodeReview;
 import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsProject;
+import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.util.HibernateUtil;
 
 @Repository
@@ -45,5 +47,15 @@ public class TmsModuleDAOImpl implements TmsModuleDAO {
 		return tmsModuleDTO;
 	}
 
+	// -------------------Edit Module---------------
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void editModule(TmsModuleDTO moduleDTO) {
+		TmsModule tmsModule = hibernateUtil.fetchById(moduleDTO.getId(), TmsModule.class);
+		tmsModule.setModuleName(moduleDTO.getModuleName());
+		tmsModule.setModuleDescription(moduleDTO.getModuleDescription());
+	    hibernateUtil.update(tmsModule); 
+	}
 
 }

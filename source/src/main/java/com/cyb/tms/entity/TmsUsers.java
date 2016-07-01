@@ -77,8 +77,6 @@ public class TmsUsers extends BaseEntity {
 		this.userStoryStausesForModifiedBy = userStoryStausesForModifiedBy;
 	}
 
-
-
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "ID", unique = true, nullable = false)
