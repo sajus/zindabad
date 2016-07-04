@@ -107,7 +107,7 @@ public class TmsLeaveMst extends BaseEntity {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	@Column(name = "REASON", nullable = false, length = 9)
+	@Column(name = "REASON", nullable = false, length = 150)
 	public String getReason() {
 		return reason;
 	}

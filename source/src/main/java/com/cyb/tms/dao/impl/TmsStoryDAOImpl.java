@@ -116,7 +116,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	//------------------- Update a Story --------------------------------------------------------
 	@SuppressWarnings("unchecked")
 	@Override
-	public long updateStoryStatus(StoryDTO storyDTO) {
+	public void updateStoryStatus(StoryDTO storyDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", storyDTO.getStatus(), TmsStatusMst.class);
 		TmsUsers user = hibernateUtil.fetchById( storyDTO.getUserId(), TmsUsers.class);
 		TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
@@ -135,7 +135,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		} else {
 				// TODO move corresponding subtasks to backlog
 		}
-			return (Long)hibernateUtil.create(userStoryStatus);
+			hibernateUtil.create(userStoryStatus);
 		}
 		
 	// -------------------Edit backlog Story---------------

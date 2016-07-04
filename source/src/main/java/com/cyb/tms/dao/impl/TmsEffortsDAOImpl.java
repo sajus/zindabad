@@ -117,15 +117,27 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 					.createAlias("tmsSubtask", "sub")
 					.createAlias("tmsUsersByAssignedTo", "users")
 					.setProjection( Projections.distinct(Projections.property("tmsSubtask")))
-					/*.add(Subqueries.propertyNotIn("sub.subtaskId",  DetachedCriteria.forClass(UserStoryStaus.class)
-							.createAlias("tmsStatusMst", "tsm")
-							.createAlias("tmsSubtask", "sub")
-							.add(Restrictions.eq("tsm.status", backlog))
-							.setProjection(Property.forName("sub.subtaskId"))))*/
+					.add(Restrictions.not(Restrictions.in("sub.subtaskId", getBackLogSubtaskIds())))
 					.add(Restrictions.eq("users.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 		}
 		return tmsSubtask;
+	}
+	
+	/**
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private List<Long> getBackLogSubtaskIds() {
+		List<Long> subtaskIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+				.createAlias("tmsSubtask", "sub")
+				.createAlias("tmsStatusMst", "tsm")
+				.add(Subqueries.propertyIn("uss.id",  DetachedCriteria.forClass(UserStoryStaus.class, "status")
+						.add(Restrictions.eqProperty("uss.tmsSubtask", "status.tmsSubtask"))
+						.setProjection(Projections.max("status.id"))))
+						.add(Restrictions.eq("tsm.status", "BACKLOG"))
+				.setProjection( Projections.distinct(Projections.property("sub.subtaskId"))).list();
+		return subtaskIds;
 	}
 	
 	private List<LinkedHashMap<String, Object>> parseSubtasks(Long projectId, List<TmsSubtask> subtasks) {

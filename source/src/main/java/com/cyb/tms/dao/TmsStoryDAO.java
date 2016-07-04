@@ -11,7 +11,7 @@ import com.cyb.tms.entity.TmsStoryMst;
 public interface TmsStoryDAO {
 
 	public long createStory(StoryDTO storyDTO);
-	public long updateStoryStatus(StoryDTO storyDTO);
+	public void updateStoryStatus(StoryDTO storyDTO);
 	public void editStory(StoryDTO storyDTO);
 	public List<TmsStoryMst> getAllStories();
 	public TmsStoryMst getSprint(long id);
