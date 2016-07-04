@@ -44,15 +44,12 @@
       </div>
 
       <div class="modal-body">
-        <div class="form-group">
-          <!--<datepicker ng-model="newLeave.sprintName" language="en" date-format="YYYY-MM-DD">-->
-          <label class="label-title">Start Date: </label>
-          <input class="form-control" type="text" placeholder="Select Start Date(YYYY-MM-DD)" ng-model="leave.startDate">
+       <div class="form-group">
+          <tms-datepicker label="Start Date:" ng-model="leave.startDate"></tms-datepicker>
         </div>
-
+    
         <div class="form-group">
-          <label class="label-title">End Date: </label>
-          <input class="form-control" type="text" placeholder="Select End Date(YYYY-MM-DD)" ng-model="leave.endDate">
+          <tms-datepicker label="End Date:" ng-model="leave.endDate"></tms-datepicker>
         </div>
 
         <div class="form-group">
@@ -81,14 +78,19 @@
 
       <div class="modal-body">
         <div class="form-group">
+          <tms-datepicker label="Start Date:" ng-model="leave.startDate"></tms-datepicker>
+        </div>
+        <!-- <div class="form-group">
           <label class="label-title">Start Date: </label>
           <input class="form-control" type="text" placeholder="Select Start Date(YYYY-MM-DD)" ng-model="leave.startDate">
-        </div>
-
+        </div> -->
         <div class="form-group">
+          <tms-datepicker label="End Date:" ng-model="leave.endDate"></tms-datepicker>
+        </div>
+        <!-- <div class="form-group">
           <label class="label-title">End Date: </label>
           <input class="form-control" type="text" placeholder="Select End Date(YYYY-MM-DD)" ng-model="leave.endDate">
-        </div>
+        </div> -->
 
         <div class="form-group">
           <label class="label-title">Reason: </label>
