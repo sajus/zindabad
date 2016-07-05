@@ -3,6 +3,9 @@
 define([], function() {
 	return ['$scope', '$rootScope', 'loginService', 'appConstants', '$location', '$timeout', function($scope, $rootScope, loginService, appConstants, $location, $timeout) {
 	
+	function init() {
+	$scope.error = false;
+	};
 	$scope.authenticate = function() {
 		$scope.user = {
 			username: $scope.username,
@@ -19,6 +22,7 @@ define([], function() {
 				
 			},
 			function(status) {
+				$scope.error = true;
 				clearLocalInfo();
 				$location.path('/login');
 			});
@@ -36,7 +40,7 @@ define([], function() {
 		$rootScope.$broadcast('loginStatusChanged');
 	}	
 			
-
+init();
 	$scope.$apply();
 		
 	}];

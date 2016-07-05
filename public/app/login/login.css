@@ -136,3 +136,10 @@ body, html {
 .forgot-password:focus{
     color: rgb(12, 97, 33);
 }
+
+.alert-danger{
+    margin-top: -50px;
+    width: 34%;
+    margin-left: 33%;
+    text-align: center;
+}
