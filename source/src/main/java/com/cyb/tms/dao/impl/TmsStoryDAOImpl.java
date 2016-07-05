@@ -193,12 +193,13 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			Long userId, Long projectId) {
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
+			List<Long> backLogIds = getBackLogStorieIds();
 			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
 					.createAlias("tmsSprintMst", "sprint")
 					.createAlias("tmsStoryMst", "story")
 					.createAlias("tmsUsersByAssignedTo", "users")
 					.setProjection( Projections.distinct(Projections.property("story.storyId")))
-					.add(Restrictions.not(Restrictions.in("story.storyId", getBackLogStorieIds())))
+					.add(backLogIds.size() > 0 ? Restrictions.not(Restrictions.in("story.storyId", backLogIds)): Restrictions.sqlRestriction("(1=1)"))
 					.add(Restrictions.eq("users.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {

@@ -243,12 +243,13 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	}
 
 	public List fetchCurrentUserSubtasksBySprint(Long userId, Long sprintId) {
+		List<Long> backLogIds = getBackLogSubtaskIds();
 		return hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
 				.createAlias("tmsSprintMst", "sprint")
 				.createAlias("tmsSubtask", "sub")
 				.createAlias("tmsUsersByAssignedTo", "users")
 				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
-				.add(Restrictions.not(Restrictions.in("sub.subtaskId", getBackLogSubtaskIds())))
+				.add(backLogIds.size() > 0 ? Restrictions.not(Restrictions.in("sub.subtaskId", backLogIds)): Restrictions.sqlRestriction("(1=1)"))
 				.add(Restrictions.eq("users.id", userId))
 				.add(Restrictions.eq("sprint.sprintId", sprintId)).list();
 	}
