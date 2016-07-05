@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-	return ['$scope','appConstants','$http','codereviewService','userService', function($scope, appConstants, $http, codereviewService, userService) {
+	return ['$scope','appConstants','$http','codereviewService','manageService', function($scope, appConstants, $http, codereviewService, manageService) {
 
   	function init() {
       $scope.closeModal = closeModal;
@@ -28,7 +28,7 @@ define([], function() {
 
 
     function getUser() {
-      userService.getUser()
+      manageService.getUser()
         .success(function (dataUser) {
           $scope.users = dataUser;
         })
