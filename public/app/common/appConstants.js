@@ -61,8 +61,8 @@ define([
 			
 			getRole: function(){
 				return [
-					{value: "Lead", name: "Lead"},
-					{value: "Developer", name:"Developer"}
+					{value: "LEAD", name: "Lead"},
+					{value: "DEVELOPER", name:"Developer"}
 				];
 			}
 
