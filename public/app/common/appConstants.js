@@ -38,31 +38,31 @@ define([
 
 			getStatusList: function() {
         return [
-          {value: "BACKLOG", name: "BACKLOG"},
-          {value: "TODO", name: "TODO"},
-          {value: "DEVELOPMENT", name: "DEVELOPMENT"},
-          {value: "PULLREQUEST", name: "PULLREQUEST"},
-          {value: "INTERNAL_REVIEW", name: "INTERNAL_REVIEW"},
-          {value: "QUALITY", name: "QUALITY"},
-          {value: "REOPEN", name: "REOPEN"},
-          {value: "CODE_MERGED", name: "CODE_MERGED"},
-          {value: "CLOSED", name: "CLOSED"}
+          {value: "Backlog", name: "Backlog"},
+          {value: "ToDo", name: "ToDo"},
+          {value: "Development", name: "Development"},
+          {value: "PullRequest", name: "PullRequest"},
+          {value: "Internal_Review", name: "Internal_Review"},
+          {value: "Quality", name: "Quality"},
+          {value: "Reopen", name: "Reopen"},
+          {value: "Code_Merged", name: "Code_Merged"},
+          {value: "Closed", name: "Closed"}
         ];
 		
 			},
 
 			getStatus: function() {
 	      return [
-	        {value: "ACTIVE", name: "ACTIVE"},
-	        {value: "INACTIVE", name: "INACTIVE"}
+	        {value: "ACTIVE", name: "Active"},
+	        {value: "INACTIVE", name: "Inactive"}
 	      ];
 		
 			},
 			
 			getRole: function(){
 				return [
-					{value: "LEAD", name: "LEAD"},
-					{value: "DEVELOPER", name:"DEVELOPER"}
+					{value: "LEAD", name: "Lead"},
+					{value: "DEVELOPER", name:"Developer"}
 				];
 			}
 
