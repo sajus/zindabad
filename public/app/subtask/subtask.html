@@ -282,12 +282,12 @@
 
     <div class="form-group">
       <label class="label-title">Jira Id:</label>
-      <input class="form-control" id="disabledInput" type="text" ng-model="codeReview.jiraId">
+      <input class="form-control" id="disabledInput" type="text" ng-model="codeReview.jiraId" disabled >
     </div>
 
-    <div class="form-group">
+    <div class="form-group required">
       <label class="label-title" for="codeReview_type">Review Type:</label>
-      <select class="form-control" name="review_type" id="review_type" ng-model="codeReview.reviewerType">
+      <select class="form-control" name="review_type" id="review_type" ng-model="codeReview.reviewerType" required="required" >
         <option value="">--Select --</option>
         <option value="Peer">Peer</option>
         <option value="Client">Client</option>
@@ -295,62 +295,58 @@
       </select>
     </div>
 
-    <div class="form-group">
-      <label class="label-title" for="review_type">Developer:</label>
-      <select class="form-control" name="selectUser" ng-model="codeReview.developerId">
-        <option value="">--Select --</option>
-        <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
-      </select>
-    </div>
-
-    <div class="form-group">
+    <div class="form-group required">
       <label class="label-title" for="review_type">Reviewer:</label>
-      <select class="form-control" name="selectUser" ng-model="codeReview.reviewerId">
+      <select class="form-control" name="selectUser" ng-model="codeReview.reviewerId" required="required" >
         <option value="">--Select --</option>
         <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
       </select>
     </div>
 
-    <div class="form-group">
-      <tms-datepicker label="Pull Request Date:" ng-model="codeReview.pullRequestDate"></tms-datepicker>
+    <div class="form-group required">
+      <tms-datepicker label="Pull Request Date:" ng-model="codeReview.pullRequestDate" required="required" ></tms-datepicker>
     </div>
 
     <div class="form-group">
       <label class="label-title">Pull Request Id</label>
       <input class="form-control" type="text" placeholder=" Pull Request Id"
-             ng-model="codeReview.pullRequest" ng-required="true">
+             ng-model="codeReview.pullRequest" >
     </div>
 
-    <div class="form-group">
-      <tms-datepicker label="Review Date:" ng-model="codeReview.reviewDate"></tms-datepicker>
+    <div class="form-group required">
+      <tms-datepicker label="Review Date:" ng-model="codeReview.reviewDate" required="required" ></tms-datepicker>
     </div>
 
-    <div class="form-group">
-      <label class="label-title">File Name</label>
+    <div class="form-group" >
+      <label class="label-title" >File Name</label>
       <input class="form-control" type="text" placeholder="FileName"
-             ng-model="codeReview.fileName" ng-required="true">
+             ng-model="codeReview.fileName" >
     </div>
 
     <div class="form-group">
+      <p class="formfield"> 
       <label class="label-title">Comments:</label>
-      <input class="form-control" id="disabledInput" placeholder="Comments" type="text" ng-model="codeReview.comments">
+      <textarea class="form-control" id="disabledInput" placeholder="Comments" type="text"  ng-model="codeReview.comments"></textarea>
+      </p>
+      </div>
+
+    <div class="form-group required">
+      <tms-datepicker label="Fixed Date:" ng-model="codeReview.commentsFixedDate"
+      required="required"></tms-datepicker>
     </div>
 
-    <div class="form-group">
-      <tms-datepicker label="Fixed Date:" ng-model="codeReview.commentsFixedDate"></tms-datepicker>
-    </div>
-
-    <div class="form-group">
+    <div class="form-group required">
       <label class="label-title" for="review_type">Fixed By:</label>
-      <select class="form-control" name="selectUser" ng-model="codeReview.fixedById">
+      <select class="form-control" name="selectUser" ng-model="codeReview.fixedById" 
+      required="required">
         <option value="">--Select --</option>
         <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group required">
       <label class="label-title" for="status">RCA:</label>
-      <select class="form-control" name="rca" id="rca" ng-model="codeReview.commentType">
+      <select class="form-control" name="rca" id="rca" ng-model="codeReview.commentType" required="required">
         <option value="">--Select --</option>
         <option value="DOMO Standard">DOMO Standard</option>
         <option value="AngularJS Experience">AngularJS Experience</option>
@@ -370,3 +366,4 @@
     <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="addReview(codeReview)">Add</button>
   </modal-footer>
 </tms-modal>
+

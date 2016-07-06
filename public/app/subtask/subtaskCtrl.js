@@ -171,6 +171,7 @@ define([], function() {
     }
 
      $scope.addReview = function(review){
+      review.developerId= appConstants.user.id;
       subtaskService.addReview(review)
         .success(function () {
           closeCodeReviewModal();
