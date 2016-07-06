@@ -112,12 +112,13 @@ public class TmsEffortsDAOImpl implements TmsEffortsDAO {
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		List<TmsSubtask> tmsSubtask = null;
 		if(sprint != null) {
+			List<Long> backLogIds = getBackLogSubtaskIds();
 			tmsSubtask = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
 					.createAlias("tmsSprintMst", "sprint")
 					.createAlias("tmsSubtask", "sub")
 					.createAlias("tmsUsersByAssignedTo", "users")
 					.setProjection( Projections.distinct(Projections.property("tmsSubtask")))
-					.add(Restrictions.not(Restrictions.in("sub.subtaskId", getBackLogSubtaskIds())))
+					.add(backLogIds.size() > 0 ? Restrictions.not(Restrictions.in("sub.subtaskId", backLogIds)): Restrictions.sqlRestriction("(1=1)"))
 					.add(Restrictions.eq("users.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 		}
