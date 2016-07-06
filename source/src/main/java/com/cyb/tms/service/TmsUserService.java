@@ -15,4 +15,5 @@ public interface TmsUserService {
 	public boolean isUserExist(String userName);
 	public TmsUsersDTO findByName(String userName);
 	public List<TmsUsers> getUsersByStatus(long projectId);
+	public void updatePassword(TmsUsersDTO tmsUserDTO);
 }

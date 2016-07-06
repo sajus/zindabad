@@ -64,5 +64,13 @@ public class TmsUserController {
     	HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	}
+    
+    @RequestMapping(value = URIConstants.UPDATE_PASSWORD, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updatePassword(@RequestBody TmsUsersDTO tmsUserDTO) {
+    	tmsUserService.updatePassword(tmsUserDTO);
+    	HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Void>(headers, HttpStatus.OK);
+	}
+    
 
 }

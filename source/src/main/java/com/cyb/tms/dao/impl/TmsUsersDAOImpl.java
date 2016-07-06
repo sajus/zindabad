@@ -82,5 +82,13 @@ private static final String USER_NAME = "userName";
 		return users;
 	}
 
+	@Override
+	public void updatePassword(TmsUsersDTO tmsUserDTO) {
+		TmsUsers user = hibernateUtil.fetchById(tmsUserDTO.getId(), TmsUsers.class);
+		user.setPassword(passwordEncoder.encode(tmsUserDTO.getPassword()));
+		hibernateUtil.update(user);
+		
+	}
+
 
 }
