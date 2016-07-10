@@ -15,143 +15,154 @@
 
         <div class="tab-content">
           <div class="tab-pane" id="tab_default_1" ng-class="{'active': selectedTab == 'UNASSIGNED' }">
-            <h4>LIST OF SUBTASKS</h4>
+            <h5>LIST OF SUBTASKS</h5>
+            <app-loader></app-loader>
+            <div ng-if="!loading">
+              <div class="float-right">
+                <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()">
+                  <i class="glyphicon glyphicon-plus gs"></i>
+                  Add SubTask
+                </button>
+              </div>
+              <table id="mytable" class="table table-hover table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Created Date</th>
+                  <th>Jira Id</th>
+                  <th>Type</th>
+                  <th>Estimate</th>
+                  <th>Scope</th>
+                  <th class="text-center">Actions</th>
+                  <th class="text-center">
+                    <div class="assign-section" ng-show="user.userRole === 'LEAD'">
+                      <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="checkAll()">
+                      <select name="selectUser" ng-model="assignToId">
+                        <option value="">--Select --</option>
+                        <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+                      </select>
+                      <button class='btn btn-info btn-xs' type="button" id="save" ng-click="assignToSprint()"><span
+                          class="glyphicon glyphicon-ok"></span>Save
+                      </button>
+                    </div>
 
-            <div class="float-right">
-              <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()">
-                <i class="glyphicon glyphicon-plus gs"></i>
-                Add SubTask
-              </button>
+                    <div ng-hide="user.userRole === 'LEAD'">
+                      <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()">
+                      <button class='btn btn-primary btn-sm' type="button" ng-click="assignToSprint()">Assign To Me
+                      </button>
+                    </div>
+
+                  </th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-show="!unassignedTasks">
+                  <td colspan="8" class="text-align-center">No Records Found</td>
+                </tr>
+                <tr ng-repeat="subtask in unassignedTasks track by $index">
+                  <td>{{$index+1}}
+                  <td>{{subtask.createdDate}}</td>
+                  <td>{{subtask.jiraId}}</td>
+                  <td>{{subtask.type}}</td>
+                  <td>{{subtask.efforts}}</td>
+                  <td>{{subtask.scope}}</td>
+                  <td class="text-center table-actions-medium">
+                    <button class='btn btn-primary btn-xs' type="button" ng-click="showEditModal(subtask)">
+                      <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                  </td>
+                  <td class="assign-selection-checkbox">
+                    <input type="checkbox" ng-model="subtaskSelection[$index]"
+                           ng-change="onItemSelected(subtask, subtaskSelection[$index], $index)">
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </div>
-            <table id="mytable" class="table table-hover table-bordered table-striped">
-              <thead>
-              <tr>
-                <th>No.</th>
-                <th>Created Date</th>
-                <th>Jira Id</th>
-                <th>Type</th>
-                <th>Estimate</th>
-                <th>Scope</th>
-                <th class="text-center">Actions</th>
-                <th class="text-center">
-                  <div class="assign-section" ng-show="user.userRole === 'LEAD'">
-                    <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="checkAll()">
-                    <select name="selectUser" ng-model="assignToId">
-                      <option value="">--Select --</option>
-                      <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
-                    </select>
-                    <button class='btn btn-info btn-xs' type="button" id="save" ng-click="assignToSprint()"><span
-                        class="glyphicon glyphicon-ok"></span>Save
-                    </button>
-                  </div>
-
-                  <div ng-hide="user.userRole === 'LEAD'">
-                    <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()">
-                    <button class='btn btn-primary btn-sm' type="button" ng-click="assignToSprint()">Assign To Me
-                    </button>
-                  </div>
-
-                </th>
-              </tr>
-              </thead>
-
-              <tbody>
-              <tr ng-repeat="subtask in unassignedTasks track by $index">
-                <td>{{$index+1}}
-                <td>{{subtask.createdDate}}</td>
-                <td>{{subtask.jiraId}}</td>
-                <td>{{subtask.type}}</td>
-                <td>{{subtask.efforts}}</td>
-                <td>{{subtask.scope}}</td>
-                <td class="text-center table-actions-medium">
-                  <button class='btn btn-primary btn-xs' type="button" ng-click="showEditModal(subtask)">
-                    <span class="glyphicon glyphicon-edit"></span> 
-                  </button>
-                </td>
-                <td class="assign-selection-checkbox">
-                  <input type="checkbox" ng-model="subtaskSelection[$index]"
-                         ng-change="onItemSelected(subtask, subtaskSelection[$index], $index)">
-                </td>
-              </tr>
-              </tbody>
-            </table>
           </div>
 
           <div class="tab-pane" id="tab_default_2" ng-class="{'active': selectedTab == 'ASSIGNED' }">
-            <table id="mytable" class="table table-hover table-bordered table-striped" width="100%">
-              <thead>
-              <tr>
-                <th class="text-center" width="2%">No.</th>
-                <th class="text-center" width="11%">Created Date</th>
-                <th class="text-center" width="11%">Assigned Date</th>
-                <th class="text-center" width="11%">Jira Id</th>
-                <th class="text-center" width="8%">Type</th>
-                <th class="text-center" width="7%">Estimate</th>
-                <th class="text-center" width="8%">Scope</th>
-                <th class="text-center" width="15%">Status</th>
-                <th class="text-center" width="10%">Code Review</th>
-                <th class="text-center" width="15%">Action</th>
-              </tr>
-              </thead>
+            <app-loader></app-loader>
+            <div ng-if="!loading">
+              <table id="mytable" class="table table-hover table-bordered table-striped" width="100%">
+                <thead>
+                <tr>
+                  <th class="text-center" width="2%">No.</th>
+                  <th class="text-center" width="11%">Created Date</th>
+                  <th class="text-center" width="11%">Assigned Date</th>
+                  <th class="text-center" width="11%">Jira Id</th>
+                  <th class="text-center" width="8%">Type</th>
+                  <th class="text-center" width="7%">Estimate</th>
+                  <th class="text-center" width="8%">Scope</th>
+                  <th class="text-center" width="15%">Status</th>
+                  <th class="text-center" width="10%">Code Review</th>
+                  <th class="text-center" width="15%">Action</th>
+                </tr>
+                </thead>
 
-              <tbody>
-              <tr ng-repeat="subtask in subtasks track by $index">
-                <td align="center">{{$index+1}}
-                <td align="center">{{subtask.createdDate}}</td>
-                <td align="center">{{subtask.userStoryStatus.assignedDate}}</td>
-                <td align="center">{{subtask.jiraId}}</td>
-                <td align="center">{{subtask.type}}</td>
-                <td align="center">{{subtask.efforts}}</td>
-                <td align="center">{{subtask.scope}}</td>
-                <td align="center">
-                  <div ng-show="!editStorySelection[$index]">
-                    {{subtask.userStoryStatus.status}}
-                  </div>
-                  <div ng-show="editStorySelection[$index]">
-                    <select ng-model="subtask.userStoryStatus.status">
-                      <option value="">--Select --</option>
-                      <option ng-repeat="option in availableOptions"
-                              ng-selected="{{subtask.userStoryStatus.status == option.value}}" value="{{option.value}}">
-                        {{option.name}}
-                      </option>
-                    </select>
-                  </div>
-                </td>
-                <td align="center">
-                  <div>
-                    <div data-placement="top" data-toggle="tooltip" title="Add">
-                      <button class='btn btn-info btn-xs' type="button" data-title="Add"
-                              ng-click="showCodeReviewModal(subtask)">
-                        <span class="glyphicon glyphicon-edit"></span> Add
-                      </button>
+                <tbody>
+                <tr ng-show="!subtasks">
+                  <td colspan="10" class="text-align-center">No Records Found</td>
+                </tr>
+                <tr ng-repeat="subtask in subtasks track by $index">
+                  <td align="center">{{$index+1}}
+                  <td align="center">{{subtask.createdDate}}</td>
+                  <td align="center">{{subtask.userStoryStatus.assignedDate}}</td>
+                  <td align="center">{{subtask.jiraId}}</td>
+                  <td align="center">{{subtask.type}}</td>
+                  <td align="center">{{subtask.efforts}}</td>
+                  <td align="center">{{subtask.scope}}</td>
+                  <td align="center">
+                    <div ng-show="!editStorySelection[$index]">
+                      {{subtask.userStoryStatus.status}}
                     </div>
-                  </div>
-                </td>
-                <td align="center">
-                  <div ng-show="!editStorySelection[$index]">
-                    <div data-placement="top" data-toggle="tooltip" title="Edit">
-                      <button class='btn btn-primary btn-xs' type="button" data-title="Edit"
-                              ng-click="editStorySelection[$index] = true"><span
-                          class="glyphicon glyphicon-edit"></span>
-                      </button>
+                    <div ng-show="editStorySelection[$index]">
+                      <select ng-model="subtask.userStoryStatus.status">
+                        <option value="">--Select --</option>
+                        <option ng-repeat="option in availableOptions"
+                                ng-selected="{{subtask.userStoryStatus.status == option.value}}" value="{{option.value}}">
+                          {{option.name}}
+                        </option>
+                      </select>
                     </div>
-                  </div>
-                  <div ng-show="editStorySelection[$index]">
-                    <div data-placement="top" data-toggle="tooltip">
-                      <button class='btn btn-success btn-xs' type="button"
-                              ng-click="saveSubtaskStatus(subtask, $index)"><span
-                          class="glyphicon glyphicon-ok"></span>Save
-                      </button>
-                      <button class='btn btn-default btn-xs' type="button"
-                              ng-click="editStorySelection[$index] = false"><span
-                          class="glyphicon glyphicon-remove"></span>Cancel
-                      </button>
+                  </td>
+                  <td align="center">
+                    <div>
+                      <div data-placement="top" data-toggle="tooltip" title="Add">
+                        <button class='btn btn-info btn-xs' type="button" data-title="Add"
+                                ng-click="showCodeReviewModal(subtask)">
+                          <span class="glyphicon glyphicon-edit"></span> Add
+                        </button>
+                      </div>
                     </div>
-                  </div>   
-                </td>
-              </tr>
-              </tbody>
-            </table>
+                  </td>
+                  <td align="center">
+                    <div ng-show="!editStorySelection[$index]">
+                      <div data-placement="top" data-toggle="tooltip" title="Edit">
+                        <button class='btn btn-primary btn-xs' type="button" data-title="Edit"
+                                ng-click="editStorySelection[$index] = true"><span
+                            class="glyphicon glyphicon-edit"></span>
+                        </button>
+                      </div>
+                    </div>
+                    <div ng-show="editStorySelection[$index]">
+                      <div data-placement="top" data-toggle="tooltip">
+                        <button class='btn btn-success btn-xs' type="button"
+                                ng-click="saveSubtaskStatus(subtask, $index)"><span
+                            class="glyphicon glyphicon-ok"></span>Save
+                        </button>
+                        <button class='btn btn-default btn-xs' type="button"
+                                ng-click="editStorySelection[$index] = false"><span
+                            class="glyphicon glyphicon-remove"></span>Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

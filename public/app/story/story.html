@@ -15,122 +15,133 @@
       <div class="tab-content">
         <div class="tab-pane" id="tab_default_1" ng-class="{'active': selectedTab == 'BACKLOG' }">
           <h5>BACKLOG STORIES</h5>
+          <app-loader></app-loader>
+          <div ng-if="!loading">
+            <div class="float-right">
+              <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()">
+                <i class="glyphicon glyphicon-plus gs"></i>
+                Add Story
+              </button>
+            </div>
+            <table id="mytable" class="table table-hover table-bordered table-striped">
+              <thead>
+              <tr>
+                <th>No.</th>
+                <th>Created Date</th>
+                <th>Jira Id</th>
+                <th>Module</th>
+                <th>Story Point</th>
+                <th class="text-center">Action</th>
+                <th>
+                  <div class="assign-section" ng-show="user.userRole === 'LEAD'">
+                    <input type="checkbox" value="" ng-model="isAllSelected" ng-change="checkAll()">
+                    <select name="selectUser" ng-model="assignToId">
+                      <option value="">--Select --</option>
+                      <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
+                    </select>
+                    <button class='btn btn-info btn-xs' type="button" ng-click="assignToSprint()"><span
+                        class="glyphicon glyphicon-ok"></span>Save
+                    </button>
+                  </div>
 
-          <div class="float-right">
-            <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()">
-              <i class="glyphicon glyphicon-plus gs"></i>
-              Add Story
-            </button>
-          </div>
-          <table id="mytable" class="table table-hover table-bordered table-striped">
-            <thead>
-            <tr>
-              <th>No.</th>
-              <th>Created Date</th>
-              <th>Jira Id</th>
-              <th>Module</th>
-              <th>Story Point</th>
-              <th class="text-center">Action</th>
-              <th>
-                <div class="assign-section" ng-show="user.userRole === 'LEAD'">
-                  <input type="checkbox" value="" ng-model="isAllSelected" ng-change="checkAll()">
-                  <select name="selectUser" ng-model="assignToId">
-                    <option value="">--Select --</option>
-                    <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
-                  </select>
-                  <button class='btn btn-info btn-xs' type="button" ng-click="assignToSprint()"><span
-                      class="glyphicon glyphicon-ok"></span>Save
+                  <div ng-hide="user.userRole === 'LEAD'">
+                    <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()">
+                    <button class='btn btn-primary btn-sm' type="button" ng-click="assignToSprint()">Assign To Me</button>
+                  </div>
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-show="!backlogtories">
+                <td colspan="7" class="text-align-center">No Records Found</td>
+              </tr>
+              <tr ng-repeat="story in backlogtories track by $index">
+                <td>{{$index+1}}
+                <td>{{story.createdDate}}</td>
+                <td>{{story.jiraId}}</td>
+                <td>{{story.moduleName}}</td>
+                <td>{{story.storyPoint}}</td>
+                <td class="text-center table-actions-medium">
+                  <button class='btn btn-primary btn-xs' type="button" ng-click="showEditModal(story)"><span class="glyphicon glyphicon-edit"></span>
                   </button>
-                </div>
-
-                <div ng-hide="user.userRole === 'LEAD'">
-                  <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="isSelectAll()">
-                  <button class='btn btn-primary btn-sm' type="button" ng-click="assignToSprint()">Assign To Me</button>
-                </div>
-              </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="story in backlogtories track by $index">
-              <td>{{$index+1}}
-              <td>{{story.createdDate}}</td>
-              <td>{{story.jiraId}}</td>
-              <td>{{story.moduleName}}</td>
-              <td>{{story.storyPoint}}</td>
-              <td class="text-center table-actions-medium">
-                <button class='btn btn-primary btn-xs' type="button" ng-click="showEditModal(story)"><span class="glyphicon glyphicon-edit"></span> 
-                </button>
-                <!-- <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button> -->
-              </td>
-              <td class="assign-selection-checkbox">
-                <input type="checkbox" ng-model="storySelection[$index]"
-                         ng-change="onItemSelected(story, storySelection[$index], $index)"></td>
-            </tr>
-            </tbody>
-          </table>
+                  <!-- <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button> -->
+                </td>
+                <td class="assign-selection-checkbox">
+                  <input type="checkbox" ng-model="storySelection[$index]"
+                           ng-change="onItemSelected(story, storySelection[$index], $index)"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="tab-pane" id="tab_default_2" ng-class="{'active': selectedTab == 'CURRENT' }">
           <h5>CURRENT SPRINT STORIES</h5>
-          <table id="mytable" class="table table-hover table-bordered table-striped" width="100%">
-            <thead>
-            <tr>
-              <th class="text-center" width="3%">No.</th>
-              <th class="text-center" width="13%">Created Date</th>
-              <th class="text-center" width="13%">Assigned Date</th>
-              <th class="text-center" width="13%">Jira Id</th>
-              <th class="text-center" width="10%">Module</th>
-              <th class="text-center" width="12%">Story Point</th>
-              <th class="text-center" width="20%">Status</th>
-              <th class="text-center" width="15%">Edit</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="story in stories track by $index">
-              <td align="center">{{$index+1}}
-              <td align="center">{{story.createdDate}}</td>
-              <td align="center">{{story.userStoryStatus.assignedDate}}</td>
-              <td align="center">{{story.jiraId}}</td>
-              <td align="center">{{story.moduleName}}</td>
-              <td align="center">{{story.storyPoint}}</td>
-              <td align="center">
-                <div ng-show="!editStorySelection[$index]">
-                  {{story.userStoryStatus.status}}
-                </div>
-
-                <div ng-show="editStorySelection[$index]">
-                  <select ng-model="story.userStoryStatus.status">
-                    <option value="">--Select --</option>
-                    <option ng-repeat="option in availableOptions"
-                            ng-selected="{{story.userStoryStatus.status == option.value}}" value="{{option.value}}">
-                      {{option.name}}
-                    </option>
-                  </select>
-                </div>
-              </td>
-
-              <td align="center">
-                <div ng-show="!editStorySelection[$index]">
-                  <div data-placement="top" data-toggle="tooltip" title="Edit">
-                    <button class='btn btn-primary btn-xs' type="button" data-title="Edit" ng-click="editStorySelection[$index] = true">
-                      <span class="glyphicon glyphicon-edit"></span>
-                    </button>
+          <app-loader></app-loader>
+          <div ng-if="!loading">
+            <table id="mytable" class="table table-hover table-bordered table-striped" width="100%">
+              <thead>
+              <tr>
+                <th class="text-center" width="3%">No.</th>
+                <th class="text-center" width="13%">Created Date</th>
+                <th class="text-center" width="13%">Assigned Date</th>
+                <th class="text-center" width="13%">Jira Id</th>
+                <th class="text-center" width="10%">Module</th>
+                <th class="text-center" width="12%">Story Point</th>
+                <th class="text-center" width="20%">Status</th>
+                <th class="text-center" width="15%">Edit</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-show="!stories">
+                <td colspan="8" class="text-align-center">No Records Found</td>
+              </tr>
+              <tr ng-repeat="story in stories track by $index">
+                <td align="center">{{$index+1}}
+                <td align="center">{{story.createdDate}}</td>
+                <td align="center">{{story.userStoryStatus.assignedDate}}</td>
+                <td align="center">{{story.jiraId}}</td>
+                <td align="center">{{story.moduleName}}</td>
+                <td align="center">{{story.storyPoint}}</td>
+                <td align="center">
+                  <div ng-show="!editStorySelection[$index]">
+                    {{story.userStoryStatus.status}}
                   </div>
-                </div>
 
-                <div ng-show="editStorySelection[$index]">
-                  <div data-placement="top" data-toggle="tooltip">
-                    <button class='btn btn-success btn-xs' type="button" ng-click="saveStoryStatus(story, $index)"><span
-                        class="glyphicon glyphicon-ok"></span>Save
-                    </button>
-                    <button class='btn btn-default btn-xs' type="button" ng-click="editStorySelection[$index] = false"><span
-                        class="glyphicon glyphicon-remove"></span>Cancel
-                    </button>
+                  <div ng-show="editStorySelection[$index]">
+                    <select ng-model="story.userStoryStatus.status">
+                      <option value="">--Select --</option>
+                      <option ng-repeat="option in availableOptions"
+                              ng-selected="{{story.userStoryStatus.status == option.value}}" value="{{option.value}}">
+                        {{option.name}}
+                      </option>
+                    </select>
                   </div>
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+                </td>
+
+                <td align="center">
+                  <div ng-show="!editStorySelection[$index]">
+                    <div data-placement="top" data-toggle="tooltip" title="Edit">
+                      <button class='btn btn-primary btn-xs' type="button" data-title="Edit" ng-click="editStorySelection[$index] = true">
+                        <span class="glyphicon glyphicon-edit"></span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div ng-show="editStorySelection[$index]">
+                    <div data-placement="top" data-toggle="tooltip">
+                      <button class='btn btn-success btn-xs' type="button" ng-click="saveStoryStatus(story, $index)"><span
+                          class="glyphicon glyphicon-ok"></span>Save
+                      </button>
+                      <button class='btn btn-default btn-xs' type="button" ng-click="editStorySelection[$index] = false"><span
+                          class="glyphicon glyphicon-remove"></span>Cancel
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

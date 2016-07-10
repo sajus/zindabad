@@ -6,7 +6,7 @@ define([
 	return angular.module('myApp.factory', ['localStorageService']).factory('appConstants', function(localStorageService) {
 		return {
 
-			endPointBase: 'http://localhost:8080/TaskManagement/',
+			endPointBase: 'http://localhost:9090/TaskManagement/',
 
 			config :{
 				headers: {
@@ -38,15 +38,15 @@ define([
 
 			getStatusList: function() {
         return [
-          {value: "Backlog", name: "Backlog"},
-          {value: "ToDo", name: "ToDo"},
-          {value: "Development", name: "Development"},
-          {value: "PullRequest", name: "PullRequest"},
-          {value: "Internal_Review", name: "Internal_Review"},
-          {value: "Quality", name: "Quality"},
-          {value: "Reopen", name: "Reopen"},
-          {value: "Code_Merged", name: "Code_Merged"},
-          {value: "Closed", name: "Closed"}
+          {value: "BACKLOG", name: "Backlog"},
+          {value: "TODO", name: "ToDo"},
+          {value: "DEVELOPMENT", name: "Development"},
+          {value: "PULL REQUEST", name: "Pull Request"},
+          {value: "INTERNAL REVIEW", name: "Internal Review"},
+          {value: "QUALITY", name: "Quality"},
+          {value: "REOPEN", name: "Reopen"},
+          {value: "CODE MERGED", name: "Code Merged"},
+          {value: "CLOSED", name: "Closed"}
         ];
 		
 			},
