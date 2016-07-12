@@ -13,6 +13,7 @@ define([], function() {
       $scope.editStorySelection = [];
       $scope.isAllSelected = false;
       $scope.availableOptions = appConstants.getStatusList();
+      $scope.modules = appConstants.getModule();
       $scope.currentUser = appConstants.user;
       $scope.assignToId = ($scope.currentUser.userRole !== 'LEAD') ? $scope.currentUser.id : undefined;
       getUser();

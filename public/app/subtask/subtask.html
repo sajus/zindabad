@@ -33,7 +33,7 @@
                   <th>Type</th>
                   <th>Estimate</th>
                   <th>Scope</th>
-                  <th class="text-center">Actions</th>
+                  <th class="text-center">Edit</th>
                   <th class="text-center">
                     <div class="assign-section" ng-show="user.userRole === 'LEAD'">
                       <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="checkAll()">
@@ -97,7 +97,7 @@
                   <th class="text-center" width="8%">Scope</th>
                   <th class="text-center" width="15%">Status</th>
                   <th class="text-center" width="10%">Code Review</th>
-                  <th class="text-center" width="15%">Action</th>
+                  <th class="text-center" width="15%">Edit</th>
                 </tr>
                 </thead>
 
@@ -205,8 +205,7 @@
         <label class="label-title">Scope:</label>
         <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=subtask.scope>
           <option value="">--Select --</option>
-          <option value="PLANNED">Planned</option>
-          <option value="UNPLANNED">Unplanned</option>
+          <option ng-repeat="option in scopes" ng-selected="{{subtask.scope == option.value}}" value="{{option.value}}"> {{option.name}}
         </select>
       </div>
 
@@ -214,8 +213,7 @@
         <label class="label-title">Type:</label>
         <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=subtask.type>
           <option value="">--Select --</option>
-          <option value="BUG">Bug</option>
-          <option value="SUBTASK">Subtask</option>
+          <option ng-repeat="option in types" ng-selected="{{subtask.type == option.value}}" value="{{option.value}}"> {{option.name}}
         </select>
       </div>
   </modal-body>
@@ -237,7 +235,7 @@
 
     <div class="form-group">
       <label class="label-title">Story:</label>
-      <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model=editSubtask.storyId>
+      <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model="editSubtask.storyId">
         <option value="{{story.storyId}}" data-ng-repeat="story in stories">{{story.jiraId}}</option>
       </select>
     </div>
@@ -248,14 +246,13 @@
 
     <div class="form-group">
       <label class="label-title">Jira Id:</label>
-      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text" ng-model="subtask.jiraId">
+      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text" ng-model="editSubtask.jiraId">
     </div>
 
     <div class="form-group">
       <label class="label-title">Type:</label>
       <select id="moduleDropdown" name="module" class="form-control" ng-model="editSubtask.type">
-        <option value="BUG">Bug</option>
-        <option value="SUBTASK">Subtask</option>
+        <option ng-repeat="option in types" ng-selected="{{editSubtask.type == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
 
@@ -267,8 +264,7 @@
     <div class="form-group">
       <label class="label-title">Scope:</label>
       <select id="moduleDropdown" name="module" class="form-control" ng-model="editSubtask.scope">
-        <option value="PLANNED">Planned</option>
-        <option value="UNPLANNED">Unplanned</option>
+       <option ng-repeat="option in scopes" ng-selected="{{editSubtask.scope == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
 
@@ -300,9 +296,7 @@
       <label class="label-title" for="codeReview_type">Review Type:</label>
       <select class="form-control" name="review_type" id="review_type" ng-model="codeReview.reviewerType" required="required" >
         <option value="">--Select --</option>
-        <option value="Peer">Peer</option>
-        <option value="Client">Client</option>
-        <option value="QA">QA</option>
+        <option ng-repeat="option in reviewer" ng-selected="{{codeReview.reviewerType == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
 
@@ -359,15 +353,7 @@
       <label class="label-title" for="status">RCA:</label>
       <select class="form-control" name="rca" id="rca" ng-model="codeReview.commentType" required="required">
         <option value="">--Select --</option>
-        <option value="DOMO Standard">DOMO Standard</option>
-        <option value="AngularJS Experience">AngularJS Experience</option>
-        <option value="Client Code">Client Code</option>
-        <option value="Enhancement">Enhancement</option>
-        <option value="Code Optimization">Code Optimization</option>
-        <option value="Requirement Conflict">Requirement Conflict</option>
-        <option value="Reviewer Conflict">Reviewer Conflict</option>
-        <option value="Appreciation">Appreciation</option>
-        <option value="NA">NA</option>
+        <option ng-repeat="option in options" ng-selected="{{codeReview.commentType == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
 

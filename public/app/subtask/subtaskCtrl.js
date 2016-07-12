@@ -16,6 +16,10 @@ define([], function() {
       $scope.editStorySelection = [];
       $scope.isAllSelected = false;
       $scope.availableOptions = appConstants.getStatusList();
+      $scope.options = appConstants.getList();
+      $scope.reviewer = appConstants.getReviewerType();
+      $scope.scopes = appConstants.getScope();
+      $scope.types = appConstants.getSubtaskType();
       $scope.currentUser = appConstants.user;
       $scope.assignToId = ($scope.currentUser.userRole !== 'LEAD') ? $scope.currentUser.id : undefined;
       $scope.getStories();
