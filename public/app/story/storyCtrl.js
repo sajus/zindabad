@@ -16,7 +16,7 @@ define([], function() {
       $scope.currentUser = appConstants.user;
       $scope.assignToId = ($scope.currentUser.userRole !== 'LEAD') ? $scope.currentUser.id : undefined;
       getUser();
-    }
+    };
 
     $scope.changeTab = function (currentTab) {
       currentTab === 'BACKLOG' ? getBackLogStories() : getStories();
@@ -75,22 +75,28 @@ define([], function() {
     }
 
     function getStories() {
+      $scope.loading = true;
       storyService.getStories()
         .success(function (dataStories) {
          $scope.stories = dataStories;
+         $scope.loading = false;
         })
         .error(function (error) {
+            $scope.loading = false;
             $scope.status = 'Unable to process your request: ' + error.message;
         });
     }
 
     function getBackLogStories() {
+      $scope.loading = true;
       storyService.getBackLogStories()
         .success(function (backlogtories) {
          $scope.backlogtories = backlogtories;
+         $scope.loading = false;
         })
         .error(function (error) {
-            $scope.status = 'Unable to process your request: ' + error.message;
+          $scope.loading = false;
+          $scope.status = 'Unable to process your request: ' + error.message;
         });
     }
 

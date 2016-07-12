@@ -5,51 +5,55 @@ define([], function() {
 
 	$scope.newLeave = {};
 	$scope.closeModal = closeModal;
+    $scope.loading = true;
 
 	function getLeaves() {
-        leaveService.getLeaves()
-            .success(function (dataLeave) {
-             $scope.leaves = dataLeave; 
-            })
-            .error(function (error) {
-                $scope.status = 'Unable to process your request: ' + error.message;
-            });
+    $scope.loading = true;        
+    leaveService.getLeaves()
+        .success(function (dataLeave) {
+         $scope.leaves = dataLeave; 
+         $scope.loading = false;
+        })
+        .error(function (error) {
+          $scope.loading = false;
+          $scope.status = 'Unable to process your request: ' + error.message;
+        });
     }
 
     $scope.addLeave = function(newLeave) {
-        leaveService.addLeave(newLeave)
-            .success(function() {
-                getLeaves();
-                closeModal('#add');
-            })
-            .error(function(error) {
-                $scope.status = 'Unable to process your request: ' + error.message;
-            });
+      leaveService.addLeave(newLeave)
+        .success(function() {
+          getLeaves();
+          closeModal('#add');
+        })
+        .error(function(error) {
+          $scope.status = 'Unable to process your request: ' + error.message;
+        });
 
     }
 
     $scope.updateLeave = function(leave) {
-        leaveService.updateLeave(leave)
-            .success(function() {
-                getLeaves();
-                closeModal('#edit');
-            })
-            .error(function(error) {
-                $scope.status = 'Unable to process your request: ' + error.message;
-            });
+      leaveService.updateLeave(leave)
+        .success(function() {
+          getLeaves();
+          closeModal('#edit');
+        })
+        .error(function(error) {
+          $scope.status = 'Unable to process your request: ' + error.message;
+        });
 
     }
 
     $scope.deleteLeave = function(leaveId) {
-        leaveService.deleteLeave(leaveId)
-            .success(function() {
-                getLeaves();
-                closeModal('#delete');
-            })
-            .error(function(error) {
-               closeModal('#delete');
-               $scope.status = 'Unable to process your request';
-            });
+      leaveService.deleteLeave(leaveId)
+        .success(function() {
+            getLeaves();
+            closeModal('#delete');
+        })
+        .error(function(error) {
+           closeModal('#delete');
+           $scope.status = 'Unable to process your request';
+        });
 
     }
 

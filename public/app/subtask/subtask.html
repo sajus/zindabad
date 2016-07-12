@@ -17,7 +17,7 @@
           <div class="tab-pane" id="tab_default_1" ng-class="{'active': selectedTab == 'UNASSIGNED' }">
             <h5>LIST OF SUBTASKS</h5>
             <app-loader></app-loader>
-            <div ng-if="!loading">
+            <div ng-show="!loading">
               <div class="float-right">
                 <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()">
                   <i class="glyphicon glyphicon-plus gs"></i>
@@ -57,7 +57,7 @@
                 </thead>
 
                 <tbody>
-                <tr ng-show="!unassignedTasks">
+                <tr ng-show="!unassignedTasks && !loading">
                   <td colspan="8" class="text-align-center">No Records Found</td>
                 </tr>
                 <tr ng-repeat="subtask in unassignedTasks track by $index">
@@ -84,7 +84,7 @@
 
           <div class="tab-pane" id="tab_default_2" ng-class="{'active': selectedTab == 'ASSIGNED' }">
             <app-loader></app-loader>
-            <div ng-if="!loading">
+            <div ng-show="!loading">
               <table id="mytable" class="table table-hover table-bordered table-striped" width="100%">
                 <thead>
                 <tr>
@@ -102,7 +102,7 @@
                 </thead>
 
                 <tbody>
-                <tr ng-show="!subtasks">
+                <tr ng-show="!subtasks && !loading">
                   <td colspan="10" class="text-align-center">No Records Found</td>
                 </tr>
                 <tr ng-repeat="subtask in subtasks track by $index">

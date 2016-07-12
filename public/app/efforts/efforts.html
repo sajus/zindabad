@@ -5,29 +5,36 @@
         <h4 class="leave-header">Efforts</h4>
       </div>                        
     </div>
-    <table class="table table-hover table-bordered table-striped">
-    <thead>
-      <tr>
-        <th>No.</th>
-        <th>Jira Id</th>
-        <th>Scope</th>
-        <th>Type</th>
-        <th>Remaining Hours</th>
-         <th>Efforts</th>
-        <th class="text-center">Action</th>
-      </tr>
-    </thead>
-      <tr ng-repeat="effort in efforts track by $index">
-        <td class="table-index-medium">{{$index+1}}</td>
-        <td>{{ effort.jiraId }}</td>
-        <td>{{ effort.scope }}</td>
-        <td>{{ effort.type }}</td>
-        <td>{{ effort.remaingEfforts }}</td>
-        <td> <input type="text" name="loggedHours" ng-model="effort.loggedHours"> </td>
-        <td class="text-center table-actions-medium">
-          <button class='btn btn-info btn-xs' type="button" ng-click="saveEfforts(effort)"><span class="glyphicon glyphicon-edit"></span> Save</button>
-         
-      </tr>
-    </table>
+    <app-loader></app-loader>
+    <div ng-if="!loading">
+      <table class="table table-hover table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Jira Id</th>
+          <th>Scope</th>
+          <th>Type</th>
+          <th>Remaining Hours</th>
+           <th>Efforts</th>
+          <th class="text-center">Action</th>
+        </tr>
+      </thead>
+        <tr ng-show="!efforts">
+          <td colspan="7" class="text-align-center">No Records Found</td>
+        </tr>
+        <tr ng-repeat="effort in efforts track by $index">
+          <td class="table-index-medium">{{$index+1}}</td>
+          <td>{{ effort.jiraId }}</td>
+          <td>{{ effort.scope }}</td>
+          <td>{{ effort.type }}</td>
+          <td>{{ effort.remaingEfforts }}</td>
+          <td> <input type="text" name="loggedHours" ng-model="effort.loggedHours"> </td>
+          <td class="text-center table-actions-medium">
+            <button class='btn btn-info btn-xs' type="button" ng-click="saveEfforts(effort)">
+            <span class="glyphicon glyphicon-edit"></span> Save</button>
+          </td>  
+        </tr>
+      </table>
+    </div>
   </div>
 </div>

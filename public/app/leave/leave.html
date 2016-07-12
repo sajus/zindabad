@@ -7,6 +7,8 @@
     </div>
 
      <!-- <div class="row col-md-6 col-md-offset-2 custyle"> -->
+     <app-loader></app-loader>
+      <div ng-if="!loading">
         <table class="table table-hover table-bordered table-striped">
         <thead>
           <button class="btn btn-success btn-add add-leave" type="button" data-toggle="modal" ng-click="showModal('#add')">
@@ -21,6 +23,9 @@
             <th class="text-center">Actions</th>
           </tr>
         </thead>
+          <tr ng-if="!leaves">
+            <td colspan="6" class="text-align-center">No Records Found</td>
+          </tr>
           <tr ng-repeat="leave in leaves track by $index">
             <td class="table-index-medium">{{$index+1}}</td>
             <td>{{ leave.startDate}}</td>
@@ -32,6 +37,7 @@
               <button class="btn btn-danger btn-xs" ng-click="showModal('#delete', leave)"><span class="glyphicon glyphicon-trash"></span> Del</button></td>
           </tr>
         </table>
+    </div>  
   </div>
 </div>
 
