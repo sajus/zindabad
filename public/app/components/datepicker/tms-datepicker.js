@@ -7,7 +7,7 @@ define([
     return {
       
       restrict: 'E',
-      require: ['ngModel'],
+      require: 'ngModel',
       replace:true,
       template: '<div class="form-group">'+
                    '<label class="label-title">{{label}}</label>'+
@@ -18,35 +18,33 @@ define([
         ngModel: '=',
         label: '@?'
       },   
-      link:function(scope, element, attrs){
+      link:function(scope, element, attrs, ngModel){
         var input = element.find('input');
         var span = element.find('span');
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(),0,0,0,0);
 
         var picker = input.datepicker({
-           format: "yyyy-mm-dd",
-           todayHighlight:'TRUE',
-           autoclose: true,
-            onRender: function(date) {
-                return date.valueOf() < now.valueOf() ? 'disabled' : '';
-            }
+          format: "yyyy-mm-dd",
+          todayHighlight:'TRUE',
+          autoclose: true,
+          onRender: function(date) {
+            return date.valueOf() < now.valueOf() ? 'disabled' : '';
+          }
         });
 
         element.bind('blur keyup change click', function() {
           $timeout(function () {
-            scope.ngModel = input.val();
+            ngModel = input.val();
           }, 0);
         });
 
-        // span.bind('click',function(){
-        //     if(element.is(':focus')){
-        //         element.trigger('blur');
-        //     } else {
-        //         element.trigger('focus');
-        //     }
-        // });
-
+        scope.$watch('ngModel', function (newValue, oldValue) {
+          if (newValue) {
+            input.datepicker("setDate", newValue);
+          }
+        });
+        
         element.on('$destroy', function () {
           scope.$destroy();
         });

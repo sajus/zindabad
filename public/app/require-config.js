@@ -18,8 +18,8 @@ if(window.__karma__) {
 
 require.config({
 	paths: {
-		angular: 'bower_components/angular/angular',
 		jQuery: 'bower_components/jquery/dist/jquery.min',
+		angular: 'bower_components/angular/angular',	
 		angularRoute: 'bower_components/angular-route/angular-route',
 		angularMocks: 'bower_components/angular-mocks/angular-mocks',
 		angularLocalStorage: 'bower_components/angular-local-storage/dist/angular-local-storage.min',
