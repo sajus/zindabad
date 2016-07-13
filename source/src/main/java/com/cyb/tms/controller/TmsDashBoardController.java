@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.service.TmsDashBoardService;
 import com.cyb.tms.util.URIConstants;
 
-@RestController
+@RestController 
 @RequestMapping(URIConstants.DASH_BOARD)
 public class TmsDashBoardController {
 	
@@ -26,6 +27,12 @@ public class TmsDashBoardController {
 	public ResponseEntity<LinkedHashMap<Object, Object>> listCurrentUserEffortsBySprint(@RequestParam Long userId, @RequestParam Long projectId) {
 		LinkedHashMap<Object, Object> subtasks = tmsDashBoardService.getUserDashBoardData(userId, projectId);
 		return new ResponseEntity<LinkedHashMap<Object, Object>>(subtasks, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = URIConstants.GET_MANAGER_DASH_BOARD, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LinkedHashMap<Object, Object>>> listCurrentUserEffortsBySprint(@RequestParam Long projectId) throws Exception{
+		List<LinkedHashMap<Object, Object>> list =  tmsDashBoardService.getManagerDashBoardData(projectId);
+		return new ResponseEntity<List<LinkedHashMap<Object, Object>>>(list, HttpStatus.OK);
 	}
 
 }
