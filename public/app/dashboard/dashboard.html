@@ -7,22 +7,52 @@
     </div>
 
     <!-- <div class="row col-md-6 col-md-offset-2 custyle"> -->
-    <table class="table table-hover table-bordered table-striped">
-      <thead>
-      <tr>
-        <th>Capacity</th>
-        <th>Sprint Capacity</th>
-        <th>Hours Consumed</th>
-        <th>Hours Burned</th>
-        <th>Remaining Work Hours</th>
-      </tr>
-      </thead>
-      <tr>
-        <td>{{ userDashBoardData.capacity }}</td>
-        <td>{{ userDashBoardData.sprintCapacity }}</td>
-        <td>{{ userDashBoardData.hoursConsumed }}</td>
-        <td>{{ userDashBoardData.hoursBurned }}</td>
-        <td>{{ userDashBoardData.remainingHours }}</td>
-    </table>
+    <div ng-show="user.userRole === 'MANAGER'">
+      <table class="table table-hover table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Resource Name</th>
+            <th>Capacity</th>
+            <th>Sprint Capacity</th>
+            <th>Hours Consumed</th>
+            <th>Hours Burned</th>
+            <th>Remaining Work Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="userData in managerDashBoardData">
+            <td>{{ userData.userName }}</td>
+            <td>{{ userData.capacity }}</td>
+            <td>{{ userData.sprintCapacity }}</td>
+            <td>{{ userData.hoursConsumed }}</td>
+            <td>{{ userData.hoursBurned }}</td>
+            <td>{{ userData.remainingHours }}</td>
+          </tr>
+        </tbody> 
+      </table>
+    </div> 
+
+    <div ng-hide="user.userRole === 'MANAGER'">
+      <table class="table table-hover table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Capacity</th>
+            <th>Sprint Capacity</th>
+            <th>Hours Consumed</th>
+            <th>Hours Burned</th>
+            <th>Remaining Work Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ userDashBoardData.capacity }}</td>
+            <td>{{ userDashBoardData.sprintCapacity }}</td>
+            <td>{{ userDashBoardData.hoursConsumed }}</td>
+            <td>{{ userDashBoardData.hoursBurned }}</td>
+            <td>{{ userDashBoardData.remainingHours }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
