@@ -6,7 +6,7 @@ define([
 	return angular.module('myApp.factory', ['localStorageService']).factory('appConstants', function(localStorageService) {
 		return {
 
-			endPointBase: 'http://localhost:9090/TaskManagement/',
+			endPointBase: 'http://localhost:8080/TaskManagement/',
 
 			config :{
 				headers: {
@@ -38,34 +38,83 @@ define([
 
 			getStatusList: function() {
         return [
-          {value: "BACKLOG", name: "Backlog"},
-          {value: "TODO", name: "ToDo"},
-          {value: "DEVELOPMENT", name: "Development"},
-          {value: "PULL REQUEST", name: "Pull Request"},
-          {value: "INTERNAL REVIEW", name: "Internal Review"},
-          {value: "QUALITY", name: "Quality"},
-          {value: "REOPEN", name: "Reopen"},
-          {value: "CODE MERGED", name: "Code Merged"},
-          {value: "CLOSED", name: "Closed"}
+          {value: "BACKLOG", name: "BACKLOG"},
+          {value: "TODO", name: "TODO"},
+          {value: "DEVELOPMENT", name: "DEVELOPMENT"},
+          {value: "PULL REQUEST", name: "PULL REQUEST"},
+          {value: "INTERNAL REVIEW", name: "INTERNAL REVIEW"},
+          {value: "QUALITY", name: "QUALITY"},
+          {value: "REOPEN", name: "REOPEN"},
+          {value: "CODE MERGED", name: "CODE MERGED"},
+          {value: "CLOSED", name: "CLOSED"}
+
         ];
+		
+			},
+
+			getList: function() {
+        return [
+          {value: "DOMO STANDARD", name: "DOMO STANDARD"},
+          {value: "ANGULARRJS EXPERIENCE", name: "ANGULARRJS EXPERIENCE"},
+          {value: "CLIENT CODE", name: "CLIENT CODE"},
+          {value: "ENHANCEMENT", name: "ENHANCEMENT"},
+          {value: "CODE OPTIMIZATION", name: "CODE OPTIMIZATION"},
+          {value: "REQUIREMENT CONFLICT", name: "REQUIREMENT CONFLICT"},
+          {value: "REVIEWER CONFLICT", name: "REVIEWER CONFLICT"},
+          {value: "APPRECIATION", name: "APPRECIATION"},
+          {value: "NA", name: "NA"}
+        ];
+		
+			},
+
+			getReviewerType: function() {
+	      return [
+	        {value: "PEER", name: "PEER"},
+	        {value: "CLIENT", name: "CLIENT"},
+	        {value: "QA", name: "QA"}
+	      ];
+		
+			},
+
+			getScope: function() {
+	      return [
+	        {value: "PLANNED", name: "PLANNED"},
+	        {value: "UNPLANNED", name: "UNPLANNED"}
+	      ];
+		
+			},
+
+			getSubtaskType: function() {
+	      return [
+	        {value: "BUG", name: "BUG"},
+	        {value: "SUBTASK", name: "SUBTASK"}
+	      ];
+		
+			},
+
+			getModule: function() {
+	      return [
+	        {value: "GAMBIT", name: "GAMBIT"},
+	        {value: "GOONIS", name: "GOONIS"},
+	        {value: "MATRIX", name: "MATRIX"}
+	      ];
 		
 			},
 
 			getStatus: function() {
 	      return [
-	        {value: "ACTIVE", name: "Active"},
-	        {value: "INACTIVE", name: "Inactive"}
+	        {value: "ACTIVE", name: "ACTIVE"},
+	        {value: "INACTIVE", name: "INACTIVE"}
 	      ];
 		
 			},
 			
 			getRole: function(){
 				return [
-					{value: "LEAD", name: "Lead"},
-					{value: "DEVELOPER", name:"Developer"}
+					{value: "LEAD", name: "LEAD"},
+					{value: "DEVELOPER", name:"DEVELOPER"}
 				];
 			}
-
 		}
 		
 	});

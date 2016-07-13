@@ -31,7 +31,7 @@
                 <th>Jira Id</th>
                 <th>Module</th>
                 <th>Story Point</th>
-                <th class="text-center">Action</th>
+                <th class="text-center">Edit</th>
                 <th>
                   <div class="assign-section" ng-show="user.userRole === 'LEAD'">
                     <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="checkAll()"/>
@@ -169,10 +169,8 @@
     <div class="form-group">
       <label class="label-title">Module:</label>
       <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=story.module>
-        <option value="">--Select --</option>
-        <option value="GAMBIT">Gambit</option>
-        <option value="GOONIES">Goonis</option>
-        <option value="MATRIX">Matrix</option>
+        <option value="">--Select --</option> 
+        <option ng-repeat="option in modules" ng-selected="{{story.module == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
 
@@ -187,7 +185,7 @@
     <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="addStory(story)">Add</button>
   </modal-footer>
 </tms-modal>
- 
+
  <!-- Edit Story Modal -->
 <tms-modal modal-visible="isEditModalVisible" backdrop="static" on-sown="" on-hide="" >
   <modal-header title="Edit Story"></modal-header>
@@ -212,9 +210,7 @@
     <div class="form-group">
       <label class="label-title">Module:</label>
       <select id="moduleDropdown" name="module" class="form-control" ng-model=story.module>
-        <option value="GAMBIT">Gambit</option>
-        <option value="GOONIS">Goonis</option>
-        <option value="MATRIX">Matrix</option>
+        <option ng-repeat="option in modules" ng-selected="{{story.module == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
 
