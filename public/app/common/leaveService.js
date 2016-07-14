@@ -39,13 +39,12 @@ define([
             });
         };
 
-         leaveService.deleteLeave = function (leaveId) {
+        leaveService.deleteLeave = function (leaveId) {
             return $http({
-                url: appConstants.endPointBase+"api/leave/delete/:id",
-                params: {id: leaveId},
+                url: appConstants.endPointBase+"api/leave/delete/"+leaveId,
                 method: "GET"
             });
-         };
+        };
 
     return leaveService;
 
