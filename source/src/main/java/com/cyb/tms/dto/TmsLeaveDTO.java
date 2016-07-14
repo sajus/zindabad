@@ -15,25 +15,33 @@ public class TmsLeaveDTO extends BaseDTO {
 	private Date endDate;
 	private String reason;
 	private int duration;
-	
+	private String status;
+
 	
 	public TmsLeaveDTO() {
 		super();
 	}
-
-
+	
 	public TmsLeaveDTO(Long leaveId, Long projectId, Long userId, Date startDate, Date endDate, String reason,
-			int duration) {
-		super();
-		this.leaveId = leaveId;
-		this.projectId = projectId;
-		this.userId = userId;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.reason = reason;
-		this.duration = duration;
+			int duration, String status) {
+			super();
+			this.leaveId = leaveId;
+			this.projectId = projectId;
+			this.userId = userId;
+			this.startDate = startDate;
+			this.endDate = endDate;
+			this.reason = reason;
+			this.duration = duration;
+			this.status = status;
+		}
+
+	public String getStatus() {
+		return status;
 	}
 
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public Long getLeaveId() {
 		return leaveId;
@@ -103,9 +111,5 @@ public class TmsLeaveDTO extends BaseDTO {
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
-
-
-	
-	
 
 }

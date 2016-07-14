@@ -9,7 +9,7 @@ public interface TmsLeaveService {
 
 	public long createLeave(TmsLeaveDTO tmsleaveDTO);
     public TmsLeaveMst updateLeave(TmsLeaveDTO tmsleaveDTO);
-    public void deleteLeave(long id);
+    public void deleteLeave(Long id);
     public List<TmsLeaveMst> getAllLeavesBySprint(Long projectId) throws Exception;
     public TmsLeaveMst getLeave(long id);
     public List<TmsLeaveMst> getCurrentUserLeavesBySprint(Long userId, Long projectId) throws Exception;

@@ -35,23 +35,25 @@ public class TmsLeaveMst extends BaseEntity {
 	private Date endDate;
 	private String reason;
 	private int duration;
-	
+	private String status;
+
 
 	public TmsLeaveMst() {
 	}
 
-	public TmsLeaveMst(TmsSprintMst tmsSprintMst, TmsUsers tmsUsers, Date startDate, Date endDate,
-			String reason, int duration) {
+	public TmsLeaveMst(Long leaveId, TmsSprintMst tmsSprintMst, TmsUsers tmsUsers, Date startDate, Date endDate,
+			String reason, int duration, String status) {
 		super();
-		
+		this.leaveId = leaveId;
 		this.tmsSprintMst = tmsSprintMst;
 		this.tmsUsers = tmsUsers;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.reason = reason;
 		this.duration = duration;
+		this.status = status;
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 
@@ -64,7 +66,6 @@ public class TmsLeaveMst extends BaseEntity {
 		this.leaveId = leaveId;
 	}
 	
-	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SPRINTID", nullable = false)
@@ -75,7 +76,6 @@ public class TmsLeaveMst extends BaseEntity {
 	public void setTmsSprintMst(TmsSprintMst tmsSprintMst) {
 		this.tmsSprintMst = tmsSprintMst;
 	}
-	
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -124,4 +124,14 @@ public class TmsLeaveMst extends BaseEntity {
 		this.duration = duration;
 	}
 
+	@Column(name = "STATUS", nullable = false, length = 150)
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	
 }
