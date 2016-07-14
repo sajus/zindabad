@@ -18,7 +18,7 @@ define([
         ngModel: '=',
         label: '@?'
       },   
-      link:function(scope, element, attrs, ngModel){
+      link:function(scope, element, attrs){
         var input = element.find('input');
         var span = element.find('span');
         var nowTemp = new Date();
@@ -35,16 +35,16 @@ define([
 
         element.bind('blur keyup change click', function() {
           $timeout(function () {
-            ngModel = input.val();
+            scope.ngModel = input.val();
           }, 0);
         });
 
         scope.$watch('ngModel', function (newValue, oldValue) {
-          if (newValue) {
+          if (newValue !== oldValue) {
             input.datepicker("setDate", newValue);
           }
         });
-        
+
         element.on('$destroy', function () {
           scope.$destroy();
         });

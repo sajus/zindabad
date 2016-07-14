@@ -19,6 +19,7 @@ if(window.__karma__) {
 require.config({
 	paths: {
 		jQuery: 'bower_components/jquery/dist/jquery.min',
+		bootstrapDatepicker: 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min',
 		angular: 'bower_components/angular/angular',	
 		angularRoute: 'bower_components/angular-route/angular-route',
 		angularMocks: 'bower_components/angular-mocks/angular-mocks',
@@ -26,7 +27,6 @@ require.config({
 		angularResource: 'bower_components/angular-resource/angular-resource.min',
 		tBootstrap: 'bower_components/bootstrap/dist/js/bootstrap.min',
 		angularUiBootstrap: 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
-		bootstrapDatepicker: 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min',
 		underscore: 'bower_components/underscore/underscore-min',
 		angularNvd3: 'bower_components/angular-nvd3/dist/angular-nvd3.min',
 		d3: 'bower_components/d3/d3.min',

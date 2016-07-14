@@ -68,7 +68,7 @@ public class TmsCodeReview extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "ID", unique = true, nullable = false)
+	@Column(name = "REVIEW_ID", unique = true, nullable = false)
 	public Long getReviewId() {
 		return this.reviewId;
 	}
