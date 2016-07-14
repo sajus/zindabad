@@ -29,7 +29,7 @@ public class TmsLeaveServiceImpl implements TmsLeaveService{
 	}
 
 	@Override
-	public void deleteLeave(long id) {
+	public void deleteLeave(Long id) {
 		tmsLeaveDAO.deleteLeave(id);
 	}
 

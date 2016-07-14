@@ -36,12 +36,9 @@ public class TmsLeaveController {
 		tmsLeaveService.createLeave(tmsleaveDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-
-
-
 	}
 	
-//	// -------------------update a leave---------------
+	// -------------------update a leave---------------
 	@RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateLeave(@RequestBody TmsLeaveDTO tmsleaveDTO) {
 		tmsLeaveService.updateLeave(tmsleaveDTO);
@@ -49,9 +46,9 @@ public class TmsLeaveController {
 		return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	}	
 	
-	@RequestMapping(value = URIConstants.DELETE, method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> deleteLeave(@PathVariable("id") String id) {
-		tmsLeaveService.deleteLeave(Long.parseLong(id));
+	@RequestMapping(value = URIConstants.DELETE, method = RequestMethod.GET)
+	public ResponseEntity<?> deleteLeave(@PathVariable("id") Long id) {
+		tmsLeaveService.deleteLeave(id);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	}	

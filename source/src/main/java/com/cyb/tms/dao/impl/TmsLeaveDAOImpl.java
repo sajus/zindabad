@@ -39,10 +39,10 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 	
 
 	@Override
-	public void deleteLeave(long id) {
-		TmsLeaveMst leave = new TmsLeaveMst();
-		leave.setLeaveId(id);
-		hibernateUtil.delete(leave);
+	public void deleteLeave(Long id) {
+		TmsLeaveMst leave = hibernateUtil.fetchById(id, TmsLeaveMst.class);
+		leave.setStatus("DELETED");
+		hibernateUtil.update(leave);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -83,13 +83,14 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TmsLeaveMst> getCurrentUserLeavesBySprint(Long userId, Long projectId) throws Exception {
-		
+		Object[] statuss = {"DELETED"};
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
 			Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsLeaveMst.class, "leave");
 			criteria.createAlias("tmsUsers", "user");
 			criteria.createAlias("tmsSprintMst", "sp");
 			criteria.add(Restrictions.eq("user.id", userId));
+			criteria.add(Restrictions.not(Restrictions.in("leave.status", statuss)));
 			criteria.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()));
 			return criteria.list();
 			
@@ -109,6 +110,7 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 		BeanUtils.copyProperties(tmsleaveDTO, leave);
 		leave.setTmsSprintMst(sprint);
 		leave.setTmsUsers(user);
+		leave.setStatus("EXISTS");
 		leave.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
 		return leave;
 	}
