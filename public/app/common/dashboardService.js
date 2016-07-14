@@ -16,5 +16,16 @@ define([
         }
       });
     };
+
+    self.getManagerDashBoardDetails = function () {
+      return $http({
+        url: appConstants.endPointBase+"api/dashboard/manager",
+        method: "GET",
+        params: {
+          projectId: appConstants.user.projectId
+        }
+      });
+    };
+
 	});
 });

@@ -13,6 +13,17 @@ define([], function() {
         });
     }
 
+    function getManagerDashBoardDetails() {
+      dashboardService.getManagerDashBoardDetails()
+        .success(function (dashboardData) {
+          $scope.managerDashBoardData = dashboardData;
+        })
+        .error(function (error) {
+          $scope.errorMessage = 'Unable to process your request';
+        });
+    }
+
+    getManagerDashBoardDetails();
     getUserDashBoardDetails();
 		$scope.$apply();
 	}];
