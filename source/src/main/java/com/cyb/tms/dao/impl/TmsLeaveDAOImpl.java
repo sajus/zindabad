@@ -83,14 +83,14 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TmsLeaveMst> getCurrentUserLeavesBySprint(Long userId, Long projectId) throws Exception {
-		Object[] statuss = {"DELETED"};
+		Object[] status = {"DELETED"};
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
 			Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsLeaveMst.class, "leave");
 			criteria.createAlias("tmsUsers", "user");
 			criteria.createAlias("tmsSprintMst", "sp");
 			criteria.add(Restrictions.eq("user.id", userId));
-			criteria.add(Restrictions.not(Restrictions.in("leave.status", statuss)));
+			criteria.add(Restrictions.not(Restrictions.in("leave.status", status)));
 			criteria.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()));
 			return criteria.list();
 			
@@ -117,6 +117,7 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 
 	@Override
 	public int calculateUserLeavesTotalBySprint(Long userId, Long sprintId) {
+		Object[] status = {"DELETED"};
 		Long totalLeaves = (Long) hibernateUtil.getCurrentSession()
 				.createCriteria(TmsLeaveMst.class, "leave")
 				.createAlias("tmsUsers", "users")
@@ -124,6 +125,7 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 				.setProjection(Projections.sum("leave.duration"))
 				.add(Restrictions.eq("users.id", userId))
 				.add(Restrictions.eq("sp.sprintId", sprintId))
+				.add(Restrictions.not(Restrictions.in("leave.status", status)))
 				.uniqueResult();
 		return (totalLeaves != null) ? totalLeaves.intValue() : 0;
 	}
