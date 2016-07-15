@@ -37,18 +37,18 @@ define([
 			},
 
 			getStatusList: function() {
-        return [
-          {value: "BACKLOG", name: "BACKLOG"},
-          {value: "TODO", name: "TODO"},
-          {value: "DEVELOPMENT", name: "DEVELOPMENT"},
-          {value: "PULL REQUEST", name: "PULL REQUEST"},
-          {value: "INTERNAL REVIEW", name: "INTERNAL REVIEW"},
-          {value: "QUALITY", name: "QUALITY"},
-          {value: "REOPEN", name: "REOPEN"},
-          {value: "CODE MERGED", name: "CODE MERGED"},
-          {value: "CLOSED", name: "CLOSED"}
+		        return [
+		          {value: "BACKLOG", name: "BACKLOG"},
+		          {value: "TODO", name: "TODO"},
+		          {value: "DEVELOPMENT", name: "DEVELOPMENT"},
+		          {value: "PULL REQUEST", name: "PULL REQUEST"},
+		          {value: "INTERNAL REVIEW", name: "INTERNAL REVIEW"},
+		          {value: "QUALITY", name: "QUALITY"},
+		          {value: "REOPEN", name: "REOPEN"},
+		          {value: "CODE MERGED", name: "CODE MERGED"},
+		          {value: "CLOSED", name: "CLOSED"}
 
-        ];
+		        ];
 		
 			},
 
@@ -64,7 +64,7 @@ define([
           {value: "APPRECIATION", name: "APPRECIATION"},
           {value: "NA", name: "NA"}
         ];
-		
+
 			},
 
 			getReviewerType: function() {
@@ -101,6 +101,14 @@ define([
 		
 			},
 
+			getSprintStatus: function() {
+	      return [
+	        {value: "OPEN", name: "OPEN"},
+	        {value: "CLOSED", name: "CLOSED"}
+	      ];
+		
+			},
+
 			getStatus: function() {
 	      return [
 	        {value: "ACTIVE", name: "ACTIVE"},
@@ -118,5 +126,4 @@ define([
 		}
 		
 	});
-	
 });    

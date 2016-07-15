@@ -36,7 +36,7 @@
                   <div class="assign-section" ng-show="user.userRole === 'LEAD'">
                     <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="checkAll()"/>
                     <select name="selectUser" ng-model="assignToId">
-                      <option value="">--Select --</option>
+                      <option value="">-- Assign To--</option>
                       <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
                     </select>
                     <button class='btn btn-info btn-xs' type="button" ng-click="assignToSprint()"><span
@@ -52,24 +52,24 @@
               </tr>
               </thead>
               <tbody>
-              <tr ng-show="!backlogtories">
-                <td colspan="7" class="text-align-center">No Records Found</td>
-              </tr>
-              <tr ng-repeat="story in backlogtories track by $index">
-                <td>{{$index+1}}
-                <td>{{story.createdDate}}</td>
-                <td>{{story.jiraId}}</td>
-                <td>{{story.moduleName}}</td>
-                <td>{{story.storyPoint}}</td>
-                <td class="text-center table-actions-medium">
-                  <button class='btn btn-primary btn-xs' type="button" ng-click="showEditModal(story)"><span class="glyphicon glyphicon-edit"></span>
-                  </button>
-                  <!-- <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span> Del</button> -->
-                </td>
-                <td class="assign-selection-checkbox">
-                  <input type="checkbox" ng-model="storySelection[$index]"
-                           ng-change="onItemSelected(story, storySelection[$index], $index)"></td>
-              </tr>
+                <tr ng-show="!backlogtories">
+                  <td colspan="7" class="text-align-center">No Records Found</td>
+                </tr>
+                <tr ng-repeat="story in backlogtories track by $index">
+                  <td>{{$index+1}}
+                  <td>{{story.createdDate}}</td>
+                  <td>{{story.jiraId}}</td>
+                  <td>{{story.moduleName}}</td>
+                  <td>{{story.storyPoint}}</td>
+                  <td class="text-center table-actions-medium">
+                    <button class='btn btn-primary btn-xs' type="button" ng-click="showEditModal(story)"><span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                  </td>
+                  <td class="assign-selection-checkbox">
+                    <input type="checkbox" ng-model="storySelection[$index]"
+                      ng-change="onItemSelected(story, storySelection[$index], $index)">
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -148,6 +148,7 @@
   </div>
 </div>
 
+<!-- Add Story Modal -->
 <tms-modal modal-visible="isAddModalVisible" backdrop="static" on-sown="" on-hide="" >
   <modal-header title="Add Story"></modal-header>
   <modal-body>
@@ -197,9 +198,7 @@
     </div>
 
     <div class="form-group">
-      <!-- <tms-datepicker label="Created Date:" ng-model="story.createdDate"></tms-datepicker> -->
-      <label class="label-title">Created Date: </label>
-      <input class="form-control" type="text" ng-model="story.createdDate">
+      <tms-datepicker label="Created Date:" ng-model="story.createdDate"></tms-datepicker>
     </div>
 
     <div class="form-group">
@@ -209,7 +208,7 @@
 
     <div class="form-group">
       <label class="label-title">Module:</label>
-      <select id="moduleDropdown" name="module" class="form-control" ng-model=story.module>
+      <select id="moduleDropdown" name="module" class="form-control" ng-model="story.moduleName">
         <option ng-repeat="option in modules" ng-selected="{{story.module == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>

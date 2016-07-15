@@ -41,7 +41,7 @@
   </div>
 </div>
 
-<!-- ADD LEAVE -->
+<!-- Add leave Modal -->
 <tms-modal modal-visible="isAddModalVisible" backdrop="static" on-sown="" on-hide="" >
   <modal-header title="Add Leave"></modal-header>
   <modal-body>
@@ -71,7 +71,7 @@
   </modal-footer>
 </tms-modal>
 
-<!-- EDIT LEAVE -->
+<!-- Edit leave Modal -->
 <tms-modal modal-visible="isEditModalVisible" backdrop="static" on-sown="" on-hide="" >
   <modal-header title="Edit Leave"></modal-header>
   <modal-body>
@@ -97,11 +97,11 @@
   </modal-body>
   <modal-footer>
     <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
-    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="updateLeave(leave)">Update</button>
+    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="editLeave(leave)">Save</button>
   </modal-footer>
 </tms-modal>
 
-<!-- DELETE LEAVE -->
+<!-- Delete leave Modal -->
 <tms-modal modal-visible="isDeleteModalVisible" backdrop="static" on-sown="" on-hide="" >
   <modal-header title="Delete Leave"></modal-header>
   <modal-body>
@@ -119,3 +119,4 @@
     <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="deleteLeave(leave.leaveId)">Yes</button>
   </modal-footer>
 </tms-modal>
+

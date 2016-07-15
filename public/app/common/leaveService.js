@@ -18,7 +18,7 @@ define([
         
     	};
 
-    	leaveService.updateLeave = function (leave) {
+    	leaveService.editLeave = function (leave) {
     	    leave.projectId = appConstants.user.projectId;
     	    leave.userId = appConstants.user.id;
             return $http({

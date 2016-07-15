@@ -47,7 +47,8 @@ define([], function() {
     $scope.onItemSelected = function(story, isSelected, index){
       if (isSelected) {
         $scope.selectedStoryList.push(story);
-      } else {
+      }
+      else {
         $scope.selectedStoryList.splice(index, 1);
       }
     }
@@ -119,6 +120,8 @@ define([], function() {
       storyService.assignToSprint($scope.selectedStoryList, $scope.assignToId)
         .success(function () {
          getBackLogStories();
+         $scope.assignToId = '';
+         $scope.storySelection = false;
         })
         .error(function (error) {
             $scope.status = 'Unable to process your request: ' + error.message;

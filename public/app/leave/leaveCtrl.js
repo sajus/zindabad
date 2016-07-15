@@ -56,8 +56,8 @@ define([], function() {
 
     }
 
-    $scope.updateLeave = function(leave) {
-      leaveService.updateLeave(leave)
+    $scope.editLeave = function(leave) {
+      leaveService.editLeave(leave)
         .success(function() {
           getLeaves();
           closeModal();

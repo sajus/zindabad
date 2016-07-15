@@ -38,7 +38,7 @@
                     <div class="assign-section" ng-show="user.userRole === 'LEAD'">
                       <input type="checkbox" value="" id="check" ng-model="isAllSelected" ng-change="checkAll()">
                       <select name="selectUser" ng-model="assignToId">
-                        <option value="">--Select --</option>
+                        <option value="">-- Assign To --</option>
                         <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
                       </select>
                       <button class='btn btn-info btn-xs' type="button" id="save" ng-click="assignToSprint()"><span
@@ -198,12 +198,12 @@
     </div>
       <div class="form-group">
         <label class="label-title">Estimate:</label>
-        <input class="form-control" type="text" placeholder="Efforts" ng-model="subtask.efforts" ng-required="true">
+        <input class="form-control" type="text" placeholder="Estimate" ng-model="subtask.efforts" ng-required="true">
       </div>
 
       <div class="form-group">
         <label class="label-title">Scope:</label>
-        <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=subtask.scope>
+        <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model="subtask.scope">
           <option value="">--Select --</option>
           <option ng-repeat="option in scopes" ng-selected="{{subtask.scope == option.value}}" value="{{option.value}}"> {{option.name}}
         </select>
@@ -276,8 +276,7 @@
   </modal-footer>
 </tms-modal>
 
-<!-- add review -->
-
+<!-- Add code review modal-->
 <tms-modal modal-visible="isCodeReviewModalVisible" backdrop="static" on-sown="" on-hide="">
   <modal-header title="Add Code Review"></modal-header>
   <modal-body>
