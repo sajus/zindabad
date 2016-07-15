@@ -21,6 +21,7 @@ import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.service.TmsLeaveService;
+import com.cyb.tms.service.TmsSprintService;
 import com.cyb.tms.util.URIConstants;
 
 @RestController
@@ -29,11 +30,15 @@ public class TmsLeaveController {
 
 	@Autowired
 	TmsLeaveService tmsLeaveService;
+	
+	@Autowired
+	private TmsSprintService tmsSprintService;
 
 	// -------------------Create a leave---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createLeave(@RequestBody TmsLeaveDTO tmsleaveDTO) {
 		tmsLeaveService.createLeave(tmsleaveDTO);
+		tmsSprintService.updateSprintHours(tmsleaveDTO.getProjectId());
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
@@ -42,6 +47,7 @@ public class TmsLeaveController {
 	@RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateLeave(@RequestBody TmsLeaveDTO tmsleaveDTO) {
 		tmsLeaveService.updateLeave(tmsleaveDTO);
+		tmsSprintService.updateSprintHours(tmsleaveDTO.getProjectId());
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	}	

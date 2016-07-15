@@ -12,5 +12,6 @@ public interface TmsSprintDAO {
 	public List<TmsSprintMst> getAllSprints(long projectId);
 	public TmsSprintMst getSprint(long id);
 	public TmsSprintMst getActiveSprint(long projectId);
+	public void updateSprintHours(Long projectId);
 	
 }

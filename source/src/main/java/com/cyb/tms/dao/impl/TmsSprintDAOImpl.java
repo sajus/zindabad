@@ -1,5 +1,6 @@
 package com.cyb.tms.dao.impl;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 		BeanUtils.copyProperties(tmsSprintDTO, tmsSprintMst);
 		tmsSprintMst.setTmsProject(project);
 		tmsSprintMst.setSprintStatus(sprint_open);
-		tmsSprintMst.setSprintHours(getSprintHours(tmsSprintDTO));
+		tmsSprintMst.setSprintHours(getSprintHours(tmsSprintDTO.getProjectId(),tmsSprintMst.getSprintStartDate(), tmsSprintMst.getSprintEndDate()));
 		tmsSprintMst.setSprintVelocity(getAverageSprintVelocity(tmsSprintDTO.getProjectId()));
 		return (Long)hibernateUtil.create(tmsSprintMst);
 	}
@@ -72,7 +73,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	@Override
 	public List<String> updateSprint(TmsSprintDTO tmsSprintDTO) {
 		TmsSprintMst tmsSprintMst = hibernateUtil.fetchById(tmsSprintDTO.getProjectId(), TmsSprintMst.class);
-		tmsSprintMst.setSprintHours(getSprintHours(tmsSprintDTO));
+		tmsSprintMst.setSprintHours(getSprintHours(tmsSprintDTO.getProjectId(),tmsSprintMst.getSprintStartDate(), tmsSprintMst.getSprintEndDate()));
 		if (tmsSprintDTO.getSprintStatus().equalsIgnoreCase(sprint_closed)) {
 			List<String> pendingStories = getIncompleteStroies(tmsSprintDTO.getProjectId());
 			if (pendingStories.size() > 0) {
@@ -117,13 +118,21 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 				.add(Restrictions.eq("proj.pid", projectId)).uniqueResult();
 		return (sprintVelocity != null) ? sprintVelocity.intValue() : 0;
 	}
+	
 
-	private int getSprintHours(TmsSprintDTO tmsSprintDTO) {
-		List<TmsUsers> users = tmsUserService.getUsersByStatus(tmsSprintDTO.getProjectId());
-		int sprintDays = WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(tmsSprintDTO.getSprintStartDate(), tmsSprintDTO.getSprintEndDate());
-		int leaves = tmsLeaveDAO.getTotalLeavesBySprint(tmsSprintDTO.getProjectId());
-		int holidays = tmsOrgLeavesDAO.calculateTotalHolidays(tmsSprintDTO.getSprintStartDate(), tmsSprintDTO.getSprintEndDate());
-		return (sprintDays * users.size() * Integer.parseInt(workingHours))-(leaves+holidays);
+	private int getSprintHours(Long projectId, Date startDate, Date endDate) {
+		List<TmsUsers> users = tmsUserService.getUsersByStatus(projectId);
+		int sprintDays = WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(startDate, endDate);
+		int leaves = tmsLeaveDAO.getTotalLeavesBySprint(projectId);
+		int holidays = tmsOrgLeavesDAO.calculateTotalHolidays(startDate, endDate);
+		return (sprintDays - (leaves+holidays))* users.size() * Integer.parseInt(workingHours);
+	}
+
+	@Override
+	public void updateSprintHours(Long projectId) {
+		TmsSprintMst tmsSprintMst = hibernateUtil.fetchById(projectId, TmsSprintMst.class);
+		tmsSprintMst.setSprintHours(getSprintHours(projectId, tmsSprintMst.getSprintStartDate(), tmsSprintMst.getSprintEndDate()));
+		hibernateUtil.update(tmsSprintMst);
 	}
 
 }

@@ -62,6 +62,7 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 
 	@Override
 	public int getTotalLeavesBySprint(Long projectId) {
+		Object[] status = {"DELETED"};
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
 		if(sprint != null) {
 			Long totalLeaves = (Long) hibernateUtil.getCurrentSession()
@@ -69,6 +70,7 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 							.createAlias("tmsSprintMst", "sp")
 							.setProjection(Projections.sum("leave.duration"))
 							.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()))
+							.add(Restrictions.not(Restrictions.in("leave.status", status)))
 							.uniqueResult();
 			return totalLeaves.intValue();
 		}

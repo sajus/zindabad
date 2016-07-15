@@ -43,6 +43,12 @@ public class TmsSprintServiceImpl implements TmsSprintService{
 	public TmsSprintMst getSprint(long id) {
 		return sprintDAO.getSprint(id);
 	}
+
+	@Override
+	public void updateSprintHours(Long projectId) {
+		sprintDAO.updateSprintHours(projectId);
+		
+	}
 	
 	//@Override
 	//public List<TmsSprintMst> getActiveSprint(Long projectId) throws Exception {
