@@ -13,10 +13,10 @@ define([], function() {
       $scope.editStorySelection = [];
       $scope.isAllSelected = false;
       $scope.availableOptions = appConstants.getStatusList();
-      $scope.modules = appConstants.getModule();
       $scope.currentUser = appConstants.user;
       $scope.assignToId = ($scope.currentUser.userRole !== 'LEAD') ? $scope.currentUser.id : undefined;
       getUser();
+      getModule();
     };
 
     $scope.changeTab = function (currentTab) {
@@ -116,12 +116,23 @@ define([], function() {
         });
     }
 
+    function getModule() {
+      manageService.getModule()
+        .success(function (dataModule) {
+          $scope.modules = dataModule;
+        })
+        .error(function (error) {
+          $scope.status = 'Unable to load customer data: ' + error.message;
+        });
+    }
+
     $scope.assignToSprint = function(){
       storyService.assignToSprint($scope.selectedStoryList, $scope.assignToId)
         .success(function () {
          getBackLogStories();
          $scope.assignToId = '';
-         $scope.storySelection = false;
+         $scope.isAllSelected = false;
+         selectAllItems();
         })
         .error(function (error) {
             $scope.status = 'Unable to process your request: ' + error.message;

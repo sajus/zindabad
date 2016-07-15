@@ -182,7 +182,7 @@
 
     <div class="form-group">
       <label class="label-title">Story:</label>
-      <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model=subtask.storyId>
+      <select id="jiraIdDropdown" name="jiraIdDropdown" text="Select Story" class="form-control" ng-model=subtask.storyId>
         <option value="{{story.storyId}}" data-ng-repeat="story in stories">{{story.jiraId}}</option>
       </select>
     </div>
@@ -203,7 +203,7 @@
 
       <div class="form-group">
         <label class="label-title">Scope:</label>
-        <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model="subtask.scope">
+        <select id="subtaskScopeDropdown" name="subtaskScopeDropdown" placeholder="Select Scope" class="form-control" ng-model="subtask.scope">
           <option value="">--Select --</option>
           <option ng-repeat="option in scopes" ng-selected="{{subtask.scope == option.value}}" value="{{option.value}}"> {{option.name}}
         </select>
@@ -211,7 +211,7 @@
 
       <div class="form-group">
         <label class="label-title">Type:</label>
-        <select id="moduleDropdown" name="module" placeholder="Select Module" class="form-control" ng-model=subtask.type>
+        <select id="subtaskTypeDropdown" name="subtaskTypeDropdown" placeholder="Select Type" class="form-control" ng-model=subtask.type>
           <option value="">--Select --</option>
           <option ng-repeat="option in types" ng-selected="{{subtask.type == option.value}}" value="{{option.value}}"> {{option.name}}
         </select>
@@ -235,7 +235,7 @@
 
     <div class="form-group">
       <label class="label-title">Story:</label>
-      <select id="moduleDropdown" name="module" text="Select Story" class="form-control" ng-model="editSubtask.storyId">
+      <select id="jiraIdDropdown" name="jiraIdDropdown" text="Select Story" class="form-control" ng-model="editSubtask.storyId">
         <option value="{{story.storyId}}" data-ng-repeat="story in stories">{{story.jiraId}}</option>
       </select>
     </div>
@@ -251,7 +251,7 @@
 
     <div class="form-group">
       <label class="label-title">Type:</label>
-      <select id="moduleDropdown" name="module" class="form-control" ng-model="editSubtask.type">
+      <select id="subtaskTypeDropdown" name="subtaskTypeDropdown" class="form-control" ng-model="editSubtask.type">
         <option ng-repeat="option in types" ng-selected="{{editSubtask.type == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
@@ -263,7 +263,7 @@
 
     <div class="form-group">
       <label class="label-title">Scope:</label>
-      <select id="moduleDropdown" name="module" class="form-control" ng-model="editSubtask.scope">
+      <select id="subtaskScopeDropdown" name="subtaskScopeDropdown" class="form-control" ng-model="editSubtask.scope">
        <option ng-repeat="option in scopes" ng-selected="{{editSubtask.scope == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
@@ -301,7 +301,7 @@
 
     <div class="form-group required">
       <label class="label-title" for="review_type">Reviewer:</label>
-      <select class="form-control" name="selectUser" ng-model="codeReview.reviewerId" required="required" >
+      <select class="form-control" name="selectReviewer" ng-model="codeReview.reviewerId" required="required" >
         <option value="">--Select --</option>
         <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
       </select>
@@ -313,8 +313,7 @@
 
     <div class="form-group">
       <label class="label-title">Pull Request Id</label>
-      <input class="form-control" type="text" placeholder=" Pull Request Id"
-             ng-model="codeReview.pullRequest" >
+      <input class="form-control" type="text" placeholder=" Pull Request Id" ng-model="codeReview.pullRequest">
     </div>
 
     <div class="form-group required">
@@ -323,26 +322,23 @@
 
     <div class="form-group" >
       <label class="label-title" >File Name</label>
-      <input class="form-control" type="text" placeholder="FileName"
-             ng-model="codeReview.fileName" >
+      <input class="form-control" type="text" placeholder="FileName" ng-model="codeReview.fileName">
     </div>
 
     <div class="form-group">
       <p class="formfield"> 
-      <label class="label-title">Comments:</label>
-      <textarea class="form-control" id="disabledInput" placeholder="Comments" type="text"  ng-model="codeReview.comments"></textarea>
+        <label class="label-title">Comments:</label>
+        <textarea class="form-control" id="disabledInput" placeholder="Comments" type="text"  ng-model="codeReview.comments"></textarea>
       </p>
-      </div>
+    </div>
 
     <div class="form-group required">
-      <tms-datepicker label="Fixed Date:" ng-model="codeReview.commentsFixedDate"
-      required="required"></tms-datepicker>
+      <tms-datepicker label="Fixed Date:" ng-model="codeReview.commentsFixedDate" required="required"></tms-datepicker>
     </div>
 
     <div class="form-group required">
       <label class="label-title" for="review_type">Fixed By:</label>
-      <select class="form-control" name="selectUser" ng-model="codeReview.fixedById" 
-      required="required">
+      <select class="form-control" name="selectFixedBy" ng-model="codeReview.fixedById" required="required">
         <option value="">--Select --</option>
         <option ng-repeat="user in users" value="{{user.id}}">{{user.userName}}</option>
       </select>
@@ -355,11 +351,9 @@
         <option ng-repeat="option in options" ng-selected="{{codeReview.commentType == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
-
   </modal-body>
   <modal-footer>
     <button type="button" class="btn btn-secondary" ng-click="closeCodeReviewModal()">Cancel</button>
     <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="addReview(codeReview)">Add</button>
   </modal-footer>
 </tms-modal>
-

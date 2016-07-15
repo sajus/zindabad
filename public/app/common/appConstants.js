@@ -37,19 +37,17 @@ define([
 			},
 
 			getStatusList: function() {
-		        return [
-		          {value: "BACKLOG", name: "BACKLOG"},
-		          {value: "TODO", name: "TODO"},
-		          {value: "DEVELOPMENT", name: "DEVELOPMENT"},
-		          {value: "PULL REQUEST", name: "PULL REQUEST"},
-		          {value: "INTERNAL REVIEW", name: "INTERNAL REVIEW"},
-		          {value: "QUALITY", name: "QUALITY"},
-		          {value: "REOPEN", name: "REOPEN"},
-		          {value: "CODE MERGED", name: "CODE MERGED"},
-		          {value: "CLOSED", name: "CLOSED"}
-
-		        ];
-		
+        return [
+          {value: "BACKLOG", name: "BACKLOG"},
+          {value: "TODO", name: "TODO"},
+          {value: "DEVELOPMENT", name: "DEVELOPMENT"},
+          {value: "PULL REQUEST", name: "PULL REQUEST"},
+          {value: "INTERNAL REVIEW", name: "INTERNAL REVIEW"},
+          {value: "QUALITY", name: "QUALITY"},
+          {value: "REOPEN", name: "REOPEN"},
+          {value: "CODE MERGED", name: "CODE MERGED"},
+          {value: "CLOSED", name: "CLOSED"}
+        ];
 			},
 
 			getList: function() {
@@ -64,7 +62,6 @@ define([
           {value: "APPRECIATION", name: "APPRECIATION"},
           {value: "NA", name: "NA"}
         ];
-
 			},
 
 			getReviewerType: function() {
@@ -73,7 +70,6 @@ define([
 	        {value: "CLIENT", name: "CLIENT"},
 	        {value: "QA", name: "QA"}
 	      ];
-		
 			},
 
 			getScope: function() {
@@ -81,7 +77,6 @@ define([
 	        {value: "PLANNED", name: "PLANNED"},
 	        {value: "UNPLANNED", name: "UNPLANNED"}
 	      ];
-		
 			},
 
 			getSubtaskType: function() {
@@ -89,16 +84,6 @@ define([
 	        {value: "BUG", name: "BUG"},
 	        {value: "SUBTASK", name: "SUBTASK"}
 	      ];
-		
-			},
-
-			getModule: function() {
-	      return [
-	        {value: "GAMBIT", name: "GAMBIT"},
-	        {value: "GOONIS", name: "GOONIS"},
-	        {value: "MATRIX", name: "MATRIX"}
-	      ];
-		
 			},
 
 			getSprintStatus: function() {
@@ -106,7 +91,6 @@ define([
 	        {value: "OPEN", name: "OPEN"},
 	        {value: "CLOSED", name: "CLOSED"}
 	      ];
-		
 			},
 
 			getStatus: function() {
@@ -114,7 +98,6 @@ define([
 	        {value: "ACTIVE", name: "ACTIVE"},
 	        {value: "INACTIVE", name: "INACTIVE"}
 	      ];
-		
 			},
 			
 			getRole: function(){
