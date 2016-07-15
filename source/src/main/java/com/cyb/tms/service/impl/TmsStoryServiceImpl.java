@@ -66,6 +66,14 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 		tmsStoryDAO.addToCurrentSprint(storyDTOs, projectId, assignToId, modifiedById);
 	}
 
+	@Override
+	public List<LinkedHashMap<String, Object>> getAllCurrentUserStoriesBySprint(Long projectId) {
+		return tmsStoryDAO.getAllCurrentUserStoriesBySprint(projectId);
+	
+	}
+
+	
+
 	
 	
 }

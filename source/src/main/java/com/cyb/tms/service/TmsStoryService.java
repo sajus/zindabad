@@ -18,5 +18,6 @@ public interface TmsStoryService {
 	public List<LinkedHashMap<String, Object>> getCurrentUserStoriesBySprint(
 			Long userId, Long projectId);
 	void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById);
-
+	public List<LinkedHashMap<String, Object>> getAllCurrentUserStoriesBySprint(
+			Long projectId);	
 }
