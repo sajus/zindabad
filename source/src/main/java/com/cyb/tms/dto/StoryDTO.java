@@ -23,6 +23,7 @@ public class StoryDTO extends BaseDTO {
 	private String jiraId;
 	private int storyPoint;
 	private Long projectId;
+	private Long moduleId;
 	
 	public StoryDTO() {
 		super();
@@ -30,7 +31,7 @@ public class StoryDTO extends BaseDTO {
 
 	public StoryDTO(Long storyId, Long userId, String module, String status,
 			Date assignedDate, Date createdDate, String jiraId, int storyPoint,
-			Long projectId) {
+			Long projectId, Long moduleId) {
 		super();
 		this.storyId = storyId;
 		this.userId = userId;
@@ -41,6 +42,7 @@ public class StoryDTO extends BaseDTO {
 		this.jiraId = jiraId;
 		this.storyPoint = storyPoint;
 		this.projectId = projectId;
+		this.moduleId = moduleId;
 	}
 
 	public Long getStoryId() {
@@ -114,4 +116,12 @@ public class StoryDTO extends BaseDTO {
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
 	}
+
+	public Long getModuleId() {
+		return moduleId;
+	}
+
+	public void setModuleId(Long moduleId) {
+		this.moduleId = moduleId;
+	}	
 }

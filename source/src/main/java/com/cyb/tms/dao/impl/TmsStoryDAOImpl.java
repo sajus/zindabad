@@ -63,7 +63,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Override
 	public long createStory(StoryDTO storyDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
-		TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
+		TmsModule module = hibernateUtil.fetchById(storyDTO.getModuleId(), TmsModule.class);
 		TmsStoryMst tmsStoryMst = new TmsStoryMst();
 		BeanUtils.copyProperties(storyDTO, tmsStoryMst);
 		tmsStoryMst.setTmsModule(module);
@@ -113,7 +113,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		}
 	}
 
-	//------------------- Update a Story --------------------------------------------------------
+	//------------------- Edit a Story --------------------------------------------------------
 	@SuppressWarnings("unchecked")
 	@Override
 	public void updateStoryStatus(StoryDTO storyDTO) {
@@ -143,7 +143,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Override
 	public void editStory(StoryDTO storyDTO) {
 		TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
-		TmsModule module = hibernateUtil.findByPropertyName("moduleName", storyDTO.getModule(), TmsModule.class);
+		TmsModule module = hibernateUtil.fetchById(storyDTO.getModuleId(), TmsModule.class);
 		tmsStoryMst.setJiraId(storyDTO.getJiraId());
 		tmsStoryMst.setCreatedDate(storyDTO.getCreatedDate());
 		tmsStoryMst.setStoryPoint(storyDTO.getStoryPoint());
@@ -325,7 +325,5 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		List<UserStoryStaus> userStoryStatusList = new ArrayList<UserStoryStaus>();
 		userStoryStatusList.addAll(tmsStoryMst.getUserStoryStauses());
 		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
-	}
-
-	
+	}	
 }
