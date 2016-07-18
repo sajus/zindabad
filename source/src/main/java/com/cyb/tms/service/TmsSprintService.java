@@ -11,5 +11,6 @@ public interface TmsSprintService {
 	public List<String> updateSprint(TmsSprintDTO tmsSprintDTO);
 	public List<TmsSprintMst> getAllSprints(Long projectId) throws Exception;
 	public TmsSprintMst getSprint(long id);
+	public void updateSprintHours(Long projectId);
 	
 }
