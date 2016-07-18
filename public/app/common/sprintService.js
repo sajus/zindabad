@@ -16,7 +16,7 @@ define([
         
   	};
 
-  	sprintService.updateSprint = function (sprint) {
+  	sprintService.editSprint = function (sprint) {
   		sprint.projectId = appConstants.user.projectId;
         return $http({
 			    url: appConstants.endPointBase+"api/sprint/edit", 

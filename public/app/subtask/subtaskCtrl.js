@@ -168,6 +168,9 @@ define([], function() {
       subtaskService.assignToSprint($scope.selectedSubtaskList, $scope.assignToId)
         .success(function () {
         getUnassignedSubtasks();
+        $scope.assignToId = '';
+        $scope.isAllSelected = false;
+        selectAllItems();
         })
         .error(function (error) {
           $scope.status = 'Unable to process your request: ' + error.message;

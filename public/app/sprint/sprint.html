@@ -1,7 +1,7 @@
 <app-loader></app-loader>
 <div class="container" ng-show="!loading">
   <div class="float-right">
-    <button class="btn btn-success btn-add" type="button" data-title="Add" data-toggle="modal" ng-click="showModal('#add')">
+    <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()">
       <i class="glyphicon glyphicon-plus gs"></i>
         Add Sprint
     </button>
@@ -28,116 +28,91 @@
         <td>{{ sprint.sprintHours }}</td>
         <td>{{ sprint.sprintStatus }}</td>
         <td>{{ sprint.sprintVelocity}}</td>
-        <td>
-          <p data-placement="top" data-toggle="tooltip" title="Edit">
-            <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" ng-disabled="sprint.sprintStatus == 'CLOSED'" ng-click="showModal('#edit', sprint)">
-              <span class="glyphicon glyphicon-edit"></span>
-           </button>
-          </p>
+        <td class="text-center table-actions-medium">
+          <button class="btn btn-primary btn-xs"  type="button" ng-disabled="sprint.sprintStatus == 'CLOSED'" ng-click="showEditModal(sprint)"><span class="glyphicon glyphicon-edit"></span>
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Edit Your Sprint Details</h4>
-      </div>
-
-      <div class="modal-body">
-        <div class="sprint-errors" ng-show="error">
-          <div class="alert alert-danger">
-            <strong>{{error}}. </strong> {{errorMessage}}
-            <div>{{errorDetails}}</div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="label-title">Name:</label>
-          <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintName" disabled>
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">Start Date:</label>
-          <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintStartDate" disabled>
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">End Date:</label>
-          <input class="form-control" type="text" ng-model="sprint.sprintEndDate">
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">Hours:</label>
-          <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintHours" disabled>
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">Status:</label>
-            <select id="selectbasic" name="selectbasic" class="form-control" ng-model=sprint.sprintStatus>
-              <option value="OPEN" >Open</option>
-              <option value="CLOSED" >Closed</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">Velocity:</label>
-            <input class="form-control" id="disabledInput" type="text"  ng-model="sprint.sprintVelocity" disabled>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal('#edit')">Cancel</button>
-          <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="updateSprint(sprint)">Update</button>
-        </div>
+<!-- Add Sprint Modal -->
+<tms-modal modal-visible="isAddModalVisible" backdrop="static" on-sown="" on-hide="">
+  <modal-header title="Add New Sprint"></modal-header>
+  <modal-body>
+    <div class="sprint-errors" ng-show="errorMessage">
+      <div class="alert alert-warning">
+        <strong>Error. </strong> {{errorMessage}}
       </div>
     </div>
-  </div>
-      <!-- /.modal-content --> 
-</div>
+    <div class="form-group">
+      <label class="label-title">Sprint Name: </label>
+      <input class="form-control " type="text" placeholder="Sprint Name" ng-model="sprint.sprintName">
+    </div>
 
-<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-          <h4 class="modal-title custom_align" id="Heading">Add New Sprint</h4>
-      </div>
+    <div class="form-group">
+      <tms-datepicker label="Start Date:" ng-model="sprint.sprintStartDate"></tms-datepicker>
+    </div>
 
-      <div class="modal-body">
-        <div class="form-group">
-          <tms-alert error-message=""></tms-alert>
-        </div>
+    <div class="form-group">
+      <tms-datepicker label="End Date:" ng-model="sprint.sprintEndDate"></tms-datepicker>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
+    <button type="button" class="btn btn-primary" ng-disabled="errorMessage" ng-click="addSprint(sprint)">Save
+    </button>
+  </modal-footer>
+</tms-modal>
 
-        <div class="form-group">
-          <label class="label-title">Sprint Name: </label>
-          <input class="form-control " type="text" placeholder="Name" ng-model="sprint.sprintName">
-        </div>
-        <div class="form-group">
-          <label class="label-title">Start Date: </label>
-          <input class="form-control" type="text" placeholder="Select Start Date(YYYY-MM-DD)" ng-model="sprint.sprintStartDate">
-        </div>
-
-        <div class="form-group">
-          <label class="label-title">End Date: </label>
-          <input class="form-control" type="text" placeholder="Select End Date(YYYY-MM-DD)" ng-model="sprint.sprintEndDate">
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal('#add')">Cancel</button>
-          <button type="button" class="btn btn-primary" ng-click="addSprint(sprint)">Save</button>
-        </div>
-        
+<!-- Edit Sprint Modal -->
+<tms-modal modal-visible="isEditModalVisible" backdrop="static" on-sown="" on-hide="">
+  <modal-header title="Edit Sprint Details"></modal-header>
+  <modal-body>
+    <div class="sprint-errors" ng-show="errorMessage">
+      <div class="alert alert-warning">
+        <strong>Error. </strong> {{errorMessage}}
       </div>
     </div>
-  </div>
-</div>
 
+    <div class="form-group">
+      <label class="label-title">Name:</label>
+      <input class="form-control" id="disabledInput" type="text"  ng-model="editSprint.sprintName" disabled>
+    </div>
 
+    <div class="form-group">
+      <label class="label-title">Start Date:</label>
+      <input class="form-control" type="text" id="disabledInput" ng-model="editSprint.sprintStartDate" disabled>
+    </div>
+
+    <div class="form-group">
+      <tms-datepicker label="End Date:" ng-model="editSprint.sprintEndDate"></tms-datepicker>
+    </div>
     
+    <div class="form-group">
+      <label class="label-title">Hours:</label>
+      <input class="form-control" id="disabledInput" type="text"  ng-model="editSprint.sprintHours" disabled>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Status:</label>
+      <select id="selectSprintStatus" name="selectSprintStatus" class="form-control" ng-model="editSprint.sprintStatus">
+        <option ng-repeat="option in sprintStatus" ng-selected="{{editSprint.status == option.value}}" value="{{option.value}}"> {{option.name}}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Velocity:</label>
+      <input class="form-control" id="disabledInput" type="text"  ng-model="editSprint.sprintVelocity" disabled>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
+    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="editSprint(editSprint)">Update
+    </button>
+  </modal-footer>
+</tms-modal>
+
  
-		
-		
-	 
