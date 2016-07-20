@@ -29,6 +29,17 @@ define([
       return $http(req);
     };
 
+    self.getAllCurrentUserStoriesBySprint = function () {
+      var req = {
+        method: 'GET',
+        url: appConstants.endPointBase+"api/story/user/allusers",
+        params: {
+          projectId: appConstants.user.projectId,
+        }
+      }
+      return $http(req);
+    }; 
+
     self.getBackLogStories = function () {
       var req = {
          method: 'GET',

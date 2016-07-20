@@ -95,5 +95,11 @@ public class TmsStoryController {
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	} 
+     
+ 	@RequestMapping(value = URIConstants.ALL_USER_STORIES_BY_SPRINT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+ 	public ResponseEntity<List<LinkedHashMap<String, Object>>> listAllCurrentUserStoriesBySprint(@RequestParam  Long projectId) throws Exception {
+ 		List<LinkedHashMap<String, Object>> stories = tmsStoryService.getAllCurrentUserStoriesBySprint(projectId);
+ 		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(stories, HttpStatus.OK);
+ 	}
 
 }

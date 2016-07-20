@@ -17,6 +17,7 @@ define([], function() {
       $scope.assignToId = ($scope.currentUser.userRole !== 'LEAD') ? $scope.currentUser.id : undefined;
       getUser();
       getModule();
+      getAllCurrentUserStoriesBySprint();
     };
 
     $scope.changeTab = function (currentTab) {
@@ -81,6 +82,19 @@ define([], function() {
       storyService.getStories()
         .success(function (dataStories) {
          $scope.stories = dataStories;
+         $scope.loading = false;
+        })
+        .error(function (error) {
+            $scope.loading = false;
+            $scope.status = 'Unable to process your request: ' + error.message;
+        });
+    }
+
+    function getAllCurrentUserStoriesBySprint() {
+      $scope.loading = true;
+      storyService.getAllCurrentUserStoriesBySprint()
+        .success(function (allstories) {
+         $scope.allstories = allstories;
          $scope.loading = false;
         })
         .error(function (error) {

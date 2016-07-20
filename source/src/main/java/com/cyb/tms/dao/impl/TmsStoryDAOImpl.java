@@ -113,7 +113,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		}
 	}
 
-	//------------------- Edit a Story --------------------------------------------------------
+	//------------------- Update a Story --------------------------------------------------------
 	@SuppressWarnings("unchecked")
 	@Override
 	public void updateStoryStatus(StoryDTO storyDTO) {
@@ -181,7 +181,6 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			} else {
 				return null;
 			}
-
 		} else {
 			throw new Exception("Sprint not found");
 		}
@@ -325,5 +324,32 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		List<UserStoryStaus> userStoryStatusList = new ArrayList<UserStoryStaus>();
 		userStoryStatusList.addAll(tmsStoryMst.getUserStoryStauses());
 		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
-	}	
+	}
+	 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LinkedHashMap<String, Object>> getAllCurrentUserStoriesBySprint(Long projectId) {
+		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
+		if(sprint != null) {
+			List<Long> backLogIds = getBackLogStorieIds();
+			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+					.createAlias("tmsSprintMst", "sprint")
+					.createAlias("tmsStoryMst", "story")
+					.createAlias("tmsUsersByAssignedTo", "users")
+					.setProjection( Projections.distinct(Projections.property("story.storyId")))
+					.add(backLogIds.size() > 0 ? Restrictions.not(Restrictions.in("story.storyId", backLogIds)): Restrictions.sqlRestriction("(1=1)"))
+					//.add(Restrictions.eq("users.id", userId))
+					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
+			if(storyIds.size() > 0) {
+				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
+											.add(Restrictions.in("storyId", storyIds)).list();
+				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+				return parseStories(stories);
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
 }
