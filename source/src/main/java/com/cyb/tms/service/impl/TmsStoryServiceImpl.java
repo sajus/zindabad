@@ -69,11 +69,5 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	@Override
 	public List<LinkedHashMap<String, Object>> getAllCurrentUserStoriesBySprint(Long projectId) {
 		return tmsStoryDAO.getAllCurrentUserStoriesBySprint(projectId);
-	
 	}
-
-	
-
-	
-	
 }
