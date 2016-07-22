@@ -1,7 +1,7 @@
 <app-loader></app-loader>
 <div class="container" ng-show="!loading">
   <div class="float-right">
-    <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()">
+    <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()" ng-disabled="addButton">
       <i class="glyphicon glyphicon-plus gs"></i>
         Add Sprint
     </button>
@@ -73,6 +73,9 @@
     <div class="sprint-errors" ng-show="errorMessage">
       <div class="alert alert-warning">
         <strong>Error. </strong> {{errorMessage}}
+        <p>
+          {{errorDetails}}
+        </p>
       </div>
     </div>
 
@@ -110,7 +113,7 @@
   </modal-body>
   <modal-footer>
     <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
-    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="editSprint(editSprint)">Update
+    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="updateSprint(editSprint)">Update
     </button>
   </modal-footer>
 </tms-modal>

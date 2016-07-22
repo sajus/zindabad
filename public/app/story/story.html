@@ -18,6 +18,12 @@
           <app-loader></app-loader>
           <div ng-show="!loading">
             <div ng-hide="user.userRole === 'MANAGER'">
+              <div class="float-right">
+                <button class="btn btn-success btn-add" type="button" ng-click="showAddModal()">
+                  <i class="glyphicon glyphicon-plus gs"></i>
+                  Add Story
+                </button>
+              </div>
             <table id="mytable" class="table table-hover table-bordered table-striped">
               <thead>
               <tr>
