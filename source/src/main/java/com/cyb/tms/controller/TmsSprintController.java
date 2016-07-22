@@ -63,7 +63,7 @@ public class TmsSprintController {
 	    @RequestMapping(value = URIConstants.EDIT, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
 	    public ResponseEntity<Void> updateSprint(@RequestBody TmsSprintDTO tmsSprintDTO) {
 	    	List<String> incompleteStories = tmsSprintService.updateSprint(tmsSprintDTO);
-	    	if(incompleteStories != null & incompleteStories.size() > 0) {
+	    	if(incompleteStories != null && incompleteStories.size() > 0) {
 	    		throw new SprintException(ErrorCodes.CLOSE, incompleteStories);
 	    	}
 			HttpHeaders headers = new HttpHeaders();
