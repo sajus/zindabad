@@ -8,6 +8,7 @@ define([], function() {
         $scope.isAddModalVisible = false;
         $scope.isEditModalVisible = false;
         $scope.errorMessage = undefined;
+        $scope.addButton = false;
         $scope.sprintStatus = appConstants.getSprintStatus();
         getSprints();
       };
@@ -16,7 +17,13 @@ define([], function() {
         $scope.loading = true;
         sprintService.getSprint()
           .success(function (dataSprint) {
-          var array = _.sortBy(dataSprint, function(sprint) {
+            for(var i=0; i<dataSprint.length; i++){
+              if(dataSprint[i].sprintStatus === "OPEN"){
+                $scope.addButton = true;
+                break;
+              }
+            }
+            var array = _.sortBy(dataSprint, function(sprint) {
               return sprint.sprintStartDate;
           });
            $scope.sprints = array.reverse();
@@ -44,8 +51,8 @@ define([], function() {
         $scope.isEditModalVisible = false;
       }
 
-      $scope.editSprint = function(sprint){
-        sprintService.editSprint(sprint)
+      $scope.updateSprint = function(sprint){
+        sprintService.updateSprint(sprint)
           .success(function () {
               getSprints();
               closeModal();

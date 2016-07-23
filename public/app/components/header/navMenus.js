@@ -9,7 +9,7 @@ define([
 
             getMenus: function() {
                 return [
-                    {label: 'DashBoard', key: 'dashboard', accessTo: ['LEAD', 'DEVELOPER']},
+                    {label: 'DashBoard', key: 'dashboard', accessTo: ['MANAGER', 'LEAD', 'DEVELOPER']},
                     {label: 'Manage', key: 'manage', accessTo: ['MANAGER']},
                     {label: 'Sprint', key: 'sprint', accessTo: ['MANAGER', 'LEAD']},
                     {label: 'Story', key: 'story', accessTo: ['MANAGER','LEAD', 'DEVELOPER']},
