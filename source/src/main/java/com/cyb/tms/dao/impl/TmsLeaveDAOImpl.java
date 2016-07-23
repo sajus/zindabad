@@ -72,7 +72,7 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 							.add(Restrictions.eq("sp.sprintId", sprint.getSprintId()))
 							.add(Restrictions.not(Restrictions.in("leave.status", status)))
 							.uniqueResult();
-			return totalLeaves.intValue();
+			return (totalLeaves != null) ? totalLeaves.intValue() : 0;
 		}
 		return 0;
 	}
