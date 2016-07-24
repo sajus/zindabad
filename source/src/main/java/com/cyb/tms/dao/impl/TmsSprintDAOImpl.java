@@ -39,10 +39,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	
 	@Autowired
 	private TmsStoryDAO tmsStoryDAO;
-	
-	@Autowired
-	private TmsSprintDAO tmsSprintDAO;
-	
+
 	@Autowired
 	private TmsLeaveDAO tmsLeaveDAO;
 	

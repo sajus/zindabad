@@ -7,7 +7,14 @@ define([
         var userService = {};
 
     		userService.getUser = function () {
-          return $http.get(appConstants.endPointBase+"api/user/list");
+          var req = {
+            method: 'POST',
+            url: appConstants.endPointBase+"api/user/list/project",
+            params: {
+              projectId: appConstants.user.projectId
+            }
+          }
+          return $http(req);
 
         };
 
@@ -29,11 +36,6 @@ define([
             return $http(req);
         };
 
-
     return userService;
-
-
     });
-	
-	
 });
