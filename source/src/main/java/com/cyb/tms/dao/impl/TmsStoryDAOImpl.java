@@ -219,22 +219,22 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Override
 	public List<String> getIncompleteStoriesInSprint(Long projectId) {
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(projectId);
-		Object[] status = {backlog, closed, code_merged};
+		Object[] status = {backlog, closed};
 		if(sprint != null) {
 			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
-					.createAlias("tmsSprintMst", "sprint")
 					.createAlias("tmsStoryMst", "story")
-					.setProjection( Projections.distinct(Projections.property("story.storyId")))
-					.add(Subqueries.propertyNotIn("story.storyId",  DetachedCriteria.forClass(UserStoryStaus.class)
-							.createAlias("tmsStatusMst", "tsm")
-							.createAlias("tmsStoryMst", "story")
+					.createAlias("tmsSprintMst", "sprint")
+					.createAlias("tmsStatusMst", "tsm")
+					.add(Subqueries.propertyIn("uss.id",  DetachedCriteria.forClass(UserStoryStaus.class, "status")
+							.add(Restrictions.eqProperty("uss.tmsStoryMst", "status.tmsStoryMst"))
+							.setProjection(Projections.max("status.id"))))
 							.add(Restrictions.in("tsm.status", status))
-					        .setProjection(Property.forName("story.storyId"))))
-					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
+					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId()))
+					.setProjection( Projections.distinct(Projections.property("story.storyId"))).list();
 			if(storyIds.size() > 0) {
 				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
 				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
-											.add(Restrictions.in("storyId", storyIds)).list();
+											.add(Restrictions.not(Restrictions.in("storyId", storyIds))).list();
 				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
 				return getIncompleteStoryIds(stories);
 			} 
