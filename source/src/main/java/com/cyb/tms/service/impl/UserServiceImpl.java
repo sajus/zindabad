@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserDetailsService {
 	@Autowired
 	private TmsUsersDAO userDAO;
 
-	@Cacheable(value = "users", key="#username")
+	//@Cacheable(value = "users", key="#username")
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		TmsUsers user = this.userDAO.findByUsername(username);

@@ -72,7 +72,7 @@ public class TmsSprintDAOImpl implements TmsSprintDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> updateSprint(TmsSprintDTO tmsSprintDTO){
-		TmsSprintMst tmsSprintMst = hibernateUtil.fetchById(tmsSprintDTO.getProjectId(), TmsSprintMst.class);
+		TmsSprintMst tmsSprintMst = hibernateUtil.fetchById(tmsSprintDTO.getSprintId(), TmsSprintMst.class);
 		tmsSprintMst.setSprintEndDate(tmsSprintDTO.getSprintEndDate());
 		tmsSprintMst.setSprintHours(getSprintHours(tmsSprintDTO.getProjectId(),tmsSprintDTO.getSprintStartDate(), tmsSprintDTO.getSprintEndDate()));
 		if (tmsSprintDTO.getSprintStatus().equalsIgnoreCase(sprint_closed)) {
