@@ -35,3 +35,23 @@ h5{
   margin-left: 20px !important;
 }
 
+.inner-addon {
+  position: relative;
+}
+
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+}
+
+.right-addon .glyphicon {
+  right: 0px;
+}
+
+.right-addon input { 
+  padding-right: 30px;
+}
+
+.inner-addon .form-control{
+  width:100%;
+}
