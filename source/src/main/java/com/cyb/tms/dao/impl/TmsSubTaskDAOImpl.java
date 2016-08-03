@@ -269,6 +269,8 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		for (TmsSubtask tmsSubtask : subtasks) {
 			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
 			map.put("subtaskId", tmsSubtask.getSubtaskId());
+			map.put("storyId", tmsSubtask.getTmsStoryMst().getStoryId());
+			map.put("story", tmsSubtask.getTmsStoryMst().getJiraId());
 			map.put("jiraId", tmsSubtask.getJiraId());
 			map.put("scope", tmsSubtask.getScope());
 			map.put("type", tmsSubtask.getType());
