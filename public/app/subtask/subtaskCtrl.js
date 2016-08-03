@@ -37,7 +37,7 @@ define([], function() {
     }
 
     $scope.showEditModal = function(subtask) {
-      $scope.editSubtask = angular.copy(subtask);
+      $scope.subtask = angular.copy(subtask);
       $scope.isEditModalVisible = true;
     }
 

@@ -46,7 +46,9 @@ define([
           {value: "QUALITY", name: "QUALITY"},
           {value: "REOPEN", name: "REOPEN"},
           {value: "CODE MERGED", name: "CODE MERGED"},
-          {value: "CLOSED", name: "CLOSED"}
+          {value: "CLOSED", name: "CLOSED"},
+          {value: "NEXT SPRINT", name: "NEXT SPRINT"},
+          {value: "BLOCKED", name: "BLOCKED"}
         ];
 			},
 

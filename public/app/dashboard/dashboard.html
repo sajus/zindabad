@@ -11,6 +11,7 @@
       <table class="table table-hover table-bordered table-striped">
         <thead>
           <tr>
+            <th>No.</th>
             <th>Resource Name</th>
             <th>Capacity</th>
             <th>Sprint Capacity</th>
@@ -21,6 +22,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="userData in managerDashBoardData">
+            <td>{{ $index+1 }}</td>
             <td>{{ userData.userName }}</td>
             <td>{{ userData.capacity }}</td>
             <td>{{ userData.sprintCapacity }}</td>
