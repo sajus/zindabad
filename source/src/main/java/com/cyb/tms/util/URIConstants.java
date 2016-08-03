@@ -37,6 +37,9 @@ public class URIConstants {
 	// Module
 	public static final String MODULE = "api/module";
 	
+	// TaskType
+	public static final String TASKTYPE = "api/tasktype";
+	
 	// Project
 	public static final String PROJECT = "api/project";
 	

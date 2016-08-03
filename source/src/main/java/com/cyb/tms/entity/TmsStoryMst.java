@@ -40,6 +40,7 @@ public class TmsStoryMst extends BaseEntity {
 	public static final String LATEST_STATUS_FILTER = "latestStatusFilter";
 	private Long storyId;
 	private TmsModule tmsModule;
+	private TmsTaskType tmsTaskType;
 	private String jiraId;
 	private int storyPoint;
 	private Date createdDate;
@@ -50,11 +51,12 @@ public class TmsStoryMst extends BaseEntity {
 	public TmsStoryMst() {
 	}
 
-	public TmsStoryMst(Long storyId, TmsModule tmsModule, String jiraId,
+	public TmsStoryMst(Long storyId, TmsModule tmsModule, TmsTaskType tmsTaskType, String jiraId,
 			int storyPoint, Date createdDate, Set<TmsSubtask> tmsSubtasks,
 			Set<UserStoryStaus> userStoryStauses) {
 		this.storyId = storyId;
 		this.tmsModule = tmsModule;
+		this.tmsTaskType = tmsTaskType;
 		this.jiraId = jiraId;
 		this.storyPoint = storyPoint;
 		this.createdDate = createdDate;
@@ -81,6 +83,16 @@ public class TmsStoryMst extends BaseEntity {
 
 	public void setTmsModule(TmsModule tmsModule) {
 		this.tmsModule = tmsModule;
+	}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "TASKTYPE_ID")
+	public TmsTaskType getTmsTaskType() {
+		return this.tmsTaskType;
+	}
+
+	public void setTmsTaskType(TmsTaskType tmsTaskType) {
+		this.tmsTaskType = tmsTaskType;
 	}
 
 	@Column(name = "JIRA_ID", nullable = false, length = 45)

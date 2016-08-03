@@ -26,6 +26,7 @@ import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsStoryMst;
+import com.cyb.tms.entity.TmsTaskType;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.util.HibernateUtil;
@@ -64,9 +65,11 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	public long createStory(StoryDTO storyDTO) {
 		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
 		TmsModule module = hibernateUtil.fetchById(storyDTO.getModuleId(), TmsModule.class);
+		TmsTaskType taskType = hibernateUtil.fetchById(storyDTO.getTaskTypeId(), TmsTaskType.class);
 		TmsStoryMst tmsStoryMst = new TmsStoryMst();
 		BeanUtils.copyProperties(storyDTO, tmsStoryMst);
 		tmsStoryMst.setTmsModule(module);
+		tmsStoryMst.setTmsTaskType(taskType);
 		UserStoryStaus userStoryStatus = new UserStoryStaus();
 		userStoryStatus.setCreatedDate(storyDTO.getCreatedDate());
 		userStoryStatus.setType(story);
@@ -144,10 +147,12 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	public void editStory(StoryDTO storyDTO) {
 		TmsStoryMst tmsStoryMst = hibernateUtil.fetchById(storyDTO.getStoryId(), TmsStoryMst.class);
 		TmsModule module = hibernateUtil.fetchById(storyDTO.getModuleId(), TmsModule.class);
+		TmsTaskType taskType = hibernateUtil.fetchById(storyDTO.getTaskTypeId(), TmsTaskType.class);
 		tmsStoryMst.setJiraId(storyDTO.getJiraId());
 		tmsStoryMst.setCreatedDate(storyDTO.getCreatedDate());
 		tmsStoryMst.setStoryPoint(storyDTO.getStoryPoint());
 		tmsStoryMst.setTmsModule(module);
+		tmsStoryMst.setTmsTaskType(taskType);
 		hibernateUtil.update(tmsStoryMst);
 	}
 
@@ -285,6 +290,8 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			map.put("storyPoint", tmsStoryMst.getStoryPoint());
 			map.put("moduleId", tmsStoryMst.getTmsModule().getId());
 			map.put("moduleName", tmsStoryMst.getTmsModule().getModuleName());
+			map.put("taskTypeId", tmsStoryMst.getTmsTaskType().getId());
+			map.put("taskTypeName", tmsStoryMst.getTmsTaskType().getTaskTypeName());
 			map.put("createdDate", tmsStoryMst.getCreatedDate());
 			
 			for (UserStoryStaus userStoryStatus : tmsStoryMst.getUserStoryStauses()) {
