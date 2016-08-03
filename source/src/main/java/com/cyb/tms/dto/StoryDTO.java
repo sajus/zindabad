@@ -17,6 +17,7 @@ public class StoryDTO extends BaseDTO {
 	private Long storyId;
 	private Long userId;
 	private String module;
+	private String taskType;
 	private String status;
 	private Date assignedDate;
 	private Date createdDate;
@@ -24,18 +25,20 @@ public class StoryDTO extends BaseDTO {
 	private int storyPoint;
 	private Long projectId;
 	private Long moduleId;
+	private Long taskTypeId;
 	
 	public StoryDTO() {
 		super();
 	}
 
-	public StoryDTO(Long storyId, Long userId, String module, String status,
+	public StoryDTO(Long storyId, Long userId, String module, String taskType, String status,
 			Date assignedDate, Date createdDate, String jiraId, int storyPoint,
-			Long projectId, Long moduleId) {
+			Long projectId, Long moduleId, Long taskTypeId) {
 		super();
 		this.storyId = storyId;
 		this.userId = userId;
 		this.module = module;
+		this.taskType = taskType;
 		this.status = status;
 		this.assignedDate = assignedDate;
 		this.createdDate = createdDate;
@@ -43,6 +46,23 @@ public class StoryDTO extends BaseDTO {
 		this.storyPoint = storyPoint;
 		this.projectId = projectId;
 		this.moduleId = moduleId;
+		this.taskTypeId = taskTypeId;
+	}
+
+	public String getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(String taskType) {
+		this.taskType = taskType;
+	}
+
+	public Long getTaskTypeId() {
+		return taskTypeId;
+	}
+
+	public void setTaskTypeId(Long taskTypeId) {
+		this.taskTypeId = taskTypeId;
 	}
 
 	public Long getStoryId() {
