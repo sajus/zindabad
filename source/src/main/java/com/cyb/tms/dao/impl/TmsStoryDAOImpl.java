@@ -290,8 +290,10 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			map.put("storyPoint", tmsStoryMst.getStoryPoint());
 			map.put("moduleId", tmsStoryMst.getTmsModule().getId());
 			map.put("moduleName", tmsStoryMst.getTmsModule().getModuleName());
-			map.put("taskTypeId", tmsStoryMst.getTmsTaskType().getId());
-			map.put("taskTypeName", tmsStoryMst.getTmsTaskType().getTaskTypeName());
+			if ( tmsStoryMst.getTmsTaskType() != null) {
+				map.put("taskTypeId", tmsStoryMst.getTmsTaskType().getId());
+				map.put("taskTypeName", tmsStoryMst.getTmsTaskType().getTaskTypeName());
+			}
 			map.put("createdDate", tmsStoryMst.getCreatedDate());
 			
 			for (UserStoryStaus userStoryStatus : tmsStoryMst.getUserStoryStauses()) {
