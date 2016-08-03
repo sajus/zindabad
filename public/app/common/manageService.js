@@ -21,6 +21,10 @@ define([
       return $http.get(appConstants.endPointBase+"api/module/list");
     };
 
+    manageService.getTaskType = function() {
+      return $http.get(appConstants.endPointBase+"api/tasktype/list");
+    };
+
     manageService.addUser = function (user) {
       user.projectId = appConstants.user.projectId;
       var req = {
@@ -55,6 +59,24 @@ define([
         url: appConstants.endPointBase+"api/module/edit",
         method: "POST",
         data: module
+     });
+    };
+
+    manageService.addTaskType = function (task) {
+      task.projectId = appConstants.user.projectId;
+      var req = {
+        method: 'POST',
+        url: appConstants.endPointBase+"api/tasktype/create",
+        data: task
+      }
+      return $http(req);
+    };
+
+    manageService.editTaskType = function (task) {
+      return $http({
+        url: appConstants.endPointBase+"api/tasktype/edit",
+        method: "POST",
+        data: task
      });
     };
 

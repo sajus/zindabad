@@ -10,7 +10,9 @@ define([], function() {
       $scope.errorMessage = undefined;
       $scope.isAddModalVisible = false;
       $scope.isModuleVisible = false;
+      $scope.isTaskModuleVisible = false;
       $scope.isEditModalVisible = false;
+      $scope.isEditTaskModalVisible = false;
       $scope.availableOptions = appConstants.getStatus();
       $scope.Options = appConstants.getRole();
       $scope.changeTab('USERS');
@@ -43,15 +45,27 @@ define([], function() {
       $scope.isModuleVisible = true;
     }
 
+    $scope.showTaskModule = function() {
+      $scope.task = {};
+      $scope.isTaskModuleVisible = true;
+    }
+
     $scope.showEditModal = function(module) {
       $scope.module = angular.copy(module);
       $scope.isEditModalVisible = true;
     }
 
+    $scope.showEditTaskModal = function(task) {
+      $scope.task = angular.copy(task);
+      $scope.isEditTaskModalVisible = true;
+    }
+
     function closeModal() {
       $scope.isAddModalVisible = false;
       $scope.isModuleVisible = false;
+      $scope.isTaskModuleVisible = false;
       $scope.isEditModalVisible = false;
+      $scope.isEditTaskModalVisible = false;
     }
 
     $scope.saveUserStatus = function(user, index) {
@@ -113,6 +127,40 @@ define([], function() {
         }).
         error(function (error) {
             $scope.status = 'Unable to edit module: ' + error.message;
+        });
+    }
+
+    function getTaskType() {
+      manageService.getTaskType()
+        .success(function (dataTaskType) {
+          $scope.tasktypes = dataTaskType;
+      })
+      .error(function (error) {
+        $scope.status = 'Unable to load customer data: ' + error.message;
+      });
+    }
+
+    getTaskType();
+
+    $scope.addTaskType = function(task) {
+      manageService.addTaskType(task)
+      .success(function () {
+        getTaskType();
+        closeModal();
+      })
+      .error(function (error) {
+        $scope.errorMessage = 'Unable to process your request';
+      });
+    }
+
+    $scope.editTaskType = function(task){
+      manageService.editTaskType(task)
+        .success(function () {
+            getTaskType();
+            closeModal();
+        }).
+        error(function (error) {
+            $scope.status = 'Unable to edit tasks: ' + error.message;
         });
     }
            
