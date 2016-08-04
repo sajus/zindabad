@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-	return ['$scope', '$rootScope', 'storyService', 'manageService', 'appConstants', '$location', function($scope, $rootScope, storyService, manageService, appConstants, $location) {
+  return ['$scope', '$rootScope', 'storyService', 'manageService', 'appConstants', '$location', function($scope, $rootScope, storyService, manageService, appConstants, $location) {
 
     function init() {
       $scope.closeModal = closeModal;
@@ -17,6 +17,7 @@ define([], function() {
       $scope.assignToId = ($scope.currentUser.userRole !== 'LEAD') ? $scope.currentUser.id : undefined;
       getUser();
       getModule();
+      getTaskType();
       getAllCurrentUserStoriesBySprint();
     };
 
@@ -140,6 +141,16 @@ define([], function() {
         });
     }
 
+    function getTaskType() {
+      manageService.getTaskType()
+        .success(function (dataTaskType) {
+          $scope.tasktypes = dataTaskType;
+      })
+      .error(function (error) {
+        $scope.status = 'Unable to load customer data: ' + error.message;
+      });
+    }
+
     $scope.assignToSprint = function(){
       storyService.assignToSprint($scope.selectedStoryList, $scope.assignToId)
         .success(function () {
@@ -182,7 +193,7 @@ define([], function() {
         });
     }
     init();
-	  $scope.$apply();
+    $scope.$apply();
     
-	}];
+  }];
 });

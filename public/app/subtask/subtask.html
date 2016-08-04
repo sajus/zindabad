@@ -29,6 +29,7 @@
                 <tr>
                   <th>No.</th>
                   <th>Created Date</th>
+                  <th>Story</th>
                   <th>Subtask</th>
                   <th>Type</th>
                   <th>Estimate</th>
@@ -63,6 +64,7 @@
                 <tr ng-repeat="subtask in unassignedTasks track by $index">
                   <td>{{$index+1}}
                   <td>{{subtask.createdDate}}</td>
+                  <td>{{subtask.story}}</td>
                   <td>{{subtask.jiraId}}</td>
                   <td>{{subtask.type}}</td>
                   <td>{{subtask.efforts}}</td>
@@ -93,12 +95,12 @@
                   <th class="text-center" width="11%">Assigned Date</th>
                   <th class="text-center" width="10%">Story</th>
                   <th class="text-center" width="10%">Subtask</th>
-                  <th class="text-center" width="8%">Type</th>
+                  <th class="text-center" width="7%">Type</th>
                   <th class="text-center" width="6%">Estimate</th>
-                  <th class="text-center" width="8%">Scope</th>
+                  <th class="text-center" width="7%">Scope</th>
                   <th class="text-center" width="16%">Status</th>
                   <th class="text-center" width="8%">Code Review</th>
-                  <th class="text-center" width="21%">Edit</th>
+                  <th class="text-center" width="22%">Edit</th>
                 </tr>
                 </thead>
 
@@ -235,10 +237,16 @@
       </div>
     </div>
 
-    <div class="form-group">
+   <!--  <div class="form-group">
       <label class="label-title">Story:</label>
       <select id="jiraIdDropdown" name="jiraIdDropdown" text="Select Story" class="form-control" ng-model="subtask.storyId" ng-options="story.storyId as story.jiraId for story in stories" ng-init="subtask.storyId">
       </select>
+    </div> -->
+
+    <div class="form-group">
+      <label class="label-title">Story:</label>
+       <select class="form-control" ng-model="subtask.storyId" ng-options="story.storyId as story.jiraId for story in stories" ng-init="story.storyId">
+       </select>
     </div>
 
     <div class="form-group">
