@@ -99,6 +99,8 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	@Override
 	public void editSubtask(SubtaskDTO subtaskDTO) {
 		TmsSubtask tmsSubtask = hibernateUtil.fetchById(subtaskDTO.getSubtaskId(), TmsSubtask.class);
+		TmsStoryMst storyId = hibernateUtil.fetchById(subtaskDTO.getStoryId(), TmsStoryMst.class);
+		tmsSubtask.setTmsStoryMst(storyId);
 		tmsSubtask.setJiraId(subtaskDTO.getJiraId());
 		tmsSubtask.setCreatedDate(subtaskDTO.getCreatedDate());
 		tmsSubtask.setEfforts(subtaskDTO.getEfforts());
