@@ -1,5 +1,7 @@
 package com.cyb.tms.entity;
 
+import java.util.Comparator;
+
 // Generated May 17, 2016 12:38:28 PM by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;
@@ -22,11 +24,12 @@ import com.cyb.tms.entity.base.BaseEntity;
  */
 @Entity
 @Table(name = "user_story_staus", catalog = "TaskManagement")
-public class UserStoryStaus extends BaseEntity {
+public class UserStoryStaus extends BaseEntity implements Comparable<UserStoryStaus>{
 
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = -4728402203623134193L;
 	private Long id;
 	private TmsSprintMst tmsSprintMst;
 	private TmsStatusMst tmsStatusMst;
@@ -42,18 +45,13 @@ public class UserStoryStaus extends BaseEntity {
 	public UserStoryStaus() {
 	}
 
-	public UserStoryStaus(TmsStatusMst tmsStatusMst,
-			TmsUsers tmsUsersByModifiedBy, Date modifiedDate, String type) {
-		this.tmsStatusMst = tmsStatusMst;
-		this.tmsUsersByModifiedBy = tmsUsersByModifiedBy;
-		this.modifiedDate = modifiedDate;
-		this.type = type;
-	}
+	
 
-	public UserStoryStaus(TmsSprintMst tmsSprintMst, TmsStatusMst tmsStatusMst,
-			TmsStoryMst tmsStoryMst, TmsSubtask tmsSubtask,
-			TmsUsers tmsUsersByAssignedTo, TmsUsers tmsUsersByModifiedBy,
-			Date modifiedDate, String type, Date assignedDate, Date createdDate) {
+	public UserStoryStaus(Long id, TmsSprintMst tmsSprintMst, TmsStatusMst tmsStatusMst, TmsStoryMst tmsStoryMst,
+			TmsSubtask tmsSubtask, TmsUsers tmsUsersByAssignedTo, TmsUsers tmsUsersByModifiedBy, Date modifiedDate,
+			String type, Date assignedDate, Date createdDate) {
+		super();
+		this.id = id;
 		this.tmsSprintMst = tmsSprintMst;
 		this.tmsStatusMst = tmsStatusMst;
 		this.tmsStoryMst = tmsStoryMst;
@@ -65,6 +63,8 @@ public class UserStoryStaus extends BaseEntity {
 		this.assignedDate = assignedDate;
 		this.createdDate = createdDate;
 	}
+
+
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -175,5 +175,106 @@ public class UserStoryStaus extends BaseEntity {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((assignedDate == null) ? 0 : assignedDate.hashCode());
+		result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((modifiedDate == null) ? 0 : modifiedDate.hashCode());
+		result = prime * result + ((tmsSprintMst == null) ? 0 : tmsSprintMst.hashCode());
+		result = prime * result + ((tmsStatusMst == null) ? 0 : tmsStatusMst.hashCode());
+		result = prime * result + ((tmsStoryMst == null) ? 0 : tmsStoryMst.hashCode());
+		result = prime * result + ((tmsSubtask == null) ? 0 : tmsSubtask.hashCode());
+		result = prime * result + ((tmsUsersByAssignedTo == null) ? 0 : tmsUsersByAssignedTo.hashCode());
+		result = prime * result + ((tmsUsersByModifiedBy == null) ? 0 : tmsUsersByModifiedBy.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserStoryStaus other = (UserStoryStaus) obj;
+		if (assignedDate == null) {
+			if (other.assignedDate != null)
+				return false;
+		} else if (!assignedDate.equals(other.assignedDate))
+			return false;
+		if (createdDate == null) {
+			if (other.createdDate != null)
+				return false;
+		} else if (!createdDate.equals(other.createdDate))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (modifiedDate == null) {
+			if (other.modifiedDate != null)
+				return false;
+		} else if (!modifiedDate.equals(other.modifiedDate))
+			return false;
+		if (tmsSprintMst == null) {
+			if (other.tmsSprintMst != null)
+				return false;
+		} else if (!tmsSprintMst.equals(other.tmsSprintMst))
+			return false;
+		if (tmsStatusMst == null) {
+			if (other.tmsStatusMst != null)
+				return false;
+		} else if (!tmsStatusMst.equals(other.tmsStatusMst))
+			return false;
+		if (tmsStoryMst == null) {
+			if (other.tmsStoryMst != null)
+				return false;
+		} else if (!tmsStoryMst.equals(other.tmsStoryMst))
+			return false;
+		if (tmsSubtask == null) {
+			if (other.tmsSubtask != null)
+				return false;
+		} else if (!tmsSubtask.equals(other.tmsSubtask))
+			return false;
+		if (tmsUsersByAssignedTo == null) {
+			if (other.tmsUsersByAssignedTo != null)
+				return false;
+		} else if (!tmsUsersByAssignedTo.equals(other.tmsUsersByAssignedTo))
+			return false;
+		if (tmsUsersByModifiedBy == null) {
+			if (other.tmsUsersByModifiedBy != null)
+				return false;
+		} else if (!tmsUsersByModifiedBy.equals(other.tmsUsersByModifiedBy))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(UserStoryStaus o) {
+		return (int) (this.id - o.id);
+	}
+	
+	
+	public static final Comparator<UserStoryStaus> sortLatestStatus = new Comparator<UserStoryStaus>(){
+
+        @Override
+        public int compare(UserStoryStaus o1, UserStoryStaus o2) {
+            return (int) (o1.id - o2.id);  // This will work because age is positive integer
+        }
+      
+    };
+	
 
 }

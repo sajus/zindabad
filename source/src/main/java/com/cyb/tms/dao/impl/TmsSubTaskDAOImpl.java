@@ -1,6 +1,7 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -306,6 +307,7 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	private UserStoryStaus getLatestStatus(TmsSubtask tmsSubtask) {
 		List<UserStoryStaus> userStoryStatusList = new ArrayList<UserStoryStaus>();
 		userStoryStatusList.addAll(tmsSubtask.getUserStoryStauses());
+		Collections.sort(userStoryStatusList);
 		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
 	}
 

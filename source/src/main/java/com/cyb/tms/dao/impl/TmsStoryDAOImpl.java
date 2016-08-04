@@ -1,6 +1,7 @@
 package com.cyb.tms.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,7 +11,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.springframework.beans.BeanUtils;
@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsSprintDAO;
-import com.cyb.tms.dao.TmsStatusDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.entity.TmsModule;
@@ -30,6 +29,7 @@ import com.cyb.tms.entity.TmsTaskType;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.entity.UserStoryStaus;
 import com.cyb.tms.util.HibernateUtil;
+
 
 @Repository
 public class TmsStoryDAOImpl implements TmsStoryDAO {
@@ -54,9 +54,6 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 
 	@Autowired
 	private TmsSprintDAO tmsSprintDAO;
-	
-	@Autowired
-	private TmsStatusDAO tmsStatusDAO;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -233,13 +230,13 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					.add(Subqueries.propertyIn("uss.id",  DetachedCriteria.forClass(UserStoryStaus.class, "status")
 							.add(Restrictions.eqProperty("uss.tmsStoryMst", "status.tmsStoryMst"))
 							.setProjection(Projections.max("status.id"))))
-							.add(Restrictions.in("tsm.status", status))
+							.add(Restrictions.not(Restrictions.in("tsm.status", status)))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId()))
 					.setProjection( Projections.distinct(Projections.property("story.storyId"))).list();
 			if(storyIds.size() > 0) {
 				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
 				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
-											.add(Restrictions.not(Restrictions.in("storyId", storyIds))).list();
+											.add(Restrictions.in("storyId", storyIds)).list();
 				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
 				return getIncompleteStoryIds(stories);
 			} 
@@ -332,6 +329,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	private UserStoryStaus getLatestStatus(TmsStoryMst tmsStoryMst) {
 		List<UserStoryStaus> userStoryStatusList = new ArrayList<UserStoryStaus>();
 		userStoryStatusList.addAll(tmsStoryMst.getUserStoryStauses());
+		Collections.sort(userStoryStatusList);
 		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
 	}
 	 
@@ -344,7 +342,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			List<Long> storyIds = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
 					.createAlias("tmsSprintMst", "sprint")
 					.createAlias("tmsStoryMst", "story")
-					.createAlias("tmsUsersByAssignedTo", "users")
+					//.createAlias("tmsUsersByAssignedTo", "users")
 					.setProjection( Projections.distinct(Projections.property("story.storyId")))
 					.add(backLogIds.size() > 0 ? Restrictions.not(Restrictions.in("story.storyId", backLogIds)): Restrictions.sqlRestriction("(1=1)"))
 					//.add(Restrictions.eq("users.id", userId))
