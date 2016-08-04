@@ -29,7 +29,7 @@
                 <tr>
                   <th>No.</th>
                   <th>Created Date</th>
-                  <th>Jira Id</th>
+                  <th>Subtask</th>
                   <th>Type</th>
                   <th>Estimate</th>
                   <th>Scope</th>
@@ -88,27 +88,29 @@
               <table id="mytable" class="table table-hover table-bordered table-striped" width="100%">
                 <thead>
                 <tr>
-                  <th class="text-center" width="2%">No.</th>
-                  <th class="text-center" width="11%">Created Date</th>
+                  <th class="text-center" width="0%">No.</th>
+                  <th class="text-center" width="10%">Created Date</th>
                   <th class="text-center" width="11%">Assigned Date</th>
-                  <th class="text-center" width="11%">Jira Id</th>
+                  <th class="text-center" width="10%">Story</th>
+                  <th class="text-center" width="10%">Subtask</th>
                   <th class="text-center" width="8%">Type</th>
-                  <th class="text-center" width="7%">Estimate</th>
+                  <th class="text-center" width="6%">Estimate</th>
                   <th class="text-center" width="8%">Scope</th>
-                  <th class="text-center" width="15%">Status</th>
-                  <th class="text-center" width="10%">Code Review</th>
-                  <th class="text-center" width="15%">Edit</th>
+                  <th class="text-center" width="16%">Status</th>
+                  <th class="text-center" width="8%">Code Review</th>
+                  <th class="text-center" width="21%">Edit</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 <tr ng-show="!subtasks && !loading">
-                  <td colspan="10" class="text-align-center">No Records Found</td>
+                  <td colspan="11" class="text-align-center">No Records Found</td>
                 </tr>
                 <tr ng-repeat="subtask in subtasks track by $index">
                   <td align="center">{{$index+1}}
                   <td align="center">{{subtask.createdDate}}</td>
                   <td align="center">{{subtask.userStoryStatus.assignedDate}}</td>
+                  <td align="center">{{subtask.story}}</td>
                   <td align="center">{{subtask.jiraId}}</td>
                   <td align="center">{{subtask.type}}</td>
                   <td align="center">{{subtask.efforts}}</td>
@@ -235,43 +237,42 @@
 
     <div class="form-group">
       <label class="label-title">Story:</label>
-      <select id="jiraIdDropdown" name="jiraIdDropdown" text="Select Story" class="form-control" ng-model="editSubtask.storyId">
-        <option value="{{story.storyId}}" data-ng-repeat="story in stories">{{story.jiraId}}</option>
+      <select id="jiraIdDropdown" name="jiraIdDropdown" text="Select Story" class="form-control" ng-model="subtask.storyId" ng-options="story.storyId as story.jiraId for story in stories" ng-init="subtask.storyId">
       </select>
     </div>
 
     <div class="form-group">
-      <tms-datepicker label="Created Date:" ng-model="editSubtask.createdDate"></tms-datepicker>
+      <tms-datepicker label="Created Date:" ng-model="subtask.createdDate"></tms-datepicker>
     </div>
 
     <div class="form-group">
       <label class="label-title">Jira Id:</label>
-      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text" ng-model="editSubtask.jiraId">
+      <input class="form-control" id="disabledInput" placeholder="Jira Id (e.g DOMO-0123)" type="text" ng-model="subtask.jiraId">
     </div>
 
     <div class="form-group">
       <label class="label-title">Type:</label>
-      <select id="subtaskTypeDropdown" name="subtaskTypeDropdown" class="form-control" ng-model="editSubtask.type">
-        <option ng-repeat="option in types" ng-selected="{{editSubtask.type == option.value}}" value="{{option.value}}"> {{option.name}}
+      <select id="subtaskTypeDropdown" name="subtaskTypeDropdown" class="form-control" ng-model="subtask.type">
+        <option ng-repeat="option in types" ng-selected="{{subtask.type == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
 
     <div class="form-group">
       <label class="label-title">Estimate:</label>
-      <input class="form-control" type="text" ng-model="editSubtask.efforts" ng-required="true">
+      <input class="form-control" type="text" ng-model="subtask.efforts" ng-required="true">
     </div>
 
     <div class="form-group">
       <label class="label-title">Scope:</label>
-      <select id="subtaskScopeDropdown" name="subtaskScopeDropdown" class="form-control" ng-model="editSubtask.scope">
-       <option ng-repeat="option in scopes" ng-selected="{{editSubtask.scope == option.value}}" value="{{option.value}}"> {{option.name}}
+      <select id="subtaskScopeDropdown" name="subtaskScopeDropdown" class="form-control" ng-model="subtask.scope">
+       <option ng-repeat="option in scopes" ng-selected="{{subtask.scope == option.value}}" value="{{option.value}}"> {{option.name}}
       </select>
     </div>
 
   </modal-body>
   <modal-footer>
     <button type="button" class="btn btn-secondary" ng-click="closeModal()">Cancel</button>
-    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="editSubtask(editSubtask)">Update
+    <button type="button" class="btn btn-primary" ng-disabled="error" ng-click="editSubtask(subtask)">Update
     </button>
   </modal-footer>
 </tms-modal>
