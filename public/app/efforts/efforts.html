@@ -19,7 +19,7 @@
           <th class="text-center">Action</th>
         </tr>
       </thead>
-        <tr ng-show="!efforts">
+        <tr ng-show="!efforts.length">
           <td colspan="7" class="text-align-center">No Records Found</td>
         </tr>
         <tr ng-repeat="effort in efforts track by $index">
