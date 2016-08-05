@@ -54,8 +54,8 @@ define([], function() {
       $scope.updateSprint = function(sprint){
         sprintService.updateSprint(sprint)
           .success(function () {
-              getSprints();
               closeModal();
+              init();
           }).
           error(function (error) {
             processErrorMessage(error);
