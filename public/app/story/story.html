@@ -29,8 +29,9 @@
                 <tr>
                   <th>No.</th>
                   <th>Created Date</th>
-                  <th>Jira Id</th>
+                  <th>Story</th>
                   <th>Module</th>
+                  <th>Task Type</th>
                   <th>Story Point</th>
                   <th class="text-center">Edit</th>
                   <th>
@@ -54,13 +55,14 @@
                 </thead>
                 <tbody>
                   <tr ng-show="!backlogtories">
-                    <td colspan="7" class="text-align-center">No Records Found</td>
+                    <td colspan="8" class="text-align-center">No Records Found</td>
                   </tr>
                   <tr ng-repeat="story in backlogtories track by $index">
                     <td>{{$index+1}}
                     <td>{{story.createdDate}}</td>
                     <td>{{story.jiraId}}</td>
                     <td>{{story.moduleName}}</td>
+                    <td>{{story.taskTypeName}}</td>
                     <td>{{story.storyPoint}}</td>
                     <td>
                       <button class='btn btn-primary btn-xs' type="button" ng-click="showEditModal(story)"><span class="glyphicon glyphicon-edit"></span>
@@ -81,8 +83,9 @@
                   <tr>
                     <th>No.</th>
                     <th>Created Date</th>
-                    <th>Jira Id</th>
+                    <th>Story</th>
                     <th>Module</th>
+                    <th>Task Type</th>
                     <th>Story Point</th>
                   </tr>
                 </thead>
@@ -95,6 +98,7 @@
                     <td>{{story.createdDate}}</td>
                     <td>{{story.jiraId}}</td>
                     <td>{{story.moduleName}}</td>
+                    <td>{{story.taskTypeName}}</td>
                     <td>{{story.storyPoint}}</td>
                   </tr>
                 </tbody>
@@ -110,19 +114,20 @@
              <table id="mytable" class="table table-hover table-bordered table-striped" width="100%">
               <thead>
                 <tr>
-                  <th class="text-center" width="3%">No.</th>
-                  <th class="text-center" width="13%">Created Date</th>
-                  <th class="text-center" width="13%">Assigned Date</th>
+                  <th class="text-center" width="1%">No.</th>
+                  <th class="text-center" width="10%">Created Date</th>
+                  <th class="text-center" width="11%">Assigned Date</th>
                   <th class="text-center" width="13%">Story</th>
                   <th class="text-center" width="10%">Module</th>
-                  <th class="text-center" width="12%">Story Point</th>
-                  <th class="text-center" width="20%">Status</th>
-                  <th class="text-center" width="15%">Edit</th>
+                  <th class="text-center" width="13%">Task Type</th>
+                  <th class="text-center" width="8%">Story Point</th>
+                  <th class="text-center" width="19%">Status</th>
+                  <th class="text-center" width="23%">Edit</th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-show="!stories">
-                  <td colspan="8" class="text-align-center">No Records Found</td>
+                  <td colspan="9" class="text-align-center">No Records Found</td>
                 </tr>
                 <tr ng-repeat="story in stories track by $index">
                   <td align="center">{{$index+1}}</td>
@@ -130,6 +135,7 @@
                   <td align="center">{{story.userStoryStatus.assignedDate}}</td>
                   <td align="center">{{story.jiraId}}</td>
                   <td align="center">{{story.moduleName}}</td>
+                  <td align="center">{{story.taskTypeName}}</td>
                   <td align="center">{{story.storyPoint}}</td>
                   <td align="center">
                     <div ng-show="!editStorySelection[$index]">
@@ -186,8 +192,9 @@
                   <th>Resource Name</th>
                   <th>Created Date</th>
                   <th>Assigned Date</th>
-                  <th>Jira Id</th>
+                  <th>Story</th>
                   <th>Module</th>
+                  <th>Task Type</th>
                   <th>Story Point</th>
                   <th>Status</th>
                 </tr>
@@ -203,6 +210,7 @@
                   <td align="center">{{story.userStoryStatus.assignedDate}}</td>
                   <td align="center">{{story.jiraId}}</td>
                   <td align="center">{{story.moduleName}}</td>
+                  <td align="center">{{story.taskTypeName}}</td>
                   <td align="center">{{story.storyPoint}}</td>
                   <td align="center">
                     <div ng-show="!editStorySelection[$index]">
@@ -247,6 +255,14 @@
     </div>
 
     <div class="form-group">
+      <label class="label-title">Task Type:</label>
+      <select class="form-control" ng-model="story.taskTypeId">
+        <option value="">--Select --</option> 
+        <option ng-repeat="task in tasktypes" value="{{task.id}}"> {{task.taskTypeName}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
       <label class="label-title">Story Point:</label>
       <input class="form-control" type="text" placeholder="Story Point(1,2,3,5,8,13)" ng-model="story.storyPoint">
     </div>
@@ -281,7 +297,13 @@
       <label class="label-title">Module:</label>
        <select class="form-control" ng-model="story.moduleId" ng-options="module.id as module.moduleName for module in modules" ng-init="story.moduleId">
        </select>
-    </div> 
+    </div>
+
+    <div class="form-group">
+      <label class="label-title">Task Type:</label>
+       <select class="form-control" ng-model="story.taskTypeId" ng-options="task.id as task.taskTypeName for task in tasktypes" ng-init="story.taskTypeId">
+       </select>
+    </div>
 
     <div class="form-group">
           <label class="label-title">Story Point:</label>

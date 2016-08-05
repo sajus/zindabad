@@ -21,6 +21,9 @@
     </thead>
 
     <tbody>
+      <tr ng-show="!reviews">
+        <td colspan="14" class="text-align-center">No Records Found</td>
+      </tr>
       <tr ng-repeat="review in reviews track by $index">
         <td class="table-index-medium">{{$index+1}}</td>
         <td>{{review.jiraId}}</td>
