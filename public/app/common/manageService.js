@@ -9,7 +9,7 @@ define([
 		manageService.getUser = function () {
       var req = {
         method: 'POST',
-        url: appConstants.endPointBase+"api/user/list/project",
+        url: appConstants.endPointBase+"api/user/alluser",
         params: {
           projectId: appConstants.user.projectId
         }

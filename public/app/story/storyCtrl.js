@@ -157,6 +157,7 @@ define([], function() {
          getBackLogStories();
          $scope.assignToId = '';
          $scope.isAllSelected = false;
+         $scope.selectedStoryList = [];
          selectAllItems();
         })
         .error(function (error) {
