@@ -15,5 +15,6 @@ public interface TmsUsersDAO {
     public TmsUsers getUser(long id);	
     public List<TmsUsers> getUsersByStatus(long projectId);
     public void updatePassword(TmsUsersDTO tmsUserDTO);
+    public List<TmsUsers> getUsersByStatusDashboard(long projectId);
 	
 }
