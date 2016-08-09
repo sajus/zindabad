@@ -98,7 +98,8 @@ define([
 			getStatus: function() {
 	      return [
 	        {value: "ACTIVE", name: "ACTIVE"},
-	        {value: "INACTIVE", name: "INACTIVE"}
+	        {value: "INACTIVE", name: "INACTIVE"},
+	        {value: "DELETE", name: "DELETE"}
 	      ];
 			},
 			

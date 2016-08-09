@@ -170,6 +170,7 @@ define([], function() {
         getUnassignedSubtasks();
         $scope.assignToId = '';
         $scope.isAllSelected = false;
+        $scope.selectedSubtaskList = [];
         selectAllItems();
         })
         .error(function (error) {
