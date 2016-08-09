@@ -55,6 +55,12 @@ public class TmsUserController {
 		List<TmsUsers> activeuser = tmsUserService.getUsersByStatus(projectId);
 		return new ResponseEntity<List<TmsUsers>>(activeuser, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = URIConstants.GET_USER_LIST, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<TmsUsers>> listAllUsers(@RequestParam Long projectId) throws Exception {
+		List<TmsUsers> activeuser = tmsUserService.getUsersByStatusDashboard(projectId);
+		return new ResponseEntity<List<TmsUsers>>(activeuser, HttpStatus.OK);
+	}
 
 //------------------- Edit User --------------------------------------------------------
     

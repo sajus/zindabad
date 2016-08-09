@@ -16,4 +16,5 @@ public interface TmsUserService {
 	public TmsUsersDTO findByName(String userName);
 	public List<TmsUsers> getUsersByStatus(long projectId);
 	public void updatePassword(TmsUsersDTO tmsUserDTO);
+	public List<TmsUsers> getUsersByStatusDashboard(long projectId);
 }

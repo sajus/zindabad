@@ -2,6 +2,7 @@ package com.cyb.tms.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.cyb.tms.dao.TmsUsersDAO;
 import com.cyb.tms.dto.TmsProjectDTO;
 import com.cyb.tms.dto.TmsUsersDTO;
 import com.cyb.tms.entity.TmsCodeReview;
+import com.cyb.tms.entity.TmsLeaveMst;
 import com.cyb.tms.entity.TmsProject;
 import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.util.HibernateUtil;
@@ -79,7 +81,21 @@ private static final String USER_NAME = "userName";
 			                  .add(Restrictions.eq("proj.pid", projectId))
 			                  .add(Restrictions.not(Restrictions.in("userRole", roles)))
 			                  .add(Restrictions.eq("tu.isActive", "ACTIVE")).list();
+							
 		return users;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TmsUsers> getUsersByStatusDashboard(long projectId) {
+		Object[] roles = {"MANAGER", "ADMIN"};
+		Object[] status = {"DELETE"};
+		Criteria criteria = hibernateUtil.getCurrentSession().createCriteria(TmsUsers.class, "tu");
+		criteria.createAlias("tmsProject", "proj");
+		criteria.add(Restrictions.eq("proj.pid", projectId));
+		criteria.add(Restrictions.not(Restrictions.in("userRole", roles)));
+		criteria.add(Restrictions.not(Restrictions.in("tu.isActive", status)));
+		return criteria.list();
 	}
 
 	@Override

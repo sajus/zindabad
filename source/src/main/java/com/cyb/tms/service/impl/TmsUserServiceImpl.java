@@ -79,5 +79,10 @@ public class TmsUserServiceImpl implements TmsUserService {
 		tmsUsersDao.updatePassword(tmsUserDTO);
 	}
 
+	@Override
+	public List<TmsUsers> getUsersByStatusDashboard(long projectId) {
+		return tmsUsersDao.getUsersByStatusDashboard(projectId);
+
+	}
 
 }
