@@ -20,4 +20,5 @@ public interface TmsSubTaskDAO {
 	public List<LinkedHashMap<String, Object>> getBackLogSubtasks(Long projectId);
 	public void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById);
 	public Long getTotalEstimatedHoursBySprint(Long sprintId, Long userId);
+	public List<LinkedHashMap<String, Object>> fetchSubtasksByStoryId(Long storyId);
 }
