@@ -15,7 +15,6 @@ define([], function() {
       $scope.subtaskSelection = [];
       $scope.editStorySelection = [];
       $scope.isAllSelected = false;
-      $scope.availableOptions = appConstants.getStatusList();
       $scope.options = appConstants.getList();
       $scope.reviewer = appConstants.getReviewerType();
       $scope.scopes = appConstants.getScope();
@@ -24,6 +23,7 @@ define([], function() {
       $scope.assignToId = ($scope.currentUser.userRole !== 'LEAD') ? $scope.currentUser.id : undefined;
       $scope.getStories();
       getUser();
+      getStatus();
     };
 
     $scope.changeTab = function (currentTab) {
@@ -146,6 +146,16 @@ define([], function() {
         });
     }
 
+    function getStatus() {
+      subtaskService.getStatus()
+        .success(function (dataStatus) {
+          $scope.statuslist = dataStatus;
+        })
+        .error(function (error) {
+          $scope.status = 'Unable to load customer data: ' + error.message;
+        });
+    }
+
     $scope.saveSubtaskStatus = function(subtask, index) {
       $scope.editStorySelection[index] = false;
       var subtaskValues = {
@@ -185,7 +195,7 @@ define([], function() {
           closeCodeReviewModal();
         }).
         error(function (error) {
-            $scope.status = 'Unable to insert Sprint: ' + error.message;
+          $scope.status = 'Unable to insert Sprint: ' + error.message;
         });
     };
 

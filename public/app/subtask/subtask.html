@@ -124,9 +124,9 @@
                     <div ng-show="editStorySelection[$index]">
                       <select ng-model="subtask.userStoryStatus.status">
                         <option value="">--Select --</option>
-                        <option ng-repeat="option in availableOptions"
-                                ng-selected="{{subtask.userStoryStatus.status == option.value}}" value="{{option.value}}">
-                          {{option.name}}
+                        <option ng-repeat="stat in statuslist"
+                          ng-selected="{{subtask.userStoryStatus.status == stat}}" value="{{stat.status}}">
+                          {{stat.status}}
                         </option>
                       </select>
                     </div>

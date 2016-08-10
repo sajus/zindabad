@@ -35,23 +35,7 @@ define([
 			clearAll: function() {
 				return localStorageService.clearAll();
 			},
-
-			getStatusList: function() {
-        return [
-          {value: "BACKLOG", name: "BACKLOG"},
-          {value: "TODO", name: "TODO"},
-          {value: "DEVELOPMENT", name: "DEVELOPMENT"},
-          {value: "PULL REQUEST", name: "PULL REQUEST"},
-          {value: "INTERNAL REVIEW", name: "INTERNAL REVIEW"},
-          {value: "QUALITY", name: "QUALITY"},
-          {value: "REOPEN", name: "REOPEN"},
-          {value: "CODE MERGED", name: "CODE MERGED"},
-          {value: "CLOSED", name: "CLOSED"},
-          {value: "NEXT SPRINT", name: "NEXT SPRINT"},
-          {value: "BLOCKED", name: "BLOCKED"}
-        ];
-			},
-
+			
 			getList: function() {
         return [
           {value: "DOMO STANDARD", name: "DOMO STANDARD"},

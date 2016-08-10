@@ -29,6 +29,10 @@ define([
       return $http(req);
     };
 
+    self.getStatus = function () {
+     return $http.get(appConstants.endPointBase+"api/status/list");
+    }
+
     self.getAllCurrentUserStoriesBySprint = function () {
       var req = {
         method: 'GET',

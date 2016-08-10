@@ -50,6 +50,10 @@ define([
       }
       return $http(req);
     };
+
+    subtaskService.getStatus = function () {
+     return $http.get(appConstants.endPointBase+"api/status/list");
+    }
           
     subtaskService.update = function () {
       return $http.get(appConstants.endPointBase+"api/subtask/list");
