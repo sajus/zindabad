@@ -72,8 +72,12 @@ public class TmsSubTaskServiceImpl implements TmsSubTaskService {
 
 	@Override
 	public void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById) {
-		tmsSubTaskDAO.addToCurrentSprint(subtaskDTOs, projectId, assignToId, modifiedById);
-		
+		tmsSubTaskDAO.addToCurrentSprint(subtaskDTOs, projectId, assignToId, modifiedById);	
+	}
+
+	@Override
+	public List<LinkedHashMap<String, Object>> fetchSubtasksByStoryId(Long storyId) {	
+		return tmsSubTaskDAO.fetchSubtasksByStoryId(storyId);
 	}
 
 

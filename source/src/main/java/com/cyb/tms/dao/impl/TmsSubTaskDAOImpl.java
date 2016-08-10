@@ -199,6 +199,20 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 			throw new Exception("Sprint not found");
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LinkedHashMap<String, Object>> fetchSubtasksByStoryId(Long storyId) {
+		List<Long> subtaskIds= hibernateUtil.getCurrentSession().createCriteria(TmsSubtask.class, "sub")
+				.createAlias("tmsStoryMst", "story")
+				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
+				.add(Restrictions.eq("story.storyId", storyId)).list();
+		if(subtaskIds.size() > 0) {
+			return parseSubtasks(getFilteredSubtasks(subtaskIds));
+		} else {
+			return null;
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -312,5 +326,8 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		Collections.sort(userStoryStatusList);
 		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
 	}
+	
+	
+	
 
 }

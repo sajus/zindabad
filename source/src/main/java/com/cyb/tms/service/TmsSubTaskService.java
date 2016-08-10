@@ -21,4 +21,5 @@ public interface TmsSubTaskService {
 	public List<LinkedHashMap<String, Object>> getCurrentUserSubTasksBySprintBy(
 			Long userId, Long projectId)throws Exception;
 	void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById);
+	public List<LinkedHashMap<String, Object>> fetchSubtasksByStoryId(Long storyId);
 }

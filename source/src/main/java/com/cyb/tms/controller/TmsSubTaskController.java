@@ -93,5 +93,11 @@ public class TmsSubTaskController {
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	} 
+	
+	@RequestMapping(value = URIConstants.SUBTASKS_BY_STORY, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LinkedHashMap<String, Object>>> listSubtasks(@RequestParam Long storyId) {
+		List<LinkedHashMap<String, Object>> subtasks = tmsSubTaskService.fetchSubtasksByStoryId(storyId);
+		return new ResponseEntity<List<LinkedHashMap<String, Object>>>(subtasks, HttpStatus.OK);
+	}
 
 }
