@@ -44,6 +44,9 @@ public class URIConstants {
 	// Project
 	public static final String PROJECT = "api/project";
 	
+	//Status
+	public static final String STATUS = "api/status";
+	
 	// Story
 	public static final String STORY = "api/story";
 	public static final String STORIES_BY_SPRINT = "/sprint";
