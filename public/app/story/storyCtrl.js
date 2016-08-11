@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-  return ['$scope', '$rootScope', 'storyService', 'manageService', 'appConstants', '$location', function($scope, $rootScope, storyService, manageService, appConstants, $location) {
+  return ['$scope', '$rootScope', 'storyService', 'manageService', 'statusService', 'appConstants', '$location', function($scope, $rootScope, storyService, manageService, statusService, appConstants, $location) {
 
     function init() {
       $scope.closeModal = closeModal;
@@ -152,7 +152,7 @@ define([], function() {
     }
 
     function getStatus() {
-      storyService.getStatus()
+      statusService.getStatus()
         .success(function (dataStatus) {
           $scope.statuslist = dataStatus;
         })

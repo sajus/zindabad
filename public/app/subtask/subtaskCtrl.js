@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-	return ['$scope', '$rootScope', 'subtaskService', 'manageService', 'appConstants', '$location', '$timeout', function($scope, $rootScope, subtaskService, manageService, appConstants, $location, $timeout) {
+	return ['$scope', '$rootScope', 'subtaskService', 'manageService', 'statusService', 'appConstants', '$location', '$timeout', function($scope, $rootScope, subtaskService, manageService, statusService, appConstants, $location, $timeout) {
 
     function init() {
       $scope.closeModal = closeModal;
@@ -147,7 +147,7 @@ define([], function() {
     }
 
     function getStatus() {
-      subtaskService.getStatus()
+      statusService.getStatus()
         .success(function (dataStatus) {
           $scope.statuslist = dataStatus;
         })

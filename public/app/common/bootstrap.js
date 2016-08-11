@@ -33,6 +33,7 @@ define([
 	'common/codereviewService',
 	'password/password',
 	'common/passwordService',
+	'common/statusService',
 	
 		], function(
 				loginView, 
@@ -67,7 +68,8 @@ define([
 				codereviewView,
 				codereviewService,
 				passwordView,
-				passwordService
+				passwordService,
+				statusService
 				
 			) {
 	return [
@@ -103,7 +105,8 @@ define([
     	codereviewView,
 		codereviewService,
 		passwordView,
-		passwordService
+		passwordService,
+		statusService
     	
 	];
 });
