@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
+import com.cyb.tms.dto.TmsUsersDTO;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStoryMst;
+import com.cyb.tms.entity.TmsUsers;
 import com.cyb.tms.service.TmsStoryService;
 
 @Service
@@ -70,4 +72,17 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	public List<LinkedHashMap<String, Object>> getAllCurrentUserStoriesBySprint(Long projectId) {
 		return tmsStoryDAO.getAllCurrentUserStoriesBySprint(projectId);
 	}
+
+	@Override
+	public boolean isStoryExist(String jiraId) {
+		return tmsStoryDAO.findByJiraId(jiraId)!=null;
+	}
+	
+	public StoryDTO findByJiraId(String jiraId) {
+		StoryDTO storyDto = new StoryDTO();
+		TmsStoryMst story = tmsStoryDAO.findByJiraId(jiraId);
+		createStory(storyDto);
+		return storyDto;
+	}
+	
 }

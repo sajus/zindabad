@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.dto.TmsSprintDTO;
+import com.cyb.tms.dto.TmsUsersDTO;
 import com.cyb.tms.entity.TmsStoryMst;
 import com.cyb.tms.exceptions.ErrorCodes;
 import com.cyb.tms.exceptions.SprintException;
@@ -33,17 +34,14 @@ public class TmsStoryController {
 	
 	@Autowired
 	private TmsModuleService tmsModuleService;
-	
-	@Autowired
-	private TmsUserService tmsUserService;
 
 	// -------------------Create a Story---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> createStory(@RequestBody StoryDTO storyDTO) {
-		 Long stories = tmsStoryService.createStory(storyDTO);
-		 if(stories == 0){
-			 throw new SprintException(ErrorCodes.CLOSE, null); 
-		 }
+		if (tmsStoryService.isStoryExist(storyDTO.getJiraId())) {
+			System.out.println("A User with name " + storyDTO.getJiraId()+ " already exist");
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
 		tmsStoryService.createStory(storyDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);

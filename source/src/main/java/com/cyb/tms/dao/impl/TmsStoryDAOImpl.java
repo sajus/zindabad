@@ -59,17 +59,15 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	private static final String JIRA_ID = "jiraId";
+	
+	@Override
+	public TmsStoryMst findByJiraId(String jiraId) {
+		return hibernateUtil.findByJiraId(JIRA_ID, jiraId, TmsStoryMst.class);
+	} 
+	
 	@Override
     public long createStory(StoryDTO storyDTO) {
-		int flag1=0;
-        List<TmsStoryMst> allStories = getAllStories();
-        for(TmsStoryMst storyMst:allStories){
-           if(storyDTO.getJiraId().equals(storyMst.getJiraId())){
-                  flag1=1;
-                  return 0;
-           }  
-        } 
-        if(flag1==0){
            TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
            TmsModule module = hibernateUtil.fetchById(storyDTO.getModuleId(), TmsModule.class);
            TmsTaskType taskType = hibernateUtil.fetchById(storyDTO.getTaskTypeId(), TmsTaskType.class);
@@ -85,12 +83,8 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
            tmsStoryMst.getUserStoryStauses().add(userStoryStatus);
            return (Long)hibernateUtil.create(tmsStoryMst);
            }
-        else {
-        	return 0;
-        }
-     }
 
-
+	
 	@Override
 	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
 		Session session = sessionFactory.openSession();

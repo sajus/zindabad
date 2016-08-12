@@ -7,12 +7,14 @@ import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.dto.TmsSprintDTO;
 import com.cyb.tms.entity.TmsStoryMst;
+import com.cyb.tms.entity.TmsUsers;
 
 public interface TmsStoryDAO {
 
 	public long createStory(StoryDTO storyDTO);
 	public void updateStoryStatus(StoryDTO storyDTO);
 	public void editStory(StoryDTO storyDTO);
+	public TmsStoryMst findByJiraId(String jiraId);
 	public List<TmsStoryMst> getAllStories();
 	public TmsStoryMst getSprint(long id);
 	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception;

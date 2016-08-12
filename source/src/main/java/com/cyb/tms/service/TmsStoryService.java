@@ -11,6 +11,7 @@ public interface TmsStoryService {
 	public long createStory(StoryDTO storyDTO);
 	public void updateStoryStatus(StoryDTO storyDTO);
 	public void editStory(StoryDTO storyDTO);
+	public boolean isStoryExist(String jiraId);
 	public List<TmsStoryMst> getAllStories();
 	public TmsStoryMst getSprint(long id);
 	public List<LinkedHashMap<String, Object>> getStoriesBySprint(Long projectId) throws Exception;

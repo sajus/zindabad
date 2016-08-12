@@ -65,8 +65,15 @@ public class HibernateUtil {
     	list = sessionFactory.getCurrentSession().createCriteria(entityClass)
     						.add(Restrictions.eq(propertyName, name)).list();
     	return (T) ((list != null && list.size() > 0) ? list.get(0) : null);
-    	
-    	
+    }
+    
+    @SuppressWarnings("unchecked")
+   	public <T> T findByJiraId(String propertyName, Serializable name, Class<T> entityClass) {
+       	
+       	List<?> list = null;
+       	list = sessionFactory.getCurrentSession().createCriteria(entityClass)
+       						.add(Restrictions.eq(propertyName, name)).list();
+       	return (T) ((list != null && list.size() > 0) ? list.get(0) : null);
     }
 
 	@SuppressWarnings("unchecked")
