@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
 import com.cyb.tms.dto.StoryDTO;
+import com.cyb.tms.dto.TmsSprintDTO;
 import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
 import com.cyb.tms.entity.TmsStatusMst;
@@ -59,23 +60,37 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	private SessionFactory sessionFactory;
 
 	@Override
-	public long createStory(StoryDTO storyDTO) {
-		TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
-		TmsModule module = hibernateUtil.fetchById(storyDTO.getModuleId(), TmsModule.class);
-		TmsTaskType taskType = hibernateUtil.fetchById(storyDTO.getTaskTypeId(), TmsTaskType.class);
-		TmsStoryMst tmsStoryMst = new TmsStoryMst();
-		BeanUtils.copyProperties(storyDTO, tmsStoryMst);
-		tmsStoryMst.setTmsModule(module);
-		tmsStoryMst.setTmsTaskType(taskType);
-		UserStoryStaus userStoryStatus = new UserStoryStaus();
-		userStoryStatus.setCreatedDate(storyDTO.getCreatedDate());
-		userStoryStatus.setType(story);
-		userStoryStatus.setTmsStatusMst(status);
-		userStoryStatus.setTmsStoryMst(tmsStoryMst);
-		tmsStoryMst.getUserStoryStauses().add(userStoryStatus);
-		return (Long)hibernateUtil.create(tmsStoryMst);
-	}
-	
+    public long createStory(StoryDTO storyDTO) {
+		int flag1=0;
+        List<TmsStoryMst> allStories = getAllStories();
+        for(TmsStoryMst storyMst:allStories){
+           if(storyDTO.getJiraId().equals(storyMst.getJiraId())){
+                  flag1=1;
+                  return 0;
+           }  
+        } 
+        if(flag1==0){
+           TmsStatusMst status = hibernateUtil.findByPropertyName("status", backlog, TmsStatusMst.class);
+           TmsModule module = hibernateUtil.fetchById(storyDTO.getModuleId(), TmsModule.class);
+           TmsTaskType taskType = hibernateUtil.fetchById(storyDTO.getTaskTypeId(), TmsTaskType.class);
+           TmsStoryMst tmsStoryMst = new TmsStoryMst();
+           BeanUtils.copyProperties(storyDTO, tmsStoryMst);
+           tmsStoryMst.setTmsModule(module);
+           tmsStoryMst.setTmsTaskType(taskType);
+           UserStoryStaus userStoryStatus = new UserStoryStaus();
+           userStoryStatus.setCreatedDate(storyDTO.getCreatedDate());
+           userStoryStatus.setType(story);
+           userStoryStatus.setTmsStatusMst(status);
+           userStoryStatus.setTmsStoryMst(tmsStoryMst);
+           tmsStoryMst.getUserStoryStauses().add(userStoryStatus);
+           return (Long)hibernateUtil.create(tmsStoryMst);
+           }
+        else {
+        	return 0;
+        }
+     }
+
+
 	@Override
 	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
 		Session session = sessionFactory.openSession();

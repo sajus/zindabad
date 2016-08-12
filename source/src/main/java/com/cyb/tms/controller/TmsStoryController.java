@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cyb.tms.dto.StoryDTO;
+import com.cyb.tms.dto.TmsSprintDTO;
 import com.cyb.tms.entity.TmsStoryMst;
+import com.cyb.tms.exceptions.ErrorCodes;
+import com.cyb.tms.exceptions.SprintException;
 import com.cyb.tms.service.TmsModuleService;
 import com.cyb.tms.service.TmsStoryService;
 import com.cyb.tms.service.TmsUserService;
@@ -37,6 +40,10 @@ public class TmsStoryController {
 	// -------------------Create a Story---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> createStory(@RequestBody StoryDTO storyDTO) {
+		 Long stories = tmsStoryService.createStory(storyDTO);
+		 if(stories == 0){
+			 throw new SprintException(ErrorCodes.CLOSE, null); 
+		 }
 		tmsStoryService.createStory(storyDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -50,7 +57,6 @@ public class TmsStoryController {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 		
-
 	// ------------------Retrieve All Stories --------------
 
 	@RequestMapping(value = URIConstants.GET_ALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
