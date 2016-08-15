@@ -1,4 +1,4 @@
-<div class="container">
+<div>
   <div class="tabbable-panel">
     <div class="tabbable-line">
       <ul class="nav nav-tabs ">
@@ -55,7 +55,7 @@
                 </thead>
                 <tbody>
                   <tr ng-show="!backlogtories">
-                    <td colspan="8" class="text-align-center">No Records Found</td>
+                    <td colspan="10" class="text-align-center">No Records Found</td>
                   </tr>
                   <tr ng-repeat="story in backlogtories track by $index">
                     <td>{{$index+1}}
@@ -193,10 +193,13 @@
                   <th>Created Date</th>
                   <th>Assigned Date</th>
                   <th>Story</th>
+                  <th>Sub Tasks</th>
+                  <th>Incomplete Sub Tasks</th>
                   <th>Module</th>
                   <th>Task Type</th>
                   <th>Story Point</th>
                   <th>Status</th>
+                  <th>More Details</th>
                 </tr>
               </thead>
               <tbody>
@@ -209,6 +212,8 @@
                   <td align="center">{{story.createdDate}}</td>
                   <td align="center">{{story.userStoryStatus.assignedDate}}</td>
                   <td align="center">{{story.jiraId}}</td>
+                  <td align="center">{{story.totalSubTasks}}</td>
+                  <td align="center">{{story.incompltedSubTasks}}</td>
                   <td align="center">{{story.moduleName}}</td>
                   <td align="center">{{story.taskTypeName}}</td>
                   <td align="center">{{story.storyPoint}}</td>
@@ -216,6 +221,11 @@
                     <div ng-show="!editStorySelection[$index]">
                       {{story.userStoryStatus.status}}
                     </div>
+                  </td>
+                  <td align="center">
+                    <button class='btn btn-info btn-xs' type="button" ng-click=""><span
+                        class="glyphicon glyphicon-plus"></span>Show
+                    </button>
                   </td>
                 </tr>
               </tbody>

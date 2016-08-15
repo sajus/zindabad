@@ -40,9 +40,31 @@ define([
 			app.factory = $provide.factory;
 			app.service = $provide.service;
 
+      //$httpProvider.interceptors.push('tmsInterceptor');
 			$routeProvider.otherwise({redirectTo: '/dashboard'});
 
 			$resourceProvider.defaults.stripTrailingSlashes = false;
+
+			    $httpProvider.interceptors.push(function($q) {
+
+              return {
+
+                  'responseError': function(rejection){
+
+                      var defer = $q.defer();
+
+                      if(rejection.status == 401){
+                          console.dir(rejection);
+                          $routeProvider.otherwise({redirectTo: '/login'});
+                      }
+
+                      defer.reject(rejection);
+
+                      return defer.promise;
+
+                  }
+              };
+          });
 
 			// $locationProvider.hashPrefix('!');
 			//$locationProvider.html5Mode(true);

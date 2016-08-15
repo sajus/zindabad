@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
@@ -203,15 +204,25 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<LinkedHashMap<String, Object>> fetchSubtasksByStoryId(Long storyId) {
-		List<Long> subtaskIds= hibernateUtil.getCurrentSession().createCriteria(TmsSubtask.class, "sub")
-				.createAlias("tmsStoryMst", "story")
-				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
-				.add(Restrictions.eq("story.storyId", storyId)).list();
+		List<Long> subtaskIds = getSubtaskIdsByStoryId(storyId);
 		if(subtaskIds.size() > 0) {
 			return parseSubtasks(getFilteredSubtasks(subtaskIds));
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * @param storyId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Long> getSubtaskIdsByStoryId(Long storyId) {
+		List<Long> subtaskIds= hibernateUtil.getCurrentSession().createCriteria(TmsSubtask.class, "sub")
+				.createAlias("tmsStoryMst", "story")
+				.setProjection( Projections.distinct(Projections.property("sub.subtaskId")))
+				.add(Restrictions.eq("story.storyId", storyId)).list();
+		return subtaskIds;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -326,8 +337,66 @@ public class TmsSubTaskDAOImpl implements TmsSubTaskDAO {
 		Collections.sort(userStoryStatusList);
 		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
 	}
-	
-	
-	
 
+	@Override
+	public List<LinkedHashMap<Object, Object>> fetchIncompleteSubtasksByStory(Long storyId) {
+		String excludeProperties[] = new String[]{backlog, code_merged, closed};
+		List<Long> subtaskIds = getSubtaskIdsByStoryId(storyId);
+		List<Object> rows = getIncompleteSubtasks(subtaskIds, excludeProperties);
+		return processProjectionList(rows);
+	}
+
+	private List<LinkedHashMap<Object, Object>> processProjectionList(List<Object> rows) {
+		List<LinkedHashMap<Object, Object>> list = new ArrayList<LinkedHashMap<Object, Object>>();
+		for (Object rowObj : rows) {
+			Object[] row = (Object[]) rowObj;
+			LinkedHashMap<Object, Object> map = new LinkedHashMap<Object, Object>();
+			map.put("subtaskId", row[0]);
+			map.put("jiraId", row[1]);
+			list.add(map);
+		}	
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Object> getIncompleteSubtasks(List<Long> subtaskIds, String[] excludeProperties) {
+		
+		if (subtaskIds != null && subtaskIds.size() > 0) {		
+			ProjectionList pl = Projections.projectionList();
+			pl.add(Projections.distinct(Projections.property("sub.subtaskId")));
+			pl.add(Projections.property("sub.jiraId"));
+			
+			List<Object> rows = hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+					.createAlias("tmsSubtask", "sub")
+					.createAlias("tmsStatusMst", "tsm")
+					.add(Subqueries.propertyIn("uss.id",  DetachedCriteria.forClass(UserStoryStaus.class, "status")
+							.add(Restrictions.eqProperty("uss.tmsSubtask", "status.tmsSubtask"))
+							.setProjection(Projections.max("status.id"))))
+							.add(Restrictions.not(Restrictions.in("tsm.status", excludeProperties)))
+							.add(Restrictions.in("sub.subtaskId", subtaskIds))
+							.setProjection(pl).list();
+			return rows;
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public int getIncompleteSubtasksCount(Long storyId) {
+		String excludeProperties[] = new String[]{backlog, code_merged, closed};
+		List<Long> subtaskIds = getSubtaskIdsByStoryId(storyId);
+		if (subtaskIds != null && subtaskIds.size() > 0) {
+			Long subtaskCount = (Long) hibernateUtil.getCurrentSession().createCriteria(UserStoryStaus.class, "uss")
+					.createAlias("tmsSubtask", "sub")
+					.createAlias("tmsStatusMst", "tsm")
+					.add(Subqueries.propertyIn("uss.id",  DetachedCriteria.forClass(UserStoryStaus.class, "status")
+							.add(Restrictions.eqProperty("uss.tmsSubtask", "status.tmsSubtask"))
+							.setProjection(Projections.max("status.id"))))
+							.add(Restrictions.not(Restrictions.in("tsm.status", excludeProperties)))
+							.add(Restrictions.in("sub.subtaskId", subtaskIds))
+							.setProjection(Projections.countDistinct("sub.subtaskId")).uniqueResult();
+			return subtaskCount.intValue();
+		}
+		return 0;
+	}
 }

@@ -21,4 +21,7 @@ public interface TmsSubTaskDAO {
 	public void addToCurrentSprint(List<SubtaskDTO> subtaskDTOs, Long projectId, Long assignToId, Long modifiedById);
 	public Long getTotalEstimatedHoursBySprint(Long sprintId, Long userId);
 	public List<LinkedHashMap<String, Object>> fetchSubtasksByStoryId(Long storyId);
+	public List<Long> getSubtaskIdsByStoryId(Long storyId);
+	public List<LinkedHashMap<Object, Object>> fetchIncompleteSubtasksByStory(Long storyId);
+	public int getIncompleteSubtasksCount(Long storyId);
 }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.cyb.tms.dao.TmsSprintDAO;
 import com.cyb.tms.dao.TmsStoryDAO;
+import com.cyb.tms.dao.TmsSubTaskDAO;
 import com.cyb.tms.dto.StoryDTO;
 import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsSprintMst;
@@ -54,6 +55,9 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 
 	@Autowired
 	private TmsSprintDAO tmsSprintDAO;
+	
+	@Autowired
+	private TmsSubTaskDAO tmsSubTaskDAO;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -175,11 +179,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					.setProjection( Projections.distinct(Projections.property("story.storyId")))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
-				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
-											.add(Restrictions.in("storyId", storyIds)).list();
-				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-				return parseStories(stories);
+				return parseStories(getFilteredStories(storyIds), false);
 			} else {
 				return null;
 			}
@@ -204,11 +204,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					.add(Restrictions.eq("users.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
-				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
-											.add(Restrictions.in("storyId", storyIds)).list();
-				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-				return parseStories(stories);
+				return parseStories(getFilteredStories(storyIds), false);
 			} else {
 				return null;
 			}
@@ -234,10 +230,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId()))
 					.setProjection( Projections.distinct(Projections.property("story.storyId"))).list();
 			if(storyIds.size() > 0) {
-				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
-											.add(Restrictions.in("storyId", storyIds)).list();
-				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+				List<TmsStoryMst> stories = getFilteredStories(storyIds);
 				return getIncompleteStoryIds(stories);
 			} 
 		}
@@ -250,12 +243,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			throws Exception {
 		List<Long> storyIds = getBackLogStorieIds();
 		if(storyIds.size() > 0) {
-			hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-			List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
-										.add(Restrictions.in("storyId", storyIds)).list();
-			hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-		
-			return parseStories(stories);
+			return parseStories(getFilteredStories(storyIds), false);
 		} else {
 			return null;
 		}
@@ -277,7 +265,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		return storyIds;
 	}
 		
-	private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stories) {
+	private List<LinkedHashMap<String, Object>> parseStories(List<TmsStoryMst> stories, boolean requiredSubtaskCount) {
 
 		List<LinkedHashMap<String, Object>> userStories = new ArrayList<LinkedHashMap<String, Object>>();
 		for (TmsStoryMst tmsStoryMst : stories) {
@@ -287,16 +275,21 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 			map.put("storyPoint", tmsStoryMst.getStoryPoint());
 			map.put("moduleId", tmsStoryMst.getTmsModule().getId());
 			map.put("moduleName", tmsStoryMst.getTmsModule().getModuleName());
+			map.put("createdDate", tmsStoryMst.getCreatedDate());
 			if ( tmsStoryMst.getTmsTaskType() != null) {
 				map.put("taskTypeId", tmsStoryMst.getTmsTaskType().getId());
 				map.put("taskTypeName", tmsStoryMst.getTmsTaskType().getTaskTypeName());
 			}
-			map.put("createdDate", tmsStoryMst.getCreatedDate());
+			if (requiredSubtaskCount == true) {
+				int incompleteTasks = tmsSubTaskDAO.getIncompleteSubtasksCount(tmsStoryMst.getStoryId());
+				map.put("incompltedSubTasks", incompleteTasks);
+				map.put("totalSubTasks", tmsStoryMst.getTmsSubtasks().size());				
+			}
 			
 			for (UserStoryStaus userStoryStatus : tmsStoryMst.getUserStoryStauses()) {
 				LinkedHashMap<String, Object> uss = new LinkedHashMap<String, Object>();
 				uss.put("id", userStoryStatus.getId());
-				uss.put("createdDate", userStoryStatus.getCreatedDate());
+				//uss.put("createdDate", userStoryStatus.getCreatedDate());
 				uss.put("type", userStoryStatus.getType());
 				uss.put("status", userStoryStatus.getTmsStatusMst().getStatus());
 				if(userStoryStatus.getAssignedDate() != null) {
@@ -332,6 +325,20 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		Collections.sort(userStoryStatusList);
 		return (UserStoryStaus) userStoryStatusList.get(userStoryStatusList.size() - 1);
 	}
+	
+
+	/**
+	 * @param storyIds
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private List<TmsStoryMst> getFilteredStories(List<Long> storyIds) {
+		hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+		List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
+									.add(Restrictions.in("storyId", storyIds)).list();
+		hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
+		return stories;
+	}
 	 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -348,11 +355,7 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 					//.add(Restrictions.eq("users.id", userId))
 					.add(Restrictions.eq("sprint.sprintId", sprint.getSprintId())).list();
 			if(storyIds.size() > 0) {
-				hibernateUtil.getCurrentSession().enableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-				List<TmsStoryMst> stories = hibernateUtil.getCurrentSession().createCriteria(TmsStoryMst.class)
-											.add(Restrictions.in("storyId", storyIds)).list();
-				hibernateUtil.getCurrentSession().disableFilter(TmsStoryMst.LATEST_STATUS_FILTER);
-				return parseStories(stories);
+				return parseStories(getFilteredStories(storyIds), true);
 			} else {
 				return null;
 			}
