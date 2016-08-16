@@ -97,6 +97,17 @@ define([
       return $http(req);
     };
 
+    subtaskService.getSubtaskByStory = function (story) {
+      var req = {
+        method: 'GET',
+        url: appConstants.endPointBase+"api/subtask/story",
+        params: {
+          storyId: story.storyId
+        }
+      }
+      return $http(req);
+    };
+
   return subtaskService;
 
   });

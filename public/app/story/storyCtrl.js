@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-  return ['$scope', '$rootScope', 'storyService', 'manageService', 'statusService', 'appConstants', '$location', function($scope, $rootScope, storyService, manageService, statusService, appConstants, $location) {
+  return ['$scope', '$rootScope', 'storyService', 'manageService', 'statusService', 'subtaskService', 'appErrors','appConstants', '$location', function($scope, $rootScope, storyService, manageService, subtaskService, statusService, appConstants, appErrors, $location) {
 
     function init() {
       $scope.closeModal = closeModal;
@@ -19,6 +19,7 @@ define([], function() {
       getTaskType();
       getStatus();
       getAllCurrentUserStoriesBySprint();
+      $scope.expanded= true;
     };
 
     $scope.changeTab = function (currentTab) {
@@ -62,8 +63,15 @@ define([], function() {
           closeModal();
         })
         .error(function (error) {
-          $scope.errorMessage = 'Unable to process your request';
+          processErrorMessage(error);
+          $scope.status = 'Unable to insert Sprint: ' + error.message;
         });
+    }
+
+    function processErrorMessage(error) {
+      $scope.error = appErrors.getErrorMessage(error.message);
+      $scope.errorMessage = "The Jira Id is already present";
+      $scope.errorDetails =  error.fieldErrors.toString();
     }
 
     function selectAllItems() {
@@ -76,6 +84,7 @@ define([], function() {
       clearErrorMessages();
       $scope.isAddModalVisible = false;
       $scope.isEditModalVisible = false;
+      $scope.error = false;
     }
 
     function getStories() {
@@ -88,6 +97,17 @@ define([], function() {
         .error(function (error) {
             $scope.loading = false;
             $scope.status = 'Unable to process your request: ' + error.message;
+        });
+    }
+
+    function getSubtaskByStory(story) {
+      subtaskService.getSubtaskByStory(story)
+        .success(function (dataSubtask) {
+          $scope.subtasks = dataSubtask;
+        })
+        .error(function (error) {
+          $scope.status = 'Unable to process your request: ' + error.message;
+          $scope.loading = false;
         });
     }
 
@@ -203,8 +223,26 @@ define([], function() {
             $scope.status = 'Unable to process your request: ' + error.message;
         });
     }
+
+    $scope.showDetails=function(story,$index){
+      getSubtaskByStory(story);
+      $scope.expanded= false;
+      $scope.selected_story=$index;
+    }
+
+    $scope.hideDetails = function($index){
+      $scope.selected_user=undefined;
+    }
+
+    $scope.isSelected=function($index){
+      return $scope.selected_user===$index;
+      $scope.expanded= false;
+    }
+
     init();
     $scope.$apply();
+
+   }];
+
+ });   
     
-  }];
-});

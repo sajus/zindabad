@@ -185,7 +185,7 @@
                   <input type="text" class="form-control" placeholder="Search" ng-model="searchText">
               </div>
             </div>             
-            <table id="mytable" class="table table-hover table-bordered table-striped" width="100%">
+            <table id="mytable" class="table table-hover table-condensed table-bordered table-striped" width="100%">
               <thead>
                 <tr>
                   <th>No.</th>
@@ -204,7 +204,7 @@
               </thead>
               <tbody>
                 <tr ng-show="!allstories">
-                  <td colspan="9" class="text-align-center">No Records Found</td>
+                  <td colspan="12" class="text-align-center">No Records Found</td>
                 </tr>
                 <tr ng-repeat="story in allstories  | filter:searchText track by $index">
                   <td align="center">{{$index+1}}</td>
@@ -223,11 +223,13 @@
                     </div>
                   </td>
                   <td align="center">
-                    <button class='btn btn-info btn-xs' type="button" ng-click=""><span
-                        class="glyphicon glyphicon-plus"></span>Show
+                    <button class='btn btn-info btn-xs' type="button" ng-click="showDetails(story,$index)" ng-hide="isSelected($index)"><span class="glyphicon glyphicon-plus"></span>Show
                     </button>
+                     <button class='btn btn-info btn-xs' type="button" ng-click="hideDetails($index)" ng-show="isSelected($index)"><span class="glyphicon glyphicon-plus">Hide</button>
                   </td>
                 </tr>
+
+                 
               </tbody>
             </table>
           </div>

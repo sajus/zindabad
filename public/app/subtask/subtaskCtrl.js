@@ -1,7 +1,7 @@
 'use strict';
 
 define([], function() {
-	return ['$scope', '$rootScope', 'subtaskService', 'manageService', 'statusService', 'appConstants', '$location', '$timeout', function($scope, $rootScope, subtaskService, manageService, statusService, appConstants, $location, $timeout) {
+	return ['$scope', '$rootScope', 'subtaskService', 'manageService', 'statusService', 'appConstants', 'appErrors', '$location', '$timeout', function($scope, $rootScope, subtaskService, manageService, statusService, appConstants, appErrors, $location, $timeout) {
 
     function init() {
       $scope.closeModal = closeModal;
@@ -195,6 +195,7 @@ define([], function() {
           closeCodeReviewModal();
         }).
         error(function (error) {
+          processErrorMessage(error);
           $scope.status = 'Unable to insert Sprint: ' + error.message;
         });
     };
@@ -209,6 +210,12 @@ define([], function() {
           $scope.status = 'Unable to process your request: ' + error.message;
         });
     }
+
+    function processErrorMessage(error) {
+      $scope.error = appErrors.getErrorMessage(error.message);
+      $scope.errorMessage = "Check review date and fixed date.";  
+      $scope.errorDetails =  error.fieldErrors.toString();   
+   }
 
     init();
     $scope.$apply();
