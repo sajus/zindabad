@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cyb.tms.dto.CodeReviewDTO;
 import com.cyb.tms.dto.SubtaskDTO;
 import com.cyb.tms.entity.TmsCodeReview;
+import com.cyb.tms.exceptions.ErrorCodes;
+import com.cyb.tms.exceptions.SprintException;
 import com.cyb.tms.service.TmsCodeReviewService;
 import com.cyb.tms.util.URIConstants;
 
@@ -28,14 +30,17 @@ public class TmsCodeReviewController {
    @Autowired
    private TmsCodeReviewService tmsCodeReviewService;
 
-	// -------------------Create a Review---------------
+   // -------------------Create a Review---------------
+	@SuppressWarnings("unused")
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> createCodeReview(@RequestBody CodeReviewDTO codeReviewDTO) {
-		tmsCodeReviewService.createReview(codeReviewDTO);
+		Long codeReview = tmsCodeReviewService.createReview(codeReviewDTO);
+		if(codeReview == null){
+			throw new SprintException(ErrorCodes.CLOSE, null);
+		}
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
-
 	// ------------------Retrieve All Review --------------
 
 	@RequestMapping(value = URIConstants.GET_ALL, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

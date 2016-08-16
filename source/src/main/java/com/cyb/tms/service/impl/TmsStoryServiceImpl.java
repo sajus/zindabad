@@ -70,4 +70,16 @@ public class TmsStoryServiceImpl implements TmsStoryService {
 	public List<LinkedHashMap<String, Object>> getAllCurrentUserStoriesBySprint(Long projectId) {
 		return tmsStoryDAO.getAllCurrentUserStoriesBySprint(projectId);
 	}
+	
+	@Override
+	public boolean isStoryExist(String jiraId) {
+		return tmsStoryDAO.findByJiraId(jiraId)!=null;
+	}
+	
+	public StoryDTO findByJiraId(String jiraId) {
+		StoryDTO storyDto = new StoryDTO();
+		TmsStoryMst story = tmsStoryDAO.findByJiraId(jiraId);
+		createStory(storyDto);
+		return storyDto;
+	}
 }

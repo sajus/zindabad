@@ -46,6 +46,8 @@ public class TmsCodeReviewDAOImpl implements TmsCodeReviewDAO {
 	}
 	
 	private TmsCodeReview setDtoToDo(CodeReviewDTO codeReviewDTO) {
+		int compareDate = codeReviewDTO.getCommentsFixedDate().compareTo(codeReviewDTO.getReviewDate());
+		if(compareDate >= 0){
    		TmsSubtask subtask = hibernateUtil.findByPropertyName("jiraId", codeReviewDTO.getJiraId(), TmsSubtask.class);
 		TmsUsers developerId = hibernateUtil.fetchById( codeReviewDTO.getDeveloperId(), TmsUsers.class);
 		TmsUsers fixedById = hibernateUtil.fetchById( codeReviewDTO.getFixedById(), TmsUsers.class);
@@ -62,8 +64,10 @@ public class TmsCodeReviewDAOImpl implements TmsCodeReviewDAO {
 		review.setPullRequest(codeReviewDTO.getPullRequest());
 		review.setPullRequestDate(codeReviewDTO.getPullRequestDate());
 		review.setReviewDate(codeReviewDTO.getReviewDate());
-		review.setReviewerType(codeReviewDTO.getReviewerType());		
+		review.setReviewerType(codeReviewDTO.getReviewerType());
 		return review;
+		}
+		return null;
 	}
 
 	// -------------------Edit Code review---------------

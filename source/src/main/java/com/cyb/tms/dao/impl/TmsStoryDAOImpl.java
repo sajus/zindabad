@@ -50,6 +50,8 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 	@Value("${tms.story}")
 	private String story;
 
+	private static final String JIRA_ID = "jiraId";
+	
 	@Autowired
 	private HibernateUtil hibernateUtil;
 
@@ -79,6 +81,11 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		tmsStoryMst.getUserStoryStauses().add(userStoryStatus);
 		return (Long)hibernateUtil.create(tmsStoryMst);
 	}
+	
+	@Override
+	public TmsStoryMst findByJiraId(String jiraId) {
+		return hibernateUtil.findByJiraId(JIRA_ID, jiraId, TmsStoryMst.class);
+	} 
 	
 	@Override
 	public void addToCurrentSprint(List<StoryDTO> storyDTOs, Long projectId, Long assignToId, Long modifiedById) {
@@ -362,4 +369,5 @@ public class TmsStoryDAOImpl implements TmsStoryDAO {
 		}
 		return null;
 	}
+	
 }

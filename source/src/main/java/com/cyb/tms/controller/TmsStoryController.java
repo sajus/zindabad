@@ -37,6 +37,10 @@ public class TmsStoryController {
 	// -------------------Create a Story---------------
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> createStory(@RequestBody StoryDTO storyDTO) {
+		if (tmsStoryService.isStoryExist(storyDTO.getJiraId())) {
+			System.out.println("A User with name " + storyDTO.getJiraId()+ " already exist");
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
 		tmsStoryService.createStory(storyDTO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);

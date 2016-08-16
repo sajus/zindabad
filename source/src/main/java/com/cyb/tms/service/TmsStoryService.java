@@ -9,6 +9,7 @@ import com.cyb.tms.entity.TmsStoryMst;
 public interface TmsStoryService {
 	
 	public long createStory(StoryDTO storyDTO);
+	public boolean isStoryExist(String jiraId);
 	public void updateStoryStatus(StoryDTO storyDTO);
 	public void editStory(StoryDTO storyDTO);
 	public List<TmsStoryMst> getAllStories();
