@@ -20,6 +20,8 @@ import com.cyb.tms.entity.TmsLeaveMst;
 import com.cyb.tms.entity.TmsModule;
 import com.cyb.tms.entity.TmsStatusMst;
 import com.cyb.tms.entity.TmsUsers;
+import com.cyb.tms.exceptions.ErrorCodes;
+import com.cyb.tms.exceptions.SprintException;
 import com.cyb.tms.service.TmsLeaveService;
 import com.cyb.tms.service.TmsSprintService;
 import com.cyb.tms.util.URIConstants;
@@ -35,12 +37,17 @@ public class TmsLeaveController {
 	private TmsSprintService tmsSprintService;
 
 	// -------------------Create a leave---------------
+	@SuppressWarnings("unused")
 	@RequestMapping(value = URIConstants.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createLeave(@RequestBody TmsLeaveDTO tmsleaveDTO) {
-		tmsLeaveService.createLeave(tmsleaveDTO);
+		Long leave =tmsLeaveService.createLeave(tmsleaveDTO);
+		  if(leave == null){
+              throw new SprintException(ErrorCodes.CLOSE, null);
+       }
 		tmsSprintService.updateSprintHours(tmsleaveDTO.getProjectId());
 		HttpHeaders headers = new HttpHeaders();
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	    return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		             		
 	}
 	
 	// -------------------update a leave---------------

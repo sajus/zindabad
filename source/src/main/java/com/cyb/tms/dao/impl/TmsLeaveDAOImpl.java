@@ -106,6 +106,8 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 	 * @return
 	 */
 	private TmsLeaveMst setDtoToDo(TmsLeaveDTO tmsleaveDTO) {
+        int compareDate = tmsleaveDTO.getEndDate().compareTo(tmsleaveDTO.getStartDate());
+        if(compareDate >= 0){
 		TmsUsers user = hibernateUtil.fetchById( tmsleaveDTO.getUserId(), TmsUsers.class);
 		TmsSprintMst sprint = tmsSprintDAO.getActiveSprint(tmsleaveDTO.getProjectId());
 		TmsLeaveMst leave =new TmsLeaveMst();
@@ -115,6 +117,8 @@ public class TmsLeaveDAOImpl implements TmsLeaveDAO{
 		leave.setStatus("EXISTS");
 		leave.setDuration(WorkingDaysCalculator.getWorkingDaysBetweenTwoDates(leave.getStartDate(),leave.getEndDate()));
 		return leave;
+        }
+        return null;
 	}
 
 	@Override
