@@ -1,12 +1,13 @@
 'use strict';
 
 define([], function() {
-	return ['$scope','appConstants','$http','leaveService', function($scope, appConstants, $http, leaveService) {
+	return ['$scope','appConstants','$http','leaveService','appErrors', function($scope, appConstants, $http, leaveService,appErrors) {
 
     function init(){
       $scope.leave = {};
       $scope.closeModal = closeModal;
       $scope.loading = true; 
+      $scope.errorMessage = undefined;
       getLeaves();  
     }
 
@@ -51,7 +52,8 @@ define([], function() {
           closeModal();
         })
         .error(function(error) {
-          $scope.status = 'Unable to process your request: ' + error.message;
+           processErrorMessage(error);
+            $scope.status = 'Unable to insert Sprint: ' + error.message;
         });
 
     }
@@ -80,6 +82,16 @@ define([], function() {
         });
 
     }
+
+    function processErrorMessage(error) {
+        $scope.error = appErrors.getErrorMessage(error.message);
+        $scope.errorMessage = "Please enter valid start date and end date. End date greater than start date!";   
+      }
+
+      function clearErrorMessages() {
+        $scope.error = undefined;
+        $scope.errorMessage = undefined;  
+      }
 
     init();
 

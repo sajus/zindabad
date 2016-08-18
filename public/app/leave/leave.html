@@ -48,8 +48,12 @@
     <div class="sprint-errors" ng-show="errorMessage">
       <div class="alert alert-warning">
         <strong>Error. </strong> {{errorMessage}}
+        <p>
+          {{errorDetails}}
+        </p>
       </div>
     </div>
+
 
     <div class="form-group">
       <tms-datepicker label="Start Date:" ng-model="leave.startDate"></tms-datepicker>
